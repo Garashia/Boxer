@@ -33,7 +33,12 @@ public class MapMoving : MonoBehaviour
     [SerializeField]
     private Fade m_fade;
 
-    private bool isMove = false;
+    private bool m_isMove = false;
+    public bool IsMove
+    {
+        get { return m_isMove; }
+        set { m_isMove = value; }
+    }
 
     public GridObject Grid
     {
@@ -62,7 +67,7 @@ public class MapMoving : MonoBehaviour
     private void Start()
     {
         m_encounterCount = m_OnEncounter.Count;
-        isMove = false;
+        m_isMove = false;
         m_index = 0;
         Vector3 vector3 = Vector3.zero;
         Grid = (GridSave.GridID > 0) ? m_gridManager.Grids[GridSave.GridID] : Grid;
@@ -74,6 +79,11 @@ public class MapMoving : MonoBehaviour
         vector3.y = CAMERA_ANGLE[m_index];
         transform.rotation = Grid.Rotation * Quaternion.AngleAxis
         (vector3.y, Vector3.up);
+        GetInputSystem.MapAction.Front.performed += Front;
+        GetInputSystem.MapAction.RightRotation.performed += RightRotation;
+        GetInputSystem.MapAction.LeftRotation.performed += LeftRotation;
+
+
     }
 
     // Update is called once per frame
@@ -85,7 +95,7 @@ public class MapMoving : MonoBehaviour
 
     public void RightRotation(InputAction.CallbackContext context)
     {
-        if (!context.performed || isMove) return;
+        if (m_isMove) return;
         Vector3 vector3 = Vector3.zero;
         m_index++;
         m_index %= ANGLE_MAX_INDEX;
@@ -96,7 +106,7 @@ public class MapMoving : MonoBehaviour
 
     public void LeftRotation(InputAction.CallbackContext context)
     {
-        if (!context.performed || isMove) return;
+        if (m_isMove) return;
         Vector3 vector3 = Vector3.zero;
         m_index = ANGLE_MAX_INDEX + m_index - 1;
         m_index %= ANGLE_MAX_INDEX;
@@ -107,7 +117,7 @@ public class MapMoving : MonoBehaviour
 
     public void Front(InputAction.CallbackContext context)
     {
-        if (!context.performed || isMove) return;
+        if (m_isMove) return;
         Vector3 vector3 = Vector3.zero;
 
         GridObject obj = null;

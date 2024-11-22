@@ -1,10 +1,8 @@
 // using System.Collections;
-// using System.Collections.Generic;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 // using System.Diagnostics;
-using static EncounterMicroCommander;
 using CommandList = EncounterMicroCommander.EncounterCommand;
 
 public struct EncounterParameter
@@ -23,7 +21,8 @@ public struct EncounterParameter
     }
 }
 
-public class EncounterMicroCommander : IMicroCommander<EncounterParameter, EncounterCommand>
+public class EncounterMicroCommander :
+    IMicroCommander<EncounterParameter, CommandList>
 {
     public class EncounterCommand : Command
     { }

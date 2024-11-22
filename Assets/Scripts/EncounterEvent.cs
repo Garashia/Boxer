@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 using CommandList = EncounterMicroCommander.EncounterCommand;
@@ -8,7 +7,7 @@ using CommandList = EncounterMicroCommander.EncounterCommand;
 public class EncounterEvent : MonoBehaviour
 {
     [SerializeField]
-    private PlayerInput m_playerInput;
+    private MapMoving m_playerInput;
 
     [SerializeField]
     private Text m_text = null;
@@ -27,23 +26,23 @@ public class EncounterEvent : MonoBehaviour
     private void Start()
     {
         m_encounterMicroCommander = new EncounterMicroCommander();
-        m_isEvent = false;
+        m_isEvent = true;
     }
 
     // Update is called once per frame
     private void Update()
     {
         bool isCommander = m_encounterMicroCommander.Execute();
-        if (isCommander == m_isEvent)
+        if (isCommander != m_isEvent)
         {
-            m_isEvent = !isCommander;
-            m_playerInput.enabled = m_isEvent;
+            m_isEvent = isCommander;
+            m_playerInput.IsMove = m_isEvent;
         }
     }
 
     public void ShoppingEncounter()
     {
-        m_playerInput.enabled = false;
+        m_playerInput.IsMove = true;
         List<CommandList> commands = EncounterCommandList.ShoppingCommandList();
         EncounterParameter parameter = new EncounterParameter(text: m_text);
         SetCommand(commands, parameter);
@@ -51,7 +50,7 @@ public class EncounterEvent : MonoBehaviour
 
     public void ItemEncounter()
     {
-        m_playerInput.enabled = false;
+        m_playerInput.IsMove = true;
         List<CommandList> commands = EncounterCommandList.ItemCommandList();
         EncounterParameter parameter = new EncounterParameter(text: m_text);
         SetCommand(commands, parameter);
@@ -59,7 +58,7 @@ public class EncounterEvent : MonoBehaviour
 
     public void StrengthenEncounter()
     {
-        m_playerInput.enabled = false;
+        m_playerInput.IsMove = true;
         List<CommandList> commands = EncounterCommandList.StrengthenCommandList();
         EncounterParameter parameter = new EncounterParameter(text: m_text);
         SetCommand(commands, parameter);
@@ -67,7 +66,7 @@ public class EncounterEvent : MonoBehaviour
 
     public void MessengerEncounter()
     {
-        m_playerInput.enabled = false;
+        m_playerInput.IsMove = true;
         List<CommandList> commands = EncounterCommandList.MessengerCommandList();
         EncounterParameter parameter = new EncounterParameter(text: m_text);
         SetCommand(commands, parameter);
