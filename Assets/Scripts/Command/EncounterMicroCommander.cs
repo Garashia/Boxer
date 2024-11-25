@@ -11,10 +11,10 @@ public struct EncounterParameter
     public Text encounterText;
 
     public EncounterParameter
-        (
+    (
         GameObject gameObject = null
         , Text text = null
-        )
+    )
     {
         m_gameObject = gameObject;
         encounterText = text;
