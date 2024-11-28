@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
-public class IMicroCommander<T, Com> : ICommander<T>
-    where Com : IMicroCommander<T, Com>.Command
+public class MicroCommander<T, Com> : Commander<T>
+    where Com : MicroCommander<T, Com>.Command
 {
     public class Command : ICommand<T>
     {
@@ -16,7 +16,7 @@ public class IMicroCommander<T, Com> : ICommander<T>
         public virtual void Execute()
         { }
 
-        public virtual bool Enable()
+        public virtual bool IsCompleted()
         { return true; }
     };
 

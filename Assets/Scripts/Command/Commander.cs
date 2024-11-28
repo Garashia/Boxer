@@ -1,4 +1,4 @@
-public class ICommander<T>
+public class Commander<T>
 {
     private ICommand<T> m_command = null;
     private T m_parameter;
@@ -23,11 +23,12 @@ public class ICommander<T>
     public void SetParameter(T parameter)
     { m_parameter = parameter; }
 
+    // é¿çsíÜÇ©ämîF
     public virtual bool Execute()
     {
         if (GetCommand() == null) return false;
         m_command.Execute();
-        if (m_command.Enable())
+        if (m_command.IsCompleted())
         {
             m_command = null;
         }
