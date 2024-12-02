@@ -212,6 +212,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemyParameter: {fileID: 11400000, guid: 4c811e8a188768246817acefd0e21f41, type: 2}
+  m_runtimeAnimatorController: {fileID: 0}
+  fade: {fileID: 0}
 --- !u!4 &286603578
 Transform:
   m_ObjectHideFlags: 0

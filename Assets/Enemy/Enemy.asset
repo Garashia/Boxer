@@ -30,7 +30,7 @@ MonoBehaviour:
       m_explanatoryNoteList:
       - "\u30EA\u30B9\u30C8\u304B\u3089\u6761\u4EF6\u3092\u6307\u5B9A:"
       - "\u9077\u79FB\u6761\u4EF6\uFF1AHP"
-    isFold: 1
+    isFold: 0
     selectPunch: -1
     hitTerms_1:
       isActive: 0
@@ -77,7 +77,7 @@ MonoBehaviour:
       m_explanatoryNoteList:
       - "\u30EA\u30B9\u30C8\u304B\u3089\u6761\u4EF6\u3092\u6307\u5B9A:"
       - "\u9077\u79FB\u6761\u4EF6\uFF1AHP"
-    isFold: 1
+    isFold: 0
     selectPunch: -1
     hitTerms_1:
       isActive: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
       m_explanatoryNoteList:
       - "\u30EA\u30B9\u30C8\u304B\u3089\u6761\u4EF6\u3092\u6307\u5B9A:"
       - "\u9077\u79FB\u6761\u4EF6\uFF1AHP"
-    isFold: 1
+    isFold: 0
     selectPunch: -1
     hitTerms_1:
       isActive: 0
@@ -171,7 +171,7 @@ MonoBehaviour:
       m_explanatoryNoteList:
       - "\u30EA\u30B9\u30C8\u304B\u3089\u6761\u4EF6\u3092\u6307\u5B9A:"
       - "\u9077\u79FB\u6761\u4EF6\uFF1AHP"
-    isFold: 1
+    isFold: 0
     selectPunch: -1
     hitTerms_1:
       isActive: 0

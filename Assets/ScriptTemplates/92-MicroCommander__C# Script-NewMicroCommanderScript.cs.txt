@@ -1,0 +1,37 @@
+using System.Collections.Generic;
+using UnityEngine;
+using CommandList = #SCRIPTNAME#MicroCommander.#SCRIPTNAME#Command;
+
+#ROOTNAMESPACEBEGIN#
+
+// コマンド用パラメータークラス
+public struct #SCRIPTNAME#Parameter
+{
+    // -----------------------------------------  //
+    // 以下、コマンドクラス内でもちいる変数を宣言する。 //
+    // -----------------------------------------  //
+
+
+    // -----------------------------------------  //
+}
+
+// ミクロコマンドの実装
+public class #SCRIPTNAME#MicroCommander :
+    MicroCommander<#SCRIPTNAME#Parameter, CommandList>
+{
+    public class #SCRIPTNAME#Command : Command
+    {
+        public override void Execute()
+        {
+            // コマンドの実行内容を記述
+        }
+
+        public override bool IsCompleted()
+        {
+            // 実行完了条件を記述
+            return true;
+        }
+    }
+}
+
+#ROOTNAMESPACEEND#
