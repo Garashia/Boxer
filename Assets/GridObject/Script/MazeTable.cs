@@ -12,8 +12,10 @@ public class MazeTable : ScriptableObject
         Shop,
         Start,
         Goal,
+        Move,
+        Warp,
         Boss,
-        People,
+        Chara,
 
         None
     }

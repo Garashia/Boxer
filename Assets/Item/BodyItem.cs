@@ -6,7 +6,7 @@ public class BodyItem : Item
     [SerializeField]
     private int m_luck;
 
-    void Uni()
+    public void Uni()
     {
     }
 

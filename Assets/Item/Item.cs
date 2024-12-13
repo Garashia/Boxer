@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 public class Item : ScriptableObject
 {
     public enum ItemType
@@ -21,6 +20,9 @@ public class Item : ScriptableObject
         set { m_name = value; }
         get { return m_name; }
     }
+
+
+
     [SerializeField]
     private int m_buyPrice;
     [SerializeField]

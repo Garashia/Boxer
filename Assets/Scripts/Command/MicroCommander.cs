@@ -5,6 +5,7 @@ public class MicroCommander<T, Com> : Commander<T>
 {
     public class Command : ICommand<T>
     {
+        // パラメーター変数
         private T m_parameter;
 
         public T Parameter

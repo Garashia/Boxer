@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c0b0b8e22c1f6d4e965d782105c8618, type: 3}
   m_Name: Enemy
   m_EditorClassIdentifier: 
-  m_MaxHP: 3
+  m_MaxHP: 10
   m_Power: 99
   m_Guard: 9
   m_enemyAvatar: {fileID: 9000000, guid: 50c8fe73844fb0a42bdb72b9873224e6, type: 3}
