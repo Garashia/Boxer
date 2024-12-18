@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="align-items: flex-start; justify-content: center; height: 41px; padding-left: 10px; background-color: rgb(47, 42, 39); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background-image: none; -unity-background-scale-mode: stretch-to-fill;">
+        <ui:Label text="Label" display-tooltip-when-elided="true" name="ItemName" style="font-size: 18px; -unity-font-style: bold; color: rgb(255, 255, 255); margin-left: 50px;" />
+        <ui:VisualElement name="ItemTypeSprite" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Murata/Sprite/UseSprite/spriteset2.jpg?fileID=1309417542&amp;guid=e0cabce4f4835494f9a26d0effc36f27&amp;type=3#spriteset2_0&quot;); width: 35px; height: 35px; -unity-slice-left: 0; -unity-slice-top: 0; -unity-slice-right: 0; -unity-slice-bottom: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; max-width: 35px; max-height: 35px; min-width: 10px; min-height: 10px; align-items: auto; position: absolute; top: 1px; left: 10px;" />
+        <ui:Label display-tooltip-when-elided="true" name="StackNumber" style="font-size: 18px; -unity-font-style: bold; color: rgb(255, 255, 255); margin-left: 50px; position: absolute; top: 0; left: 450px;" />
+    </ui:VisualElement>
+</ui:UXML>
