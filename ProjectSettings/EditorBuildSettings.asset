@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Title.unity
+    path: Assets/MyPG_At_Motoyoshi/Scenes/Title.unity
     guid: c286e17b9dd87f9418fae538b20bd3bc
   - enabled: 1
-    path: Assets/Scenes/Test.unity
+    path: Assets/MyPG_At_Motoyoshi/Scenes/Test.unity
     guid: ff0c83f9a593e9042a449c70e77802c9
   - enabled: 1
-    path: Assets/Scenes/Player.unity
+    path: Assets/MyPG_At_Motoyoshi/Scenes/Player.unity
     guid: 42ad4e70b7144f644882c614e07f6588
   m_configObjects: {}
