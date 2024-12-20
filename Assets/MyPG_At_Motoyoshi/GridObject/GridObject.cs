@@ -125,16 +125,6 @@ public class GridObject : MonoBehaviour
         Gizmos.DrawLine(vector.from, vector.to);
         Gizmos.color = new Color(1.0f, 0.0f, 0.0f);
         Gizmos.DrawRay(transform.position, Normal);
-
-
-        //if (m_gridDataRender)
-        //{
-        //    Handles.Label(Position + Vector3.up * 5, "Position\n" + transform.localPosition.ToString() +
-        //        "\nRotation\n" + transform.localEulerAngles.ToString() + "\nPoint\n" + GridPoint.ToString());
-        //}
-
-
-
     }
     // Update is called once per frame
     void Update()

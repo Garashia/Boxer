@@ -321,16 +321,17 @@ public class GridManagerEditor : Editor
                 newGrid.SetGridManager = obj;
             }
         }
-        obj.MazeObject = EditorGUILayout.ObjectField("Maze", obj.MazeObject, typeof(MazeTable), true) as MazeTable;
+        obj.MazeObject = EditorGUILayout.ObjectField("Maze", obj.MazeObject, typeof(TileMapData), true) as TileMapData;
         if (obj.MazeObject != null)
         {
             if (GUILayout.Button("SpawnMaze"))
             {
                 GridDestroy(grids);
-                var mazeList = obj.MazeObject.MazeList;
+                var mazeList = obj.MazeObject.Tiles;
                 if (mazeList != null)
-                    foreach (Vector2Int maze in mazeList)
+                    foreach (var maze in mazeList)
                     {
+                        // if (maze.Value == TileType.None || maze.Value == TileType.Wall) continue;
                         GameObject games = new GameObject();
 
                         Vector3 scale = games.transform.localScale;
@@ -338,13 +339,13 @@ public class GridManagerEditor : Editor
                         scale.z = obj.GridScale.y;
                         games.transform.localScale = scale;
                         games.transform.localPosition =
-                            new((float)(maze.x) * games.transform.localScale.x * 2.0f,
+                            new((float)(maze.Key.x) * games.transform.localScale.x * 2.0f,
                             0.0f,
-                           (float)(maze.y) * games.transform.localScale.z * 2.0f);
+                           (float)(maze.Key.y) * games.transform.localScale.z * 2.0f);
                         GridObject newGrid = games.AddComponent<GridObject>();
                         grids.Add(newGrid);
                         games.transform.parent = obj.transform;
-                        newGrid.GridPoint = maze;
+                        newGrid.GridPoint = maze.Key;
                         games.name = newGrid.GridPoint.ToString();
 
                         newGrid.SetGridManager = obj;

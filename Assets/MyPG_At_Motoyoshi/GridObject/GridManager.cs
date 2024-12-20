@@ -37,9 +37,9 @@ public class GridManager : MonoBehaviour
     }
 
     [SerializeField]
-    private MazeTable m_mazeTableObject;
+    private TileMapData m_mazeTableObject;
 
-    public MazeTable MazeObject
+    public TileMapData MazeObject
     {
         get { return m_mazeTableObject; }
         set { m_mazeTableObject = value; }
