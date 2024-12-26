@@ -1,19 +1,33 @@
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEditor;
-
+using UnityEditorInternal;
 using UnityEngine;
-
+using TileAction = System.Action<UnityEngine.Vector2Int, TileType>;
 
 public class TileMapEditor : EditorWindow
 {
+    private enum FieldMode
+    {
+        Grid,
+        Warp,
+        Other
+    }
+
+
+    static private Dictionary<TileType, TileAction> TileAction = new Dictionary<TileType, TileAction>();
     private TileMapData tileMapData;
     private int gridSize = 20; // Size of a tile in pixels
     private Vector2 scrollPosition;
     private Vector2 toolbarScrollPosition;
     private TileType selectedTileType = TileType.Area;
-    private string displayMode = "Color"; // Options: Color, Text, ID
 
+    private FieldMode fieldMode = FieldMode.Grid;
+    private ReorderableList _reorderableList;
+    private int warpIndex;
+
+    private string displayMode = "Color"; // Options: Color, Text, ID
+    static private int roomCount = 5;
     private static readonly Dictionary<TileType, Color> TileColors = new Dictionary<TileType, Color>
     {
         { TileType.Area, Color.green },
@@ -42,15 +56,15 @@ public class TileMapEditor : EditorWindow
 
     private static readonly Dictionary<TileType, int> TileIDs = new Dictionary<TileType, int>
     {
-        { TileType.Area, 1 },
-        { TileType.Shop, 2 },
+        { TileType.Area , 1 },
+        { TileType.Shop , 2 },
         { TileType.Start, 3 },
-        { TileType.Goal, 4 },
-        { TileType.Move, 5 },
-        { TileType.Warp, 6 },
-        { TileType.Boss, 7 },
+        { TileType.Goal , 4 },
+        { TileType.Move , 5 },
+        { TileType.Warp , 6 },
+        { TileType.Boss , 7 },
         { TileType.Chara, 8 },
-        { TileType.Item, 9 }
+        { TileType.Item , 9 }
     };
 
     [MenuItem("Tools/Tile Map Editor")]
@@ -63,21 +77,139 @@ public class TileMapEditor : EditorWindow
     {
         if (tileMapData == null)
             CreateNewMap(10, 10);
+        TileAction.Clear();
+        TileAction = new Dictionary<TileType, TileAction>
+        {
+            [TileType.Area] = tileMapData.SetTile,
+            [TileType.Shop] = tileMapData.SetTile,
+            [TileType.Start] = SetStart,
+            [TileType.Goal] = tileMapData.SetTile,
+            [TileType.Move] = tileMapData.SetTile,
+            [TileType.Warp] = tileMapData.SetWarp,
+            [TileType.Boss] = tileMapData.SetTile,
+            [TileType.Chara] = tileMapData.SetTile,
+            [TileType.Item] = tileMapData.SetTile,
+            [TileType.Area] = tileMapData.SetTile,
+            [TileType.Wall] = tileMapData.SetTile,
+            [TileType.None] = tileMapData.SetTile,
+
+        };
+        warpIndex = 0;
     }
 
     private void OnGUI()
     {
         DrawToolbar();
-        DrawGrid();
+        if (tileMapData.Width <= 0 || tileMapData.Height <= 0) return;
+
+        switch (fieldMode)
+        {
+            case FieldMode.Grid:
+                DrawGrid();
+                break;
+            case FieldMode.Warp:
+                DrawWarp();
+                break;
+            default:
+                break;
+        }
+
+        // DrawGrid();
     }
+
+    private void DrawWarp()
+    {
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
+        //EditorGUI.BeginDisabledGroup(true);
+        float windowWidth = position.width; // ウィンドウの幅を取得
+        float availableWidth = windowWidth - 100; // X軸ラベルのスペースを確保
+        float buttonWidth = 60 / tileMapData.Width; // グリッドのボタン幅を計算
+        buttonWidth = Mathf.Max(buttonWidth, 40); // 最小幅を確保
+        for (int y = 0; y < tileMapData.Height; y++)
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            for (int x = 0; x < tileMapData.Width; x++)
+            {
+                Vector2Int position = new Vector2Int(x, y);
+                TileType tile = tileMapData.GetTile(position);
+                GUIStyle style = new GUIStyle(GUI.skin.button);
+                Color tileColor = TileColors.ContainsKey(tile) ? TileColors[tile] : Color.white;
+                style.normal.background = Texture2D.whiteTexture;
+                GUI.backgroundColor = tileColor;
+                //if (displayMode == "Color")
+                //{
+                //}
+                //else
+                //{
+                //    style.normal.textColor = Color.black;
+                //    style.fontSize = 12;
+                //}
+                int count = 0;
+                string number = "";
+                if (tileMapData.WarpList.TryGetValue(position, out count))
+                {
+                    number = count.ToString();
+                }
+
+                if (GUILayout.Button(number, style, GUILayout.Width(buttonWidth), GUILayout.Height(gridSize)))
+                {
+                    if (tile == TileType.Warp)
+                    {
+                        tileMapData.WarpList[position] = warpIndex;
+                    }
+                    // if(tile != Tile)
+                    // tileMapData.SetTile(position, selectedTileType);
+                }
+
+
+                GUI.backgroundColor = Color.white;
+            }
+
+            EditorGUILayout.LabelField("Y: " + y, GUILayout.Width(40));
+            EditorGUILayout.EndHorizontal();
+        }
+
+        EditorGUILayout.BeginHorizontal();
+        for (int x = 0; x < tileMapData.Width; x++)
+        {
+            EditorGUILayout.LabelField("X: " + x, GUILayout.Width(buttonWidth));
+        }
+        EditorGUILayout.EndHorizontal();
+        _reorderableList.DoLayoutList();
+        //EditorGUI.EndDisabledGroup();
+        EditorGUILayout.EndScrollView();
+
+    }
+
+    private void SetStart(Vector2Int position, TileType tileType)
+    {
+        if (tileMapData.StartedTile != null)
+        {
+            tileMapData.SetTile((Vector2Int)tileMapData.StartedTile, TileType.Area);
+        }
+        tileMapData.StartedTile = position;
+        tileMapData.SetTile(position, tileType);
+    }
+
 
     private void DrawToolbar()
     {
         toolbarScrollPosition = EditorGUILayout.BeginScrollView(toolbarScrollPosition, GUILayout.Height(100)); // ツールバーにスクロールビューを追加
 
         EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
-
-        selectedTileType = (TileType)EditorGUILayout.EnumPopup("Select Tile:", selectedTileType);
+        EditorGUI.BeginChangeCheck();
+        fieldMode = (FieldMode)EditorGUILayout.EnumPopup("Field Tile:", fieldMode);
+        if (EditorGUI.EndChangeCheck())
+        {
+            if (fieldMode == FieldMode.Warp)
+            {
+                _reorderableList = null;
+                var keys = tileMapData.WarpList.ToList();
+                _reorderableList = new ReorderableList(keys, typeof(Vector2Int), true, true, false, false);
+            }
+        }
 
         if (GUILayout.Button("New Map", EditorStyles.toolbarButton))
         {
@@ -94,6 +226,35 @@ public class TileMapEditor : EditorWindow
             LoadMap();
         }
 
+        switch (fieldMode)
+        {
+            case FieldMode.Grid:
+                GridToolbar();
+                break;
+            case FieldMode.Warp:
+                WarpToolBar();
+                break;
+
+            default:
+                break;
+        }
+
+
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.EndScrollView();
+    }
+
+    private void WarpToolBar()
+    {
+        warpIndex = EditorGUILayout.IntField("Warp Number:", warpIndex);
+    }
+
+    private void GridToolbar()
+    {
+
+        selectedTileType = (TileType)EditorGUILayout.EnumPopup("Select Tile:", selectedTileType);
+
         displayMode = EditorGUILayout.Popup("Display Mode:", GetDisplayModeIndex(displayMode), new[] { "Color", "Text", "ID" }) switch
         {
             0 => "Color",
@@ -102,25 +263,42 @@ public class TileMapEditor : EditorWindow
             _ => displayMode
         };
 
+        EditorGUI.BeginDisabledGroup((tileMapData.Width < 5 || tileMapData.Height < 5));
+
         if (GUILayout.Button("Generate Maze", EditorStyles.toolbarButton))
         {
             GenerateMaze();
         }
+        int mazeWidth = tileMapData.Width / 3;
+        int mazeHeight = tileMapData.Height / 3;
+        if (mazeWidth % 2 == 0)
+        {
+            mazeWidth--;
+        }
+        if (mazeHeight % 2 == 0)
+        {
+            mazeHeight--;
+        }
+
+        EditorGUI.EndDisabledGroup();
+        EditorGUI.BeginDisabledGroup((mazeWidth < 5 || mazeHeight < 5));
+        if (GUILayout.Button("Generate Dungeon", EditorStyles.toolbarButton))
+        {
+            GenerateDungeon();
+        }
+        EditorGUI.EndDisabledGroup();
 
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
         tileMapData.Width = EditorGUILayout.IntField("Width:", tileMapData.Width);
         tileMapData.Height = EditorGUILayout.IntField("Height:", tileMapData.Height);
-
+        roomCount = EditorGUILayout.IntField("Room:", roomCount);
         if (GUILayout.Button("Resize Map"))
         {
             ResizeMap(tileMapData.Width, tileMapData.Height);
         }
 
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.EndScrollView();
     }
 
     private int GetDisplayModeIndex(string mode)
@@ -142,7 +320,6 @@ public class TileMapEditor : EditorWindow
         float availableWidth = windowWidth - 100; // X軸ラベルのスペースを確保
         float buttonWidth = 60 / tileMapData.Width; // グリッドのボタン幅を計算
         buttonWidth = Mathf.Max(buttonWidth, 40); // 最小幅を確保
-
         for (int y = 0; y < tileMapData.Height; y++)
         {
             EditorGUILayout.BeginHorizontal();
@@ -174,7 +351,8 @@ public class TileMapEditor : EditorWindow
 
                 if (GUILayout.Button(buttonText, style, GUILayout.Width(buttonWidth), GUILayout.Height(gridSize)))
                 {
-                    tileMapData.SetTile(position, selectedTileType);
+                    TileAction[selectedTileType]?.Invoke(position, selectedTileType);
+                    // tileMapData.SetTile(position, selectedTileType);
                 }
 
                 GUI.backgroundColor = Color.white;
@@ -189,6 +367,9 @@ public class TileMapEditor : EditorWindow
         {
             EditorGUILayout.LabelField("X: " + x, GUILayout.Width(buttonWidth));
         }
+
+
+
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.EndScrollView();
@@ -250,6 +431,21 @@ public class TileMapEditor : EditorWindow
             }
         }
     }
+
+    private void GenerateDungeon()
+    {
+        DungeonFactory factory = new DungeonFactory(tileMapData.Width, tileMapData.Height, roomCount);
+        int[,] maze = factory.CreateDungeon();
+
+        for (int y = 0; y < tileMapData.Height; y++)
+        {
+            for (int x = 0; x < tileMapData.Width; x++)
+            {
+                tileMapData.SetTile(new Vector2Int(x, y), maze[x, y] == 1 ? TileType.Area : TileType.Wall);
+            }
+        }
+    }
+
 
     public void LoadTileMapData(TileMapData data)
     {

@@ -171,11 +171,6 @@ public class EnemyParameterEditor : Editor
         }
         // •`‰æ
         _reorderableList.DoLayoutList();
-        //if (GUILayout.Button("Save"))
-        //{
-        //    obj.EnemyAnimatorController = GetAnimatorController();
-
-        //}
 
         // Dirtyƒtƒ‰ƒO‚ð—§‚Ä‚é
         EditorUtility.SetDirty(obj);

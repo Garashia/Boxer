@@ -118,7 +118,7 @@ public class GridObjectEditor : Editor
         EditorGUILayout.EndHorizontal();
         if (GUILayout.Button("Destroy"))
         {
-            gridManager.DestroyedObject(obj.gameObject);
+            gridManager.DestroyObject(obj.gameObject);
         }
         else if (GUILayout.Button("GridDown"))
         {

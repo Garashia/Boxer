@@ -15,6 +15,7 @@ public enum TileType
     None = 0
 }
 
+
 [System.Serializable]
 public class TileMapData : ScriptableObject
 {
@@ -24,7 +25,11 @@ public class TileMapData : ScriptableObject
     private int height;
     [SerializeField]
     private SerializedDictionary<Vector2Int, TileType> tiles = new SerializedDictionary<Vector2Int, TileType>();
+    [SerializeField]
+    private Vector2Int? startedTile = null;
 
+    [SerializeField]
+    private SerializedDictionary<Vector2Int, int> warpTile = new SerializedDictionary<Vector2Int, int>();
     public int Width
     {
         get => width;
@@ -40,6 +45,18 @@ public class TileMapData : ScriptableObject
     {
         get => tiles;
         set => tiles = value;
+    }
+
+    public Vector2Int? StartedTile
+    {
+        get => startedTile;
+        set => startedTile = value;
+    }
+
+    public SerializedDictionary<Vector2Int, int> WarpList
+    {
+        get => warpTile;
+        set => warpTile = value;
     }
 
     public void Initialize(int width, int height)
@@ -60,6 +77,14 @@ public class TileMapData : ScriptableObject
 
     public void SetTile(Vector2Int position, TileType tileType)
     {
+        if (tileType != TileType.Warp && warpTile.ContainsKey(position))
+        {
+            warpTile.Remove(position);
+        }
+        else if (tileType != TileType.Start && StartedTile == position)
+        {
+            StartedTile = null;
+        }
         if (tileType == TileType.None || tileType == TileType.Wall)
         {
             tiles.Remove(position);
@@ -69,4 +94,12 @@ public class TileMapData : ScriptableObject
             tiles[position] = tileType;
         }
     }
+
+    public void SetWarp(Vector2Int position, TileType tileType)
+    {
+        warpTile.TryAdd(position, 0);
+        Debug.Log(position.ToString());
+        SetTile(position, tileType);
+    }
+
 }

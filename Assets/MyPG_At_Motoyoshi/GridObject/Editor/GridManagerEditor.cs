@@ -1,435 +1,238 @@
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEditor;
 using UnityEditorInternal;
+using UnityEngine;
 
-
-
-
-
-
-#if UNITY_EDITOR
-using UnityEditor;      //!< デプロイ時にEditorスクリプトが入るとエラーになるので UNITY_EDITOR で括ってね！
-#endif // UNITY_EDITOR
-
-
-
-#if UNITY_EDITOR
 [CustomEditor(typeof(GridManager))]
 public class GridManagerEditor : Editor
 {
     private GridManager obj;
+    private ReorderableList gridList;
     private bool isString = false;
-    private ReorderableList _reorderableList;
 
     private void OnEnable()
     {
-        // 有効になった時に対象を確保しておく
-        obj = target as GridManager;
+        obj = (GridManager)target;
+
+        gridList = new ReorderableList(obj.Grids, typeof(GridObject), true, true, false, false)
+        {
+            drawHeaderCallback = rect =>
+            {
+                EditorGUI.LabelField(rect, "Grid List");
+            },
+
+            drawElementCallback = (rect, index, isActive, isFocused) =>
+            {
+                // SerializedProperty element = gridList.serializedProperty.GetArrayElementAtIndex(index);
+                GridObject grid = obj.Grids[index];
+
+                // 基本的な高さと幅の計算
+                float lineHeight = EditorGUIUtility.singleLineHeight + 4;
+                Rect fieldRect = new Rect(rect.x, rect.y + 2, rect.width, lineHeight);
+
+                // フォールドアウト
+                grid.Open = EditorGUI.Foldout(new Rect(fieldRect.x, fieldRect.y, fieldRect.width, lineHeight), grid.Open, $"Grid {index + 1}");
+
+                if (grid.Open)
+                {
+                    EditorGUI.indentLevel++;
+
+                    // Position
+                    fieldRect.y += lineHeight;
+                    grid.transform.localPosition = EditorGUI.Vector3Field(fieldRect, "Position", grid.transform.localPosition);
+
+                    // Rotation
+                    fieldRect.y += lineHeight;
+                    grid.transform.localEulerAngles = EditorGUI.Vector3Field(fieldRect, "Rotation", grid.transform.localEulerAngles);
+
+                    // ボタン群（Front, Back, Right, Left）
+                    DrawDirectionalButtons(grid, ref fieldRect, lineHeight);
+
+                    // Destroy Button
+                    fieldRect.y += lineHeight;
+                    if (GUI.Button(new Rect(fieldRect.x, fieldRect.y, fieldRect.width / 2 - 5, lineHeight), "Destroy"))
+                    {
+                        DestroyImmediate(grid.gameObject);
+                        obj.Grids.RemoveAt(index);
+                        return;
+                    }
+
+                    // GridDown Button
+                    if (GUI.Button(new Rect(fieldRect.x + fieldRect.width / 2 + 5, fieldRect.y, fieldRect.width / 2 - 5, lineHeight), "Grid Down"))
+                    {
+                        grid.GridDown();
+                    }
+                    // fieldRect.y += lineHeight;
+
+                    EditorGUI.indentLevel--;
+                }
+            },
+
+            elementHeightCallback = index =>
+            {
+                GridObject grid = obj.Grids[index];
+                return grid.Open ? EditorGUIUtility.singleLineHeight * 6 + 30 : EditorGUIUtility.singleLineHeight + 10;
+            },
+
+            onAddCallback = list =>
+            {
+                CreateGrid();
+            },
+
+            onRemoveCallback = list =>
+            {
+                if (list.index >= 0 && list.index < obj.Grids.Count)
+                {
+                    DestroyImmediate(obj.Grids[list.index].gameObject);
+                    obj.Grids.RemoveAt(list.index);
+                }
+            }
+        };
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        // 画面構成と処理
-        // 標準的な表示をしたい場合は、baseを呼び出す
-        // base.OnInspectorGUI();
-        bool flag = false;
-        bool flag2 = false;
-        EditorGUI.BeginChangeCheck();
+
+        isString = EditorGUILayout.Toggle("DebugString", isString);
+
+        obj.GridScale = EditorGUILayout.Vector3Field("Scale:", obj.GridScale);
+
+        if (GUILayout.Button("Delete All Grids"))
         {
-            isString = EditorGUILayout.Toggle("DebugString", isString);
+            GridDestroy(obj.Grids);
         }
-        if (EditorGUI.EndChangeCheck())
+
+        gridList.DoLayoutList();
+
+        if (GUILayout.Button("Create Grid"))
         {
-            flag2 = true;
+            CreateGrid();
         }
-        EditorGUI.BeginChangeCheck();
+
+        obj.MazeObject = (TileMapData)EditorGUILayout.ObjectField("Maze", obj.MazeObject, typeof(TileMapData), true);
+        if (obj.MazeObject != null && GUILayout.Button("Spawn Maze"))
         {
-            EditorGUILayout.BeginHorizontal();
-            {
-                obj.GridScale = EditorGUILayout.Vector2Field("Scale:", obj.GridScale);
-            }
-            EditorGUILayout.EndHorizontal();
+            SpawnMaze();
         }
-        if (EditorGUI.EndChangeCheck())
+
+        if (obj.Grids.Count > 0)
         {
-            flag = true;
-        }
-        List<GridObject> grids = obj.Grids;
-        int count = grids.Count;
+            obj.Floor = (GameObject)EditorGUILayout.ObjectField("Floor", obj.Floor, typeof(GameObject), true);
+            obj.Wall = (GameObject)EditorGUILayout.ObjectField("Wall", obj.Wall, typeof(GameObject), true);
+            obj.Corner = (GameObject)EditorGUILayout.ObjectField("Corner", obj.Corner, typeof(GameObject), true);
 
-        if (GUILayout.Button("Delete Grid"))
-        {
-            GridDestroy(grids, count);
-        }
-        if (_reorderableList == null)
-        {
-            _reorderableList = new ReorderableList(grids, typeof(GridObject));
-            // 並び替え可能か
-            _reorderableList.draggable = true;
-
-            // タイトル描画時のコールバック
-            // 上書きしてEditorGUIを使えばタイトル部分を自由にレイアウトできる
-            _reorderableList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "推移条件");
-
-            // 要素の描画時のコールバック
-            // 上書きしてEditorGUIを使えば自由にレイアウトできる
-            _reorderableList.drawElementCallback += DrawElement;
-            void DrawElement(Rect rect, int index, bool isActive, bool isFocused)
-            {
-                EditorGUI.indentLevel += 1;
-                var height = EditorGUIUtility.singleLineHeight + 5;
-                rect.height = EditorGUIUtility.singleLineHeight;
-                rect.y += 5;
-                GridObject grid = grids[index];
-                if (grid == null) return;
-                Transform transform = grid.transform;
-                Vector2Int point = grid.GridPoint;
-
-                if (flag2)
-                    grid.GridRender = isString;
-
-                grid.Open = EditorGUILayout.Foldout(grid.Open, "grid" + (index + 1).ToString());
-                if (grid.Open)
-                {
-                    rect.y += height;
-                    EditorGUILayout.BeginHorizontal();
-                    {
-                        transform.localPosition = EditorGUILayout.Vector3Field("position:", transform.localPosition);
-                    }
-                    EditorGUILayout.EndHorizontal();
-                    rect.y += height;
-
-                    EditorGUILayout.BeginHorizontal();
-                    {
-                        transform.localEulerAngles = EditorGUILayout.Vector3Field("rotation:", transform.localEulerAngles);
-                    }
-                    EditorGUILayout.EndHorizontal();
-                    rect.y += height;
-
-                    EditorGUILayout.BeginHorizontal();
-                    using (new EditorGUI.DisabledScope(obj.IsAdjacent(point, Vector2Int.right)))
-                    {
-                        if (GUILayout.Button("Right"))
-                        {
-                            AddObject
-                                (
-                                grids,
-                                point,
-                                Vector2Int.right,
-                                Vector3.right,
-                                transform
-                                );
-                        }
-                    }
-                    using (new EditorGUI.DisabledScope(obj.IsAdjacent(point, Vector2Int.left)))
-                    {
-                        if (GUILayout.Button("Left"))
-                        {
-                            AddObject
-                                (
-                                grids,
-                                point,
-                                Vector2Int.left,
-                                Vector3.left,
-                                transform
-                                );
-                        }
-                    }
-                    using (new EditorGUI.DisabledScope(obj.IsAdjacent(point, Vector2Int.up)))
-                    {
-                        if (GUILayout.Button("Front"))
-                        {
-                            AddObject
-                                (
-                                grids,
-                                point,
-                                Vector2Int.up,
-                                Vector3.forward,
-                                transform
-                                );
-                        }
-                    }
-                    using (new EditorGUI.DisabledScope(obj.IsAdjacent(point, Vector2Int.down)))
-                    {
-                        if (GUILayout.Button("Back"))
-                        {
-                            AddObject
-                                (
-                                grids,
-                                point,
-                                Vector2Int.down,
-                                Vector3.back,
-                                transform
-                                );
-                        }
-                    }
-                    EditorGUILayout.EndHorizontal();
-                    rect.y += height;
-
-                    if (GUILayout.Button("Destroy"))
-                    {
-                        DestroyImmediate(grid.gameObject);
-                        grids.RemoveAt(index); //リストの削除
-                        return;
-                    }
-                    rect.y += height;
-
-                    if (GUILayout.Button("GridDown"))
-                    {
-                        grid.GridDown();
-                    }
-
-
-                }
-
-                EditorGUI.indentLevel -= 1;
-            }
-        }
-        count = grids.Count;
-        if (count != 0)
-        {
-
-            for (int i = 0; i < count; ++i)
-            {
-                GridObject grid = grids[i];
-                if (grid == null) continue;
-                Transform transform = grid.transform;
-                Vector2Int point = grid.GridPoint;
-                if (flag2)
-                    grid.GridRender = isString;
-                grid.SetGridManager = obj;
-
-                if (grid.Open = EditorGUILayout.Foldout(grid.Open, "grid" + (i + 1).ToString()))
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    {
-                        transform.localPosition = EditorGUILayout.Vector3Field("position:", transform.localPosition);
-                    }
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.BeginHorizontal();
-                    {
-                        transform.localEulerAngles = EditorGUILayout.Vector3Field("rotation:", transform.localEulerAngles);
-                    }
-                    EditorGUILayout.EndHorizontal();
-                    EditorGUILayout.BeginHorizontal();
-                    using (new EditorGUI.DisabledScope(obj.IsAdjacent(point, Vector2Int.right)))
-                    {
-                        if (GUILayout.Button("Right"))
-                        {
-                            AddObject
-                                (
-                                grids,
-                                point,
-                                Vector2Int.right,
-                                Vector3.right,
-                                transform
-                                );
-                        }
-                    }
-                    using (new EditorGUI.DisabledScope(obj.IsAdjacent(point, Vector2Int.left)))
-                    {
-                        if (GUILayout.Button("Left"))
-                        {
-                            AddObject
-                                (
-                                grids,
-                                point,
-                                Vector2Int.left,
-                                Vector3.left,
-                                transform
-                                );
-                        }
-                    }
-                    using (new EditorGUI.DisabledScope(obj.IsAdjacent(point, Vector2Int.up)))
-                    {
-                        if (GUILayout.Button("Front"))
-                        {
-                            AddObject
-                                (
-                                grids,
-                                point,
-                                Vector2Int.up,
-                                Vector3.forward,
-                                transform
-                                );
-                        }
-                    }
-                    using (new EditorGUI.DisabledScope(obj.IsAdjacent(point, Vector2Int.down)))
-                    {
-                        if (GUILayout.Button("Back"))
-                        {
-                            AddObject
-                                (
-                                grids,
-                                point,
-                                Vector2Int.down,
-                                Vector3.back,
-                                transform
-                                );
-                        }
-                    }
-                    EditorGUILayout.EndHorizontal();
-                    if (GUILayout.Button("Destroy"))
-                    {
-                        DestroyImmediate(grid.gameObject);
-                        grids.RemoveAt(i); //リストの削除
-                        break;
-                    }
-                    if (GUILayout.Button("GridDown"))
-                    {
-                        grid.GridDown();
-                    }
-                }
-
-                if (flag)
-                {
-                    Vector3 scale = transform.localScale;
-                    scale.x = obj.GridScale.x;
-                    scale.z = obj.GridScale.y;
-                    transform.localScale = scale;
-                }
-
-            }
-            if (GUILayout.Button("GridAllDown"))
-            {
-                for (int i = 0; i < count; ++i)
-                {
-                    GridObject grid = grids[i];
-                    grid.GridDown();
-                }
-            }
-
-        }
-        else
-        {
-            if (GUILayout.Button("Create"))
-            {
-                GameObject games = new GameObject();
-                games.transform.position = Vector3.zero;
-                Vector3 scale = games.transform.localScale;
-                scale.x = obj.GridScale.x;
-                scale.z = obj.GridScale.y;
-                games.transform.localScale = scale;
-                GridObject newGrid = games.AddComponent<GridObject>();
-                grids.Add(newGrid);
-                games.transform.parent = obj.transform;
-                games.name = newGrid.GridPoint.ToString();
-
-                newGrid.GridPoint = Vector2Int.zero;
-                newGrid.SetGridManager = obj;
-            }
-        }
-        obj.MazeObject = EditorGUILayout.ObjectField("Maze", obj.MazeObject, typeof(TileMapData), true) as TileMapData;
-        if (obj.MazeObject != null)
-        {
-            if (GUILayout.Button("SpawnMaze"))
-            {
-                GridDestroy(grids);
-                var mazeList = obj.MazeObject.Tiles;
-                if (mazeList != null)
-                    foreach (var maze in mazeList)
-                    {
-                        // if (maze.Value == TileType.None || maze.Value == TileType.Wall) continue;
-                        GameObject games = new GameObject();
-
-                        Vector3 scale = games.transform.localScale;
-                        scale.x = obj.GridScale.x;
-                        scale.z = obj.GridScale.y;
-                        games.transform.localScale = scale;
-                        games.transform.localPosition =
-                            new((float)(maze.Key.x) * games.transform.localScale.x * 2.0f,
-                            0.0f,
-                           (float)(maze.Key.y) * games.transform.localScale.z * 2.0f);
-                        GridObject newGrid = games.AddComponent<GridObject>();
-                        grids.Add(newGrid);
-                        games.transform.parent = obj.transform;
-                        newGrid.GridPoint = maze.Key;
-                        games.name = newGrid.GridPoint.ToString();
-
-                        newGrid.SetGridManager = obj;
-                    }
-            }
-        }
-        if (count != 0)
-        {
-
-            obj.Floor = EditorGUILayout.ObjectField("Floor", obj.Floor, typeof(GameObject), true) as GameObject;
-            obj.Wall = EditorGUILayout.ObjectField("Wall", obj.Wall, typeof(GameObject), true) as GameObject;
-            obj.Corner = EditorGUILayout.ObjectField("Corner", obj.Corner, typeof(GameObject), true) as GameObject;
-
-            if (GUILayout.Button("SpawnObject"))
+            if (GUILayout.Button("Spawn Objects"))
             {
                 obj.PushObjectSpawn();
             }
         }
-        // Dirtyフラグを立てる
+
         EditorUtility.SetDirty(obj);
         serializedObject.ApplyModifiedProperties();
     }
 
-    private void GridDestroy(List<GridObject> grids)
+    private void DrawDirectionalButtons(GridObject grid, ref Rect fieldRect, float lineHeight)
     {
-        int count = grids.Count;
+        fieldRect.y += lineHeight;
 
-        if (count != 0)
+        EditorGUI.LabelField(fieldRect, "Add Neighbor:");
+        fieldRect.y += lineHeight;
+
+        float buttonWidth = fieldRect.width / 4 - 5;
+
+        using (new EditorGUI.DisabledScope(obj.IsAdjacent(grid.GridPoint, Vector2Int.up)))
         {
-            foreach (GridObject grid in grids)
+            if (GUI.Button(new Rect(fieldRect.x, fieldRect.y, buttonWidth, lineHeight), "Front"))
             {
-                if (grid != null)
-                    DestroyImmediate(grid.gameObject);
+                AddObject(obj.Grids, grid.GridPoint, Vector2Int.up, Vector3.forward, grid.transform);
             }
         }
-        // 押下時に実行したい処理
-        grids.Clear();
 
-    }
-
-    private void GridDestroy(List<GridObject> grids, int count)
-    {
-        if (count != 0)
+        using (new EditorGUI.DisabledScope(obj.IsAdjacent(grid.GridPoint, Vector2Int.down)))
         {
-            foreach (GridObject grid in grids)
+            if (GUI.Button(new Rect(fieldRect.x + buttonWidth + 5, fieldRect.y, buttonWidth, lineHeight), "Back"))
             {
-                if (grid != null)
-                    DestroyImmediate(grid.gameObject);
+                AddObject(obj.Grids, grid.GridPoint, Vector2Int.down, Vector3.back, grid.transform);
             }
         }
-        // 押下時に実行したい処理
-        grids.Clear();
 
+        using (new EditorGUI.DisabledScope(obj.IsAdjacent(grid.GridPoint, Vector2Int.right)))
+        {
+            if (GUI.Button(new Rect(fieldRect.x + 2 * (buttonWidth + 5), fieldRect.y, buttonWidth, lineHeight), "Right"))
+            {
+                AddObject(obj.Grids, grid.GridPoint, Vector2Int.right, Vector3.right, grid.transform);
+            }
+        }
+
+        using (new EditorGUI.DisabledScope(obj.IsAdjacent(grid.GridPoint, Vector2Int.left)))
+        {
+            if (GUI.Button(new Rect(fieldRect.x + 3 * (buttonWidth + 5), fieldRect.y, buttonWidth, lineHeight), "Left"))
+            {
+                AddObject(obj.Grids, grid.GridPoint, Vector2Int.left, Vector3.left, grid.transform);
+            }
+        }
     }
 
-
-    private void AddObject
-    (
-        List<GridObject> list,
-        Vector2Int point,
-        Vector2Int direct2,
-        Vector3 direct3,
-        Transform transform)
+    private void CreateGrid()
     {
-        GameObject games = new GameObject();
-        Vector3 position = transform.localPosition;
-        Vector3 moving = new Vector3(
-            direct3.x * transform.localScale.x,
-            0.0f,
-            direct3.z * transform.localScale.z
-            );
-        position += transform.rotation * (moving * 2.0f);
+        GameObject newGridObject = new GameObject("Grid");
+        newGridObject.transform.position = Vector3.zero;
+        newGridObject.transform.localScale = obj.GridScale;
 
-        games.transform.localPosition = position;
-        games.transform.rotation = transform.rotation;
-        GridObject newGrid = games.AddComponent<GridObject>();
-        list.Add(newGrid);
-        games.transform.localScale = transform.localScale;
-        games.transform.parent = obj.transform;
-        newGrid.GridPoint = point + direct2;
-        games.name = newGrid.GridPoint.ToString();
+        GridObject newGrid = newGridObject.AddComponent<GridObject>();
+        obj.Grids.Add(newGrid);
+        newGridObject.transform.parent = obj.transform;
 
+        newGrid.GridPoint = Vector2Int.zero;
         newGrid.SetGridManager = obj;
     }
 
+    private void SpawnMaze()
+    {
+        GridDestroy(obj.Grids);
+
+        foreach (var tile in obj.MazeObject.Tiles)
+        {
+            GameObject newGridObject = new GameObject();
+            newGridObject.transform.localScale = obj.GridScale;
+            newGridObject.transform.localPosition = new Vector3(
+                tile.Key.x * obj.GridScale.x * 2.0f,
+                0.0f,
+                tile.Key.y * obj.GridScale.z * 2.0f);
+
+            GridObject newGrid = newGridObject.AddComponent<GridObject>();
+            obj.Grids.Add(newGrid);
+            newGridObject.transform.parent = obj.transform;
+            newGridObject.name = tile.Key.ToString();
+
+            newGrid.GridPoint = tile.Key;
+            newGrid.SetGridManager = obj;
+        }
+    }
+
+    private void GridDestroy(List<GridObject> grids)
+    {
+        foreach (var grid in grids)
+        {
+            if (grid != null)
+                DestroyImmediate(grid.gameObject);
+        }
+        grids.Clear();
+    }
+
+    private void AddObject(List<GridObject> grids, Vector2Int point, Vector2Int direction, Vector3 offset, Transform referenceTransform)
+    {
+        GameObject newGridObject = new GameObject();
+        newGridObject.transform.localPosition = referenceTransform.localPosition + referenceTransform.rotation * (offset * 2.0f);
+        newGridObject.transform.rotation = referenceTransform.rotation;
+        newGridObject.transform.localScale = referenceTransform.localScale;
+
+        GridObject newGrid = newGridObject.AddComponent<GridObject>();
+        grids.Add(newGrid);
+        newGridObject.transform.parent = obj.transform;
+        newGrid.GridPoint = point + direction;
+        newGridObject.name = newGrid.GridPoint.ToString();
+        newGrid.SetGridManager = obj;
+    }
 }
-#endif // UNITY_EDITOR

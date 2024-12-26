@@ -1,30 +1,28 @@
 using System.Collections.Generic;
-
-// using UnityEditor;
 using UnityEngine;
 
-// using UnityEditor;
 public class GridManager : MonoBehaviour
 {
     [SerializeField]
-    private Vector2 m_gridScale;
+    private Vector3 m_gridScale; // gridScale
 
-    public Vector2 GridScale
+    public Vector3 GridScale
     {
-        get { return m_gridScale; }
-        set { m_gridScale = value; }
+        get => m_gridScale;
+        set => m_gridScale = value;
     }
 
     [SerializeField]
-    private List<GridObject> m_grids;
+    private List<GridObject> m_grids; // grids
 
     public List<GridObject> Grids
     {
-        get { return m_grids; }
-        set { m_grids = value; }
+        get => m_grids;
+        set => m_grids = value;
     }
 
-    private GridObject m_firstGrid = null;
+    [SerializeField, HideInInspector]
+    private GridObject m_firstGrid = null; // firstGrid
 
     public GridObject FirstGrid
     {
@@ -33,87 +31,88 @@ public class GridManager : MonoBehaviour
             m_firstGrid ??= Grids[0];
             return m_firstGrid;
         }
-        set { m_firstGrid = value; }
+        set => m_firstGrid = value;
     }
 
     [SerializeField]
-    private TileMapData m_mazeTableObject;
+    private TileMapData m_mazeTableObject; // mazeTableObject
 
     public TileMapData MazeObject
     {
-        get { return m_mazeTableObject; }
-        set { m_mazeTableObject = value; }
+        get => m_mazeTableObject;
+        set => m_mazeTableObject = value;
     }
 
     [SerializeField]
-    private GameObject m_floor;
+    private GameObject m_floor; // floor
 
     public GameObject Floor
     {
-        get { return m_floor; }
-        set { m_floor = value; }
+        get => m_floor;
+        set => m_floor = value;
     }
 
     [SerializeField]
-    private GameObject m_wall;
+    private GameObject m_wall; // wall
 
     public GameObject Wall
     {
-        get { return m_wall; }
-        set { m_wall = value; }
+        get => m_wall;
+        set => m_wall = value;
     }
 
     [SerializeField]
-    private GameObject m_corner;
+    private GameObject m_corner; // corner
 
     public GameObject Corner
     {
-        set { m_corner = value; }
-        get { return m_corner; }
+        get => m_corner;
+        set => m_corner = value;
     }
 
-    private readonly Vector2Int[] ORIENTATION = new[]
-{
+    private readonly Vector2Int[] m_orientations = new[]
+    {
         new Vector2Int(0, 1),
         new Vector2Int(0, -1),
         new Vector2Int(1, 0),
         new Vector2Int(-1, 0)
     };
 
-    private Vector2Int[,] ORIENTATION2 = new Vector2Int[4, 3]
+    private Vector2Int[,] m_cornerOrientations = new Vector2Int[4, 3]
     {
         {
-           new Vector2Int(0, 1),
-           new Vector2Int(1, 1),
-           new Vector2Int(1, 0)
+            new Vector2Int(0, 1),
+            new Vector2Int(1, 1),
+            new Vector2Int(1, 0)
         },
         {
-           new Vector2Int(0, 1),
-           new Vector2Int(-1, 1),
-           new Vector2Int(-1, 0)
+            new Vector2Int(0, 1),
+            new Vector2Int(-1, 1),
+            new Vector2Int(-1, 0)
         },
         {
-           new Vector2Int(0, -1),
-           new Vector2Int(1, -1),
-           new Vector2Int(1, 0)
+            new Vector2Int(0, -1),
+            new Vector2Int(1, -1),
+            new Vector2Int(1, 0)
         },
         {
-           new Vector2Int(0, -1),
-           new Vector2Int(-1, -1),
-           new Vector2Int(-1, 0)
-        },
+            new Vector2Int(0, -1),
+            new Vector2Int(-1, -1),
+            new Vector2Int(-1, 0)
+        }
     };
 
     private static readonly uint Corner_Up_Right = (1 << 0);
     private static readonly uint Corner_Up_Left = (1 << 1);
     private static readonly uint Corner_Down_Right = (1 << 2);
     private static readonly uint Corner_Down_Left = (1 << 3);
+
     private static readonly uint Wall_Up = (1 << 0);
     private static readonly uint Wall_Down = (1 << 1);
     private static readonly uint Wall_Right = (1 << 2);
     private static readonly uint Wall_Left = (1 << 3);
 
-    private readonly uint[] WALL_ORIENTATION = new[]
+    private readonly uint[] m_wallOrientations = new[]
     {
         Wall_Up,
         Wall_Down,
@@ -121,8 +120,8 @@ public class GridManager : MonoBehaviour
         Wall_Left
     };
 
-    private readonly uint[] CORNER_ORIENTATION = new[]
-{
+    private readonly uint[] m_cornerOrientationFlags = new[]
+    {
         Corner_Up_Right,
         Corner_Up_Left,
         Corner_Down_Right,
@@ -131,42 +130,29 @@ public class GridManager : MonoBehaviour
 
     private struct Distraction
     {
-        private uint corner;
-
-        public uint Corner
-        {
-            get { return corner; }
-            set { corner = value; }
-        }
-
-        private uint wall;
-
-        public uint Wall
-        {
-            get { return wall; }
-            set { wall = value; }
-        }
+        public uint Corner { get; set; }
+        public uint Wall { get; set; }
     }
 
-    private const float m_by = 2.25f;
-    private readonly float m_high = 0.275f * m_by;
-    private readonly float m_wallInvert = 0.39f * m_by;
-    private readonly float m_cornerInvert = 0.375f * m_by;
+    private const float m_baseScale = 2.25f; // by
+    private readonly float m_wallHeight = 0.275f * m_baseScale; // high
+    private readonly float m_wallOffset = 0.39f * m_baseScale; // wallInvert
+    private readonly float m_cornerOffset = 0.375f * m_baseScale; // cornerInvert
 
     [SerializeField, HideInInspector]
-    private List<GameObject> m_spawnObjects;
+    private List<GameObject> m_spawnObjects; // spawnObjects
 
-    public bool IsAdjacent(int x, int y, Vector2Int direct)
+    public bool IsAdjacent(int x, int y, Vector2Int direction)
     {
-        return IsAdjacent(new(x, y), direct);
+        return IsAdjacent(new Vector2Int(x, y), direction);
     }
 
-    public bool IsAdjacent(Vector2Int point, Vector2Int direct)
+    public bool IsAdjacent(Vector2Int point, Vector2Int direction)
     {
-        Vector2Int vector2Int = point + direct;
+        Vector2Int targetPoint = point + direction;
         foreach (GridObject obj in m_grids)
         {
-            if (obj.GridPoint == vector2Int)
+            if (obj.GridPoint == targetPoint)
             {
                 return true;
             }
@@ -174,77 +160,66 @@ public class GridManager : MonoBehaviour
         return false;
     }
 
-    public GridObject GetGridObject(Vector2Int point, Vector2Int direct)
+    public GridObject GetGridObject(Vector2Int point, Vector2Int direction)
     {
-        Vector2Int vector2Int = point + direct;
-        int count = m_grids.Count;
-        for (int i = 0; i < count; ++i)
+        Vector2Int targetPoint = point + direction;
+        foreach (GridObject obj in m_grids)
         {
-            if (m_grids[i].GridPoint == vector2Int)
+            if (obj.GridPoint == targetPoint)
             {
-                return m_grids[i];
+                return obj;
             }
         }
         return null;
     }
 
-    // Start is called before the first frame update
     private void Start()
     {
-        Vector2Int[] inter = new Vector2Int[4] { Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down };
-        int count = m_grids.Count;
-        for (int i = 0; i < count; ++i)
+        for (int i = 0; i < m_grids.Count; i++)
         {
             GridObject obj = m_grids[i];
             obj.Id = i;
-            GridObject right = GetGridObject(obj.GridPoint, Vector2Int.right);
-            GridObject left = GetGridObject(obj.GridPoint, Vector2Int.left);
-            GridObject up = GetGridObject(obj.GridPoint, Vector2Int.up);
-            GridObject down = GetGridObject(obj.GridPoint, Vector2Int.down);
-
-            // Debug.Log(i);
-
-            if (right != null && obj.A_Grid.Right == null)
-            {
-                //Debug.Log(right);
-                obj.A_Grid.Right = right;
-                right.A_Grid.Left = obj;
-            }
-            if (left != null && obj.A_Grid.Left == null)
-            {
-                //Debug.Log(left);
-
-                obj.A_Grid.Left = left;
-                left.A_Grid.Right = obj;
-            }
-            if (up != null && obj.A_Grid.Front == null)
-            {
-                // Debug.Log(up);
-                obj.A_Grid.Front = up;
-                up.A_Grid.Back = obj;
-            }
-            if (down != null && obj.A_Grid.Back == null)
-            {
-                // Debug.Log(down);
-                obj.A_Grid.Back = down;
-                down.A_Grid.Front = obj;
-            }
+            ConnectAdjacentGrids(obj, Vector2Int.right);
+            ConnectAdjacentGrids(obj, Vector2Int.left);
+            ConnectAdjacentGrids(obj, Vector2Int.up);
+            ConnectAdjacentGrids(obj, Vector2Int.down);
         }
     }
 
-    // Update is called once per frame
-    private void Update()
+    private void ConnectAdjacentGrids(GridObject grid, Vector2Int direction)
     {
+        GridObject adjacentGrid = GetGridObject(grid.GridPoint, direction);
+        if (adjacentGrid == null) return;
+
+        if (direction == Vector2Int.right)
+        {
+            grid.A_Grid.Right ??= adjacentGrid;
+            adjacentGrid.A_Grid.Left ??= grid;
+        }
+        else if (direction == Vector2Int.left)
+        {
+            grid.A_Grid.Left ??= adjacentGrid;
+            adjacentGrid.A_Grid.Right ??= grid;
+        }
+        else if (direction == Vector2Int.up)
+        {
+            grid.A_Grid.Front ??= adjacentGrid;
+            adjacentGrid.A_Grid.Back ??= grid;
+        }
+        else if (direction == Vector2Int.down)
+        {
+            grid.A_Grid.Back ??= adjacentGrid;
+            adjacentGrid.A_Grid.Front ??= grid;
+        }
     }
 
-    public void DestroyedObject(GameObject obj)
+    public void DestroyObject(GameObject obj)
     {
-        int count = m_grids.Count;
-        for (int i = 0; i < count; ++i)
+        for (int i = 0; i < m_grids.Count; i++)
         {
             if (m_grids[i].gameObject.GetInstanceID() == obj.GetInstanceID())
             {
-                DestroyImmediate(m_grids[i].gameObject.gameObject);
+                DestroyImmediate(m_grids[i].gameObject);
                 m_grids.RemoveAt(i);
                 break;
             }
@@ -254,168 +229,98 @@ public class GridManager : MonoBehaviour
     public void PushObjectSpawn()
     {
         m_spawnObjects ??= new List<GameObject>();
-        if (m_spawnObjects.Count != 0)
+        foreach (GameObject spawn in m_spawnObjects)
         {
-            foreach (GameObject spawn in m_spawnObjects)
-            {
-                if (spawn != null)
-                    DestroyImmediate(spawn);
-            }
-            m_spawnObjects.Clear();
+            if (spawn != null) DestroyImmediate(spawn);
         }
-
-        // âüâ∫éûÇ…é¿çsÇµÇΩÇ¢èàóù
+        m_spawnObjects.Clear();
 
         foreach (GridObject obj in m_grids)
         {
             Transform trans = obj.transform;
+            GameObject floorInstance = Instantiate(m_floor, trans);
+            floorInstance.transform.localPosition = Vector3.zero;
+            floorInstance.transform.localScale *= m_baseScale;
+            m_spawnObjects.Add(floorInstance);
 
-            GameObject child = GameObject.Instantiate(m_floor, trans);
-            child.transform.localPosition = Vector3.zero;
-            child.transform.localScale *= m_by;
-            m_spawnObjects.Add(child);
-
-            var distraction = DistractionArea(obj.GridPoint);
-            SpawnWall(
-                distraction.Wall,
-                m_spawnObjects,
-                Vector3.zero,
-                trans);
-            SpawnCorner(
-                distraction.Corner,
-                m_spawnObjects,
-                Vector3.zero,
-                trans);
+            Distraction distraction = DistractionArea(obj.GridPoint);
+            SpawnWall(distraction.Wall, m_spawnObjects, Vector3.zero, trans);
+            SpawnCorner(distraction.Corner, m_spawnObjects, Vector3.zero, trans);
         }
     }
 
-    private Distraction DistractionArea(Vector2Int vector2Int)
+    private Distraction DistractionArea(Vector2Int point)
     {
-        Distraction distraction = new Distraction();
-        for (int i = 0; i < ORIENTATION.Length; ++i)
+        Distraction distraction = new();
+        for (int i = 0; i < m_orientations.Length; i++)
         {
-            if (IsAdjacent(vector2Int, ORIENTATION[i]))
+            if (!IsAdjacent(point, m_orientations[i]))
             {
-                continue;
+                distraction.Wall |= m_wallOrientations[i];
             }
-            distraction.Wall |= WALL_ORIENTATION[i];
         }
-        for (int i = 0; i < ORIENTATION2.GetLength(0); ++i)
+
+        for (int i = 0; i < m_cornerOrientations.GetLength(0); i++)
         {
-            // uint m_m = 0;
-            var zz = ORIENTATION2[i, 0];
-            var zx = ORIENTATION2[i, 1];
-            var xx = ORIENTATION2[i, 2];
-
-            //var PXX = vector2Int + xx;
-            //var PXY = vector2Int + zx;
-            //var PYY = vector2Int + zz;
-
-            if (!IsAdjacent(vector2Int, xx))
+            if (IsAdjacent(point, m_cornerOrientations[i, 0]) &&
+                IsAdjacent(point, m_cornerOrientations[i, 1]) &&
+                !IsAdjacent(point, m_cornerOrientations[i, 2]))
             {
-                continue;
-            }
-            else if (!IsAdjacent(vector2Int, zz))
-            {
-                continue;
-            }
-            else if (!IsAdjacent(vector2Int, zx))
-            {
-                distraction.Corner |= CORNER_ORIENTATION[i];
+                distraction.Corner |= m_cornerOrientationFlags[i];
             }
         }
 
         return distraction;
     }
 
-    private void SpawnWall
-    (
-    uint walls,
-    List<GameObject> gameObjects,
-    Vector3 position,
-    Transform parent
-    )
+    private void SpawnWall(uint walls, List<GameObject> gameObjects, Vector3 position, Transform parent)
     {
-        if (walls == 0) return;
         if ((walls & Wall_Up) != 0)
         {
-            Vector3 pos = new Vector3(0.0f, m_high, m_wallInvert);
-            var game = Spawn(pos, parent, m_wall);
-            // game.transform.localScale *= m_by;
-            gameObjects.Add(game);
-            // ga.transform.localRotation
+            SpawnObject(m_wall, new Vector3(0.0f, m_wallHeight, m_wallOffset), parent, gameObjects);
         }
         if ((walls & Wall_Down) != 0)
         {
-            Vector3 pos = new Vector3(0.0f, m_high, -m_wallInvert);
-            var game = Spawn(pos, parent, m_wall);
-            // game.transform.localScale *= m_by;
-
-            gameObjects.Add(game);
+            SpawnObject(m_wall, new Vector3(0.0f, m_wallHeight, -m_wallOffset), parent, gameObjects);
         }
         if ((walls & Wall_Right) != 0)
         {
-            Vector3 pos = new Vector3(m_wallInvert, m_high, 0.0f);
-            var game = Spawn(pos, parent, m_wall);
-            // game.transform.localScale *= m_by;
-
-            game.transform.localRotation = Quaternion.AngleAxis(90.0f, Vector3.up);
-            gameObjects.Add(game);
+            GameObject obj = SpawnObject(m_wall, new Vector3(m_wallOffset, m_wallHeight, 0.0f), parent, gameObjects);
+            obj.transform.localRotation = Quaternion.Euler(0, 90, 0);
         }
         if ((walls & Wall_Left) != 0)
         {
-            Vector3 pos = new Vector3(-m_wallInvert, m_high, 0.0f);
-            var game = Spawn(pos, parent, m_wall);
-            // game.transform.localScale *= m_by;
-            game.transform.localRotation = Quaternion.AngleAxis(90.0f, Vector3.up);
-            gameObjects.Add(game);
+            GameObject obj = SpawnObject(m_wall, new Vector3(-m_wallOffset, m_wallHeight, 0.0f), parent, gameObjects);
+            obj.transform.localRotation = Quaternion.Euler(0, 90, 0);
         }
     }
 
-    private void SpawnCorner(
-        uint corners,
-        List<GameObject> gameObjects,
-        Vector3 position,
-        Transform parent
-        )
+    private void SpawnCorner(uint corners, List<GameObject> gameObjects, Vector3 position, Transform parent)
     {
-        if (corners == 0) return;
         if ((corners & Corner_Up_Right) != 0)
         {
-            Vector3 pos = new Vector3(m_cornerInvert, m_high, m_cornerInvert);
-            var game = Spawn(pos, parent, m_corner);
-            // game.transform.localScale *= m_by;
-            gameObjects.Add(game);
+            SpawnObject(m_corner, new Vector3(m_cornerOffset, m_wallHeight, m_cornerOffset), parent, gameObjects);
         }
         if ((corners & Corner_Up_Left) != 0)
         {
-            Vector3 pos = new Vector3(-m_cornerInvert, m_high, m_cornerInvert);
-            var game = Spawn(pos, parent, m_corner);
-            // game.transform.localScale *= m_by;
-            gameObjects.Add(game);
+            SpawnObject(m_corner, new Vector3(-m_cornerOffset, m_wallHeight, m_cornerOffset), parent, gameObjects);
         }
         if ((corners & Corner_Down_Right) != 0)
         {
-            Vector3 pos = new Vector3(m_cornerInvert, m_high, -m_cornerInvert);
-            var game = Spawn(pos, parent, m_corner);
-            // game.transform.localScale *= m_by;
-
-            gameObjects.Add(game);
+            SpawnObject(m_corner, new Vector3(m_cornerOffset, m_wallHeight, -m_cornerOffset), parent, gameObjects);
         }
         if ((corners & Corner_Down_Left) != 0)
         {
-            Vector3 pos = new Vector3(-m_cornerInvert, m_high, -m_cornerInvert);
-            var game = Spawn(pos, parent, m_corner);
-            gameObjects.Add(game);
+            SpawnObject(m_corner, new Vector3(-m_cornerOffset, m_wallHeight, -m_cornerOffset), parent, gameObjects);
         }
     }
 
-    private GameObject Spawn(Vector3 pos, Transform parent, GameObject spawn)
+    private GameObject SpawnObject(GameObject prefab, Vector3 position, Transform parent, List<GameObject> gameObjects)
     {
-        GameObject gamerObject = GameObject.Instantiate(
-                spawn, parent);
-        gamerObject.transform.localPosition = pos;
-        gamerObject.transform.localScale *= m_by;
-        return gamerObject;
+        GameObject instance = Instantiate(prefab, parent);
+        instance.transform.localPosition = position;
+        instance.transform.localScale *= m_baseScale;
+        gameObjects.Add(instance);
+        return instance;
     }
 }
