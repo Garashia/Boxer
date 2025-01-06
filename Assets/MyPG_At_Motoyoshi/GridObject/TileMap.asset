@@ -966,3 +966,7 @@ MonoBehaviour:
       Value: 1
     - Key: {x: 2, y: 1}
       Value: 1
+  warpTile:
+    m_list: []
+  shopTile:
+    m_list: []

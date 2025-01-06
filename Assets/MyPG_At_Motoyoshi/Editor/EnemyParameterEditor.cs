@@ -20,7 +20,7 @@ public class EnemyParameterEditor : Editor
         // —LŒø‚É‚È‚Á‚½‚É‘ÎÛ‚ğŠm•Û‚µ‚Ä‚¨‚­
         obj = target as EnemyParameter;
     }
-
+    // #region uai
     [System.Obsolete]
     public override void OnInspectorGUI()
     {

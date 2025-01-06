@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum TileType
@@ -14,7 +15,31 @@ public enum TileType
     Item,
     None = 0
 }
-
+[System.Serializable]
+public class ShoppingItem
+{
+    [SerializeField]
+    private List<Item> m_item = new List<Item>();
+    public List<Item> Items
+    {
+        get { return m_item; }
+        set { m_item = value; }
+    }
+    [SerializeField]
+    private string m_name;
+    public string ShopName
+    {
+        get { return m_name; }
+        set { m_name = value; }
+    }
+    [SerializeField]
+    private string m_description;
+    public string Description
+    {
+        get { return m_description; }
+        set { m_description = value; }
+    }
+}
 
 [System.Serializable]
 public class TileMapData : ScriptableObject
@@ -30,6 +55,10 @@ public class TileMapData : ScriptableObject
 
     [SerializeField]
     private SerializedDictionary<Vector2Int, int> warpTile = new SerializedDictionary<Vector2Int, int>();
+
+    [SerializeField]
+    private SerializedDictionary<Vector2Int, ShoppingItem> shopTile = new SerializedDictionary<Vector2Int, ShoppingItem>();
+
     public int Width
     {
         get => width;
@@ -59,6 +88,12 @@ public class TileMapData : ScriptableObject
         set => warpTile = value;
     }
 
+    public SerializedDictionary<Vector2Int, ShoppingItem> ShoppingList
+    {
+        get => shopTile;
+        set => shopTile = value;
+    }
+
     public void Initialize(int width, int height)
     {
         this.width = width;
@@ -77,14 +112,9 @@ public class TileMapData : ScriptableObject
 
     public void SetTile(Vector2Int position, TileType tileType)
     {
-        if (tileType != TileType.Warp && warpTile.ContainsKey(position))
-        {
-            warpTile.Remove(position);
-        }
-        else if (tileType != TileType.Start && StartedTile == position)
-        {
-            StartedTile = null;
-        }
+        RemoveWarpTile(position, tileType);
+        DeleteStart(position, tileType);
+        RemoveWarpTile(position, tileType);
         if (tileType == TileType.None || tileType == TileType.Wall)
         {
             tiles.Remove(position);
@@ -95,9 +125,42 @@ public class TileMapData : ScriptableObject
         }
     }
 
+    private void RemoveWarpTile(Vector2Int position, TileType tileType)
+    {
+        if (tileType != TileType.Shop && shopTile.ContainsKey(position))
+        {
+            shopTile.Remove(position);
+        }
+    }
+
+    private void DeleteStart(Vector2Int position, TileType tileType)
+    {
+        if (tileType != TileType.Start && StartedTile == position)
+        {
+            StartedTile = null;
+        }
+
+    }
+
+    public void RemoveShopTile(Vector2Int position, TileType tileType)
+    {
+        if (tileType != TileType.Warp && warpTile.ContainsKey(position))
+        {
+            warpTile.Remove(position);
+        }
+
+    }
+
     public void SetWarp(Vector2Int position, TileType tileType)
     {
         warpTile.TryAdd(position, 0);
+        Debug.Log(position.ToString());
+        SetTile(position, tileType);
+    }
+
+    public void SetShop(Vector2Int position, TileType tileType)
+    {
+        shopTile.TryAdd(position, new());
         Debug.Log(position.ToString());
         SetTile(position, tileType);
     }

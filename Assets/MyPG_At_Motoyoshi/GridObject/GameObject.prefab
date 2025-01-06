@@ -44,9 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 580483f8eb4023148bbd4a781e83e544, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_gridScale: {x: 1, y: 1}
+  m_gridScale: {x: 1, y: 1, z: 0}
   m_grids: []
-  m_mazeTableObject: {fileID: 11400000, guid: b720323c07e4ddb408fd43af7c4cec0d, type: 2}
+  m_firstGrid: {fileID: 0}
+  m_mazeTableObject: {fileID: 0}
   m_floor: {fileID: 0}
   m_wall: {fileID: 0}
   m_corner: {fileID: 0}

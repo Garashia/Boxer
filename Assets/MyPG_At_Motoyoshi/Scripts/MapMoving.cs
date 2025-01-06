@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
 [DefaultExecutionOrder(5)]
 public class MapMoving : MonoBehaviour
 {
@@ -150,17 +150,14 @@ public class MapMoving : MonoBehaviour
 
     public void OnEncount()
     {
-        return;
-        //if (m_random.Probability(0.8f))
-        //{
-        //    isMove = true;
-        //    GridSave.GridID = Grid.Id;
-        //    GridSave.GridIndex = m_index;
-        //    m_fade.FadeIn(1.0f, () =>
-        //    {
-        //        SceneManager.LoadSceneAsync("Player");
-        //    });
-        //    Debug.Log("Spawn");
-        //}
+        //return;
+        m_isMove = true;
+        GridSave.GridID = Grid.Id;
+        GridSave.GridIndex = m_index;
+        m_fade.FadeIn(1.0f, () =>
+        {
+            SceneManager.LoadSceneAsync("Player");
+        });
+        Debug.Log("Spawn");
     }
 }

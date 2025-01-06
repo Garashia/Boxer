@@ -190,3 +190,5 @@ MonoBehaviour:
       Value: 0
     - Key: {x: 7, y: 7}
       Value: 0
+  shopTile:
+    m_list: []

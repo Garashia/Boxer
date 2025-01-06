@@ -11,6 +11,7 @@ public class TileMapEditor : EditorWindow
     {
         Grid,
         Warp,
+        Shop,
         Other
     }
 
@@ -27,6 +28,9 @@ public class TileMapEditor : EditorWindow
     private int warpIndex;
 
     private string displayMode = "Color"; // Options: Color, Text, ID
+
+    private Vector2Int? shopEditTile = null;
+
     static private int roomCount = 5;
     private static readonly Dictionary<TileType, Color> TileColors = new Dictionary<TileType, Color>
     {
@@ -81,7 +85,7 @@ public class TileMapEditor : EditorWindow
         TileAction = new Dictionary<TileType, TileAction>
         {
             [TileType.Area] = tileMapData.SetTile,
-            [TileType.Shop] = tileMapData.SetTile,
+            [TileType.Shop] = tileMapData.SetShop,
             [TileType.Start] = SetStart,
             [TileType.Goal] = tileMapData.SetTile,
             [TileType.Move] = tileMapData.SetTile,
@@ -110,11 +114,112 @@ public class TileMapEditor : EditorWindow
             case FieldMode.Warp:
                 DrawWarp();
                 break;
+            case FieldMode.Shop:
+                DrawShop();
+                break;
+
+
             default:
                 break;
         }
 
         // DrawGrid();
+    }
+
+    private void DrawShop()
+    {
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
+        //EditorGUI.BeginDisabledGroup(true);
+        float windowWidth = position.width; // ウィンドウの幅を取得
+        float availableWidth = windowWidth - 100; // X軸ラベルのスペースを確保
+        float buttonWidth = 60 / tileMapData.Width; // グリッドのボタン幅を計算
+        buttonWidth = Mathf.Max(buttonWidth, 40); // 最小幅を確保
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.BeginVertical();
+        for (int y = 0; y < tileMapData.Height; y++)
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            for (int x = 0; x < tileMapData.Width; x++)
+            {
+                Vector2Int position = new Vector2Int(x, y);
+                TileType tile = tileMapData.GetTile(position);
+                GUIStyle style = new GUIStyle(GUI.skin.button);
+                Color tileColor = TileColors.ContainsKey(tile) ? TileColors[tile] : Color.white;
+                style.normal.background = Texture2D.whiteTexture;
+                GUI.backgroundColor = tileColor;
+                int count = 0;
+                string number = "";
+                if (tileMapData.WarpList.TryGetValue(position, out count))
+                {
+                    number = count.ToString();
+                }
+                if (GUILayout.Button(number, style, GUILayout.Width(buttonWidth), GUILayout.Height(gridSize)))
+                {
+                    if (tile == TileType.Shop)
+                    {
+                        shopEditTile = position;
+                    }
+
+                }
+
+                GUI.backgroundColor = Color.white;
+            }
+
+            EditorGUILayout.LabelField("Y: " + y, GUILayout.Width(40));
+            EditorGUILayout.EndHorizontal();
+        }
+
+        EditorGUILayout.BeginHorizontal();
+        for (int x = 0; x < tileMapData.Width; x++)
+        {
+            EditorGUILayout.LabelField("X: " + x, GUILayout.Width(buttonWidth));
+        }
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.EndVertical();
+        EditorGUILayout.BeginVertical();
+
+        if (shopEditTile != null)
+        {
+            var lists = tileMapData.ShoppingList;
+
+            var key = shopEditTile.Value;
+            EditorGUILayout.BeginVertical();
+            var value = lists[key];
+            EditorGUILayout.LabelField(key.ToString());
+
+            value.ShopName = EditorGUILayout.TextField("ShopName:", value.ShopName);
+            value.Description = EditorGUILayout.TextArea(value.Description);
+            EditorGUILayout.EndVertical();
+
+            ReorderableList reorderableList = new ReorderableList(value.Items, typeof(Item), true, true, true, true);
+            reorderableList.draggable = true;
+            reorderableList.drawElementCallback += (Rect rect, int index, bool isActive, bool isFocused) =>
+            {
+                var height = EditorGUIUtility.singleLineHeight + 5;
+                rect.height = EditorGUIUtility.singleLineHeight;
+                rect.y += 5;
+                rect.x += 10;
+                var item = value.Items[index];
+                item = EditorGUI.ObjectField(rect, "アイテム", item, typeof(Item), true) as Item;
+                value.Items[index] = item;
+                rect.y += 5;
+
+            };
+            reorderableList.DoLayoutList();
+            lists[key] = value;
+            tileMapData.ShoppingList = lists;
+
+        }
+        EditorGUILayout.EndVertical();
+
+
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.EndScrollView();
+
+
     }
 
     private void DrawWarp()
@@ -138,14 +243,6 @@ public class TileMapEditor : EditorWindow
                 Color tileColor = TileColors.ContainsKey(tile) ? TileColors[tile] : Color.white;
                 style.normal.background = Texture2D.whiteTexture;
                 GUI.backgroundColor = tileColor;
-                //if (displayMode == "Color")
-                //{
-                //}
-                //else
-                //{
-                //    style.normal.textColor = Color.black;
-                //    style.fontSize = 12;
-                //}
                 int count = 0;
                 string number = "";
                 if (tileMapData.WarpList.TryGetValue(position, out count))
@@ -159,8 +256,6 @@ public class TileMapEditor : EditorWindow
                     {
                         tileMapData.WarpList[position] = warpIndex;
                     }
-                    // if(tile != Tile)
-                    // tileMapData.SetTile(position, selectedTileType);
                 }
 
 
@@ -208,6 +303,16 @@ public class TileMapEditor : EditorWindow
                 _reorderableList = null;
                 var keys = tileMapData.WarpList.ToList();
                 _reorderableList = new ReorderableList(keys, typeof(Vector2Int), true, true, false, false);
+            }
+            else if (fieldMode == FieldMode.Shop)
+            {
+                var lists = tileMapData.ShoppingList;
+                var keys = new List<Vector2Int>(lists.Keys);
+                if (keys.Count > 0)
+                {
+                    shopEditTile = keys[0];
+
+                }
             }
         }
 

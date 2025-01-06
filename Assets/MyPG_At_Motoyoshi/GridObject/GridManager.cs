@@ -183,6 +183,21 @@ public class GridManager : MonoBehaviour
             ConnectAdjacentGrids(obj, Vector2Int.left);
             ConnectAdjacentGrids(obj, Vector2Int.up);
             ConnectAdjacentGrids(obj, Vector2Int.down);
+
+            var point = obj.GridPoint;
+            var tileData = m_mazeTableObject.Tiles[point];
+
+            switch (tileData)
+            {
+                case TileType.Start:
+                    FirstGrid = obj;
+                    break;
+
+
+                default:
+                    break;
+            }
+
         }
     }
 
