@@ -42,7 +42,7 @@ public class TileMapDataEditor : Editor
                     TileType.Shop => Color.blue,
                     TileType.Start => Color.cyan,
                     TileType.Goal => Color.magenta,
-                    TileType.Move => Color.yellow,
+                    TileType.Stairs => Color.yellow,
                     TileType.Warp => Color.gray,
                     TileType.Boss => new Color(0.5f, 0, 0),
                     TileType.Chara => new Color(0.5f, 0.5f, 0),

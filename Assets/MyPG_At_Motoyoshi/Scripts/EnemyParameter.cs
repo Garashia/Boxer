@@ -265,13 +265,13 @@ public class EnemyParameter : ScriptableObject
         get { return m_transitionConditionList; }
     }
 
-    //[SerializeField]
-    //private RuntimeAnimatorController m_enemyAnimatorController;
-    //public RuntimeAnimatorController EnemyAnimatorController
-    //{
-    //    get { return m_enemyAnimatorController; }
-    //    set { m_enemyAnimatorController = value; }
-    //}
+    [SerializeField, HideInInspector]
+    private RuntimeAnimatorController m_runtimeAnimatorController;
+    public RuntimeAnimatorController EnemyAnimationController
+    {
+        set { m_runtimeAnimatorController = value; }
+        get { return m_runtimeAnimatorController; }
+    }
 }
 
 [System.Serializable]

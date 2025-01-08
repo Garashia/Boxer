@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GridObject : MonoBehaviour
@@ -56,6 +57,44 @@ public class GridObject : MonoBehaviour
     public Vector3 Position
     {
         get { return transform.position; }
+    }
+    public delegate List<EncounterMicroCommander.EncounterCommand> GetEncounterCommands();
+
+    [SerializeField, HideInInspector]
+    private GetEncounterCommands m_encounterCommands = null;
+    public GetEncounterCommands EncounterCommands
+    {
+        get { return m_encounterCommands; }
+        set { m_encounterCommands = value; }
+    }
+    public delegate List<EventGridMicroCommander.EventGridCommand> GetEventCommands();
+    [SerializeField, HideInInspector]
+    private GetEventCommands m_eventCommands = null;
+    public GetEventCommands EventCommands
+    {
+        get { return m_eventCommands; }
+        set { m_eventCommands = value; }
+
+    }
+
+    private EncounterMicroCommander encounter = new();
+
+    private EventGridMicroCommander eventGrid = new();
+
+    [SerializeField, HideInInspector]
+    private EventParameter eventStates;
+    public EventParameter EvensStates
+    {
+        get { return eventStates; }
+        set { eventStates = value; }
+    }
+
+    [SerializeField, HideInInspector]
+    private EncounterParameter encounterParameter;
+    public EncounterParameter EncounterStates
+    {
+        get { return encounterParameter; }
+        set { encounterParameter = value; }
     }
 
     private AdjacentGrid adjacentGrid = new AdjacentGrid();
@@ -136,6 +175,45 @@ public class GridObject : MonoBehaviour
         Gizmos.DrawLine(vector.from, vector.to);
         Gizmos.color = new Color(1.0f, 0.0f, 0.0f);
         Gizmos.DrawRay(transform.position, Normal);
+    }
+
+    public EncounterMicroCommander OnEncounter()
+    {
+        if (m_encounterCommands == null) return null;
+        var commands = m_encounterCommands();
+        encounter.Clear();
+        foreach (var command in commands)
+        {
+            encounter.AddCommand(command, encounterParameter);
+        }
+        return encounter;
+    }
+
+    public bool OnEncounter(out EncounterMicroCommander encounterMicroCommander)
+    {
+        encounterMicroCommander = null;
+        if (m_encounterCommands == null) return false;
+        var commands = m_encounterCommands();
+        encounter.Clear();
+        foreach (var command in commands)
+        {
+            encounter.AddCommand(command, encounterParameter);
+        }
+        encounterMicroCommander = encounter;
+        return true;
+    }
+
+
+    public EventGridMicroCommander OnEvent()
+    {
+        if (m_eventCommands == null) return null;
+        var commands = m_eventCommands();
+        eventGrid.Clear();
+        foreach (var command in commands)
+        {
+            eventGrid.AddCommand(command, eventStates);
+        }
+        return eventGrid;
     }
 
     // Update is called once per frame

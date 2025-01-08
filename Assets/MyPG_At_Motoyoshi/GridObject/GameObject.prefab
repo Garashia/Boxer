@@ -51,4 +51,5 @@ MonoBehaviour:
   m_floor: {fileID: 0}
   m_wall: {fileID: 0}
   m_corner: {fileID: 0}
+  m_textObject: {fileID: 0}
   m_spawnObjects: []

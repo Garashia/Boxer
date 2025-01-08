@@ -146,8 +146,9 @@ public class GridManager : MonoBehaviour
 
     private const float m_baseScale = 2.25f; // by
     private readonly float m_wallHeight = 0.275f * m_baseScale; // high
-    private readonly float m_wallOffset = 0.39f * m_baseScale; // wallInvert
-    private readonly float m_cornerOffset = 0.375f * m_baseScale; // cornerInvert
+    private readonly float m_wallOffset = 0.44f * m_baseScale; // wallInvert
+    private readonly float m_cornerOffset = 0.44f * m_baseScale; // cornerInvert
+    //private readonly float m_cornerOffset = 0.425f * m_baseScale; // cornerInvert
 
     [SerializeField, HideInInspector]
     private List<GameObject> m_spawnObjects; // spawnObjects

@@ -1,8 +1,12 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEditor;      //!< デプロイ時にEditorスクリプトが入るとエラーになるので UNITY_EDITOR で括ってね！
+using UnityEditor.Animations;
+
 // using UnityEditor.Animations;
 using UnityEditorInternal;
 using UnityEngine;
+using static EnemyParameter;
 
 #endif // UNITY_EDITOR
 
@@ -172,9 +176,81 @@ public class EnemyParameterEditor : Editor
         // 描画
         _reorderableList.DoLayoutList();
 
+        if (GUILayout.Button("Animation"))
+            obj.EnemyAnimationController = GetAnimatorController();
+
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.ObjectField
+            (obj.EnemyAnimationController, typeof(RuntimeAnimatorController), true);
+        EditorGUI.EndDisabledGroup();
+
         // Dirtyフラグを立てる
         EditorUtility.SetDirty(obj);
         serializedObject.ApplyModifiedProperties();
+    }
+
+    private UnityEditor.Animations.AnimatorController GetAnimatorController()
+    {
+        var enemyParameter = obj;
+
+        if (enemyParameter == null) return null;
+        List<EnemyState> enemyStates = enemyParameter.TransitionConditionList;
+        var m_animatorController = CreateAnimatorController.GetAnimatorController();
+        // m_animatorController.name = "EnemyAnimator";
+        m_animatorController.AddParameter("ParameterId", UnityEngine.AnimatorControllerParameterType.Int);
+
+        // Layer 追加
+        m_animatorController.AddLayer("Base Layer");
+        var layer = m_animatorController.layers[0];
+        var stateMachine = layer.stateMachine;
+
+        // State 追加
+        var state = stateMachine.AddState("Idle");
+        var hit = stateMachine.AddState("Hit");
+        hit.motion = enemyParameter.EnemyHitMotion;
+
+        m_animatorController.AddParameter("Hit", UnityEngine.AnimatorControllerParameterType.Trigger);
+
+        var hitTrans = hit.AddTransition(state);
+        hitTrans.hasExitTime = true;
+
+        hitTrans = state.AddTransition(hit);
+        hitTrans.hasExitTime = false;
+        hitTrans.AddCondition(AnimatorConditionMode.If, 0, "Hit");
+        hitTrans = hit.AddTransition(hit);
+        hitTrans.hasExitTime = false;
+        // Transition 追加
+        var transition = stateMachine.AddAnyStateTransition(state);
+
+        // Condition 追加はそのままで OK
+        transition.AddCondition(AnimatorConditionMode.Equals, 1, "ParameterId");
+
+        foreach (var enemyState in enemyStates)
+        {
+            // enemyState.Condition.Owner = this;
+
+            string dataName = enemyState.StateName;
+            // m_triggerList.Add(dataName);
+            m_animatorController.AddParameter(dataName, UnityEngine.AnimatorControllerParameterType.Trigger);
+            var subState = stateMachine.AddState(dataName);
+            var trans = state.AddTransition(subState);
+            trans.hasExitTime = false;
+            trans.AddCondition(AnimatorConditionMode.If, 0, dataName);
+            trans = subState.AddTransition(state);
+            trans.hasExitTime = true;
+            subState.motion = enemyState.EnemyMotion;
+
+            var hitTrans2 = subState.AddTransition(hit);
+            hitTrans2.hasExitTime = false;
+            hitTrans2.AddCondition(AnimatorConditionMode.If, 0, "Hit");
+            var esa = subState.AddStateMachineBehaviour<EnemyStateAnimator>();
+            esa.SetStateData(enemyState);
+            Debug.Log("43");
+        }
+        state.motion = enemyParameter.EnemyIdleMotion;
+
+        return m_animatorController;
+
     }
 
 }

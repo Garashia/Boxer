@@ -14,6 +14,8 @@ public class MapMoving : MonoBehaviour
     [SerializeField]
     private float m_higher;
 
+    private EncounterMicroCommander m_commander = null;
+
     private int m_index = 0;
 
     [SerializeField]
@@ -68,6 +70,7 @@ public class MapMoving : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        // m_commander = new EncounterMicroCommander();
         m_encounterCount = m_OnEncounter.Count;
         m_isMove = false;
         m_index = 0;
@@ -91,6 +94,11 @@ public class MapMoving : MonoBehaviour
     {
         if (Grid == null)
             return;
+        bool? isCommander = m_commander?.Execute();
+        if (isCommander != null && isCommander != m_isMove)
+        {
+            m_isMove = (bool)isCommander;
+        }
     }
 
     public void RightRotation(InputAction.CallbackContext context)
@@ -144,6 +152,12 @@ public class MapMoving : MonoBehaviour
         vector3.y = CAMERA_ANGLE[m_index];
         transform.rotation = Grid.Rotation * Quaternion.AngleAxis
         (vector3.y, Vector3.up);
+
+        if (Grid.OnEncounter(out EncounterMicroCommander encounter))
+        {
+            m_commander = encounter;
+        }
+
         if (m_random.Probability(0.8f))
             m_OnEncounter[m_random.Next(m_encounterCount)].Invoke();
     }

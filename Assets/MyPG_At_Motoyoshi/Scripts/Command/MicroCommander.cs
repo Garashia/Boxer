@@ -42,4 +42,10 @@ public class MicroCommander<T, Com> : Commander<T>
         }
         return base.Execute();
     }
+
+    public void Clear()
+    {
+        m_microCommand.Clear();
+    }
+
 }
