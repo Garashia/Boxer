@@ -22,7 +22,6 @@ public class EnemyObserver
         {
             m_battleManager.OnStateExitEnemy(stateName);
             m_battleManager.EnemyController.OnStateExit(stateName);
-
         }
     }
 

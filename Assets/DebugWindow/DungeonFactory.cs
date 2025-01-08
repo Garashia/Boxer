@@ -2,22 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 public class DungeonFactory
 {
-
     private readonly Vector2Int[] DIRECT_POINT = new Vector2Int[4]
     {
         new(0, 1),
         new(0, -1),
         new(1, 0),
         new(-1, 0),
-
     };
 
-
-
-
-    enum MapType2
+    private enum MapType2
     {
         AREA,
         ROAD,
@@ -33,8 +29,6 @@ public class DungeonFactory
     private int Height { get; set; }
 
     private int Room { get; set; }
-
-
 
     public DungeonFactory(int width, int height, int room)
     {
@@ -62,7 +56,7 @@ public class DungeonFactory
         this.Room = room;
     }
 
-    struct DungeonMap
+    private struct DungeonMap
     {
         public int s_x, s_y;
 
@@ -71,8 +65,8 @@ public class DungeonFactory
             get { return new(s_x, s_y); }
         }
 
-
         public bool s_up, s_down, s_right, s_left;
+
         //new (0, 1),
         //new (0, -1),
         //new (1, 0),
@@ -84,12 +78,15 @@ public class DungeonFactory
                 case 0:
                     s_up = true;
                     break;
+
                 case 1:
                     s_down = true;
                     break;
+
                 case 2:
                     s_right = true;
                     break;
+
                 case 3:
                     s_left = true;
                     break;
@@ -109,7 +106,6 @@ public class DungeonFactory
             s_left = left;
         }
     }
-
 
     public int[,] CreateDungeon()
     {
@@ -144,7 +140,6 @@ public class DungeonFactory
                 }
             }
 
-
             return item;
         });
 
@@ -152,8 +147,6 @@ public class DungeonFactory
         int DungeonHeight = this.Height * 3;
 
         int[,] m_dungeon = new int[DungeonWidth + 5, DungeonHeight + 5];
-
-
 
         foreach (var d in d_list)
         {
@@ -197,22 +190,14 @@ public class DungeonFactory
         return m_dungeon;
     }
 
-
-
-
-
-
-
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
     }
 }
 
@@ -231,6 +216,5 @@ public class DungeonFactory
 //            Debug.Log(str);
 //        }
 //    }
-
 
 //}

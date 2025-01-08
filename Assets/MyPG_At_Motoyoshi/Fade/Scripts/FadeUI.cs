@@ -20,6 +20,7 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,7 +28,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Mask))]
 public class FadeUI : MonoBehaviour, IFade
 {
-
     [SerializeField, Range(0, 1)]
     private float cutoutRange;
 
@@ -44,10 +44,10 @@ public class FadeUI : MonoBehaviour, IFade
         }
     }
 
-    [SerializeField] Material mat = null;
-    [SerializeField] RenderTexture rt = null;
+    [SerializeField] private Material mat = null;
+    [SerializeField] private RenderTexture rt = null;
 
-    [SerializeField] Texture texture = null;
+    [SerializeField] private Texture texture = null;
 
     private void UpdateMaskCutout(float range)
     {

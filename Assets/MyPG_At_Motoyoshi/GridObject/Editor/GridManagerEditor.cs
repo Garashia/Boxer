@@ -121,7 +121,7 @@ public class GridManagerEditor : Editor
             obj.Floor = (GameObject)EditorGUILayout.ObjectField("Floor", obj.Floor, typeof(GameObject), true);
             obj.Wall = (GameObject)EditorGUILayout.ObjectField("Wall", obj.Wall, typeof(GameObject), true);
             obj.Corner = (GameObject)EditorGUILayout.ObjectField("Corner", obj.Corner, typeof(GameObject), true);
-
+            obj.TextObject = (GameObject)EditorGUILayout.ObjectField("Text", obj.TextObject, typeof(GameObject), true);
             if (GUILayout.Button("Spawn Objects"))
             {
                 obj.PushObjectSpawn();
@@ -140,7 +140,7 @@ public class GridManagerEditor : Editor
         fieldRect.y += lineHeight;
 
         float buttonWidth = fieldRect.width / 4 - 5;
-
+        #region •ûŒü
         using (new EditorGUI.DisabledScope(obj.IsAdjacent(grid.GridPoint, Vector2Int.up)))
         {
             if (GUI.Button(new Rect(fieldRect.x, fieldRect.y, buttonWidth, lineHeight), "Front"))
@@ -172,6 +172,7 @@ public class GridManagerEditor : Editor
                 AddObject(obj.Grids, grid.GridPoint, Vector2Int.left, Vector3.left, grid.transform);
             }
         }
+        #endregion
     }
 
     private void CreateGrid()

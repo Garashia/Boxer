@@ -34,7 +34,6 @@ public class EncounterMicroCommander :
                 return "..";
             else
                 return "...";
-
         }
     }
 }
@@ -235,5 +234,4 @@ public static class EncounterCommandList
             new DeleteCommand(),
         };
     }
-
 }

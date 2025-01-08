@@ -20,33 +20,34 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+
 using System.Collections;
 using UnityEngine;
 
 public class Fade : MonoBehaviour
 {
-    IFade fade;
+    private IFade fade;
 
-    void Start()
+    private void Start()
     {
         Init();
         fade.Range = cutoutRange;
     }
 
-    float cutoutRange;
+    private float cutoutRange;
 
-    void Init()
+    private void Init()
     {
         fade = GetComponent<IFade>();
     }
 
-    void OnValidate()
+    private void OnValidate()
     {
         Init();
         fade.Range = cutoutRange;
     }
 
-    IEnumerator FadeoutCoroutine(float time, System.Action action)
+    private IEnumerator FadeoutCoroutine(float time, System.Action action)
     {
         cutoutRange = 1.0f;
         fade.Range = cutoutRange;
@@ -70,7 +71,7 @@ public class Fade : MonoBehaviour
         }
     }
 
-    IEnumerator FadeinCoroutine(float time, System.Action action)
+    private IEnumerator FadeinCoroutine(float time, System.Action action)
     {
         cutoutRange = 0;
         fade.Range = cutoutRange;

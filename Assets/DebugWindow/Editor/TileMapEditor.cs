@@ -32,6 +32,9 @@ public class TileMapEditor : EditorWindow
     private Vector2Int? shopEditTile = null;
 
     static private int roomCount = 5;
+
+    #region íËêî
+
     private static readonly Dictionary<TileType, Color> TileColors = new Dictionary<TileType, Color>
     {
         { TileType.Area, Color.green },
@@ -71,6 +74,8 @@ public class TileMapEditor : EditorWindow
         { TileType.Item , 9 }
     };
 
+    #endregion
+
     [MenuItem("Tools/Tile Map Editor")]
     public static void OpenWindow()
     {
@@ -81,6 +86,11 @@ public class TileMapEditor : EditorWindow
     {
         if (tileMapData == null)
             CreateNewMap(10, 10);
+        Reload();
+    }
+
+    private void Reload()
+    {
         TileAction.Clear();
         TileAction = new Dictionary<TileType, TileAction>
         {
@@ -99,6 +109,7 @@ public class TileMapEditor : EditorWindow
 
         };
         warpIndex = 0;
+
     }
 
     private void OnGUI()
@@ -535,6 +546,7 @@ public class TileMapEditor : EditorWindow
                 tileMapData.SetTile(new Vector2Int(x, y), maze[x, y] == 1 ? TileType.Wall : TileType.Area);
             }
         }
+        tileMapData.Reload();
     }
 
     private void GenerateDungeon()
@@ -549,6 +561,7 @@ public class TileMapEditor : EditorWindow
                 tileMapData.SetTile(new Vector2Int(x, y), maze[x, y] == 1 ? TileType.Area : TileType.Wall);
             }
         }
+        tileMapData.Reload();
     }
 
 
@@ -556,5 +569,6 @@ public class TileMapEditor : EditorWindow
     {
         tileMapData = data;
         Repaint();
+        Reload();
     }
 }

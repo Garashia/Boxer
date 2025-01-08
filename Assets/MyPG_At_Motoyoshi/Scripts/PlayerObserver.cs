@@ -17,7 +17,6 @@ public class PlayerObserver
         }
     }
 
-
     public static void OnStateExit(PlayerState stateName)
     {
         if (m_battleManager != null)
@@ -41,7 +40,4 @@ public class PlayerObserver
             m_battleManager.OnStateEnterPlayer(stateName, ref state);
         }
     }
-
-
 }
-

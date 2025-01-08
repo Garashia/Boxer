@@ -16,9 +16,11 @@ public class SerializedDictionary<K, V> : Dictionary<K, V>, ISerializationCallba
             Value = value;
         }
     }
-    [SerializeField] List<KeyValue> m_list;
+
+    [SerializeField] private List<KeyValue> m_list;
 
     public virtual K DefaultKey => default;
+
     void ISerializationCallbackReceiver.OnAfterDeserialize()
     {
         Clear();
@@ -37,11 +39,13 @@ public class SerializedDictionary<K, V> : Dictionary<K, V>, ISerializationCallba
         }
     }
 }
+
 [System.Serializable]
 public class SerializedDictionary<V> : SerializedDictionary<string, V>
 {
     public override string DefaultKey => string.Empty;
 }
+
 [System.Serializable]
 public class SerializedDictionaryC<K, V> : SerializedDictionary<K, V> where K : new()
 {

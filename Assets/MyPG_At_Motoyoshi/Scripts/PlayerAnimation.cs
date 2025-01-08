@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    struct AnimatorTrigger
+    private struct AnimatorTrigger
     {
         public string name;
         public float time;
@@ -10,9 +10,10 @@ public class PlayerAnimation : MonoBehaviour
     }
 
     private Animator m_animator;
-    AnimatorTrigger m_animatorTrigger;
+    private AnimatorTrigger m_animatorTrigger;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         m_animator = GetComponent<Animator>();
         m_animatorTrigger.name = "";
@@ -21,7 +22,7 @@ public class PlayerAnimation : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (m_animatorTrigger.time >= 0.3f)
         {
@@ -44,5 +45,4 @@ public class PlayerAnimation : MonoBehaviour
         m_animatorTrigger.name = triggerName;
         m_animatorTrigger.time = 0.0f;
     }
-
 }

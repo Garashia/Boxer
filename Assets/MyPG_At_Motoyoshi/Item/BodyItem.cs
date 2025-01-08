@@ -10,5 +10,6 @@ public class BodyItem : Item
     {
     }
 
-    public override ItemType GetItemType() { return ItemType.Body; }
+    public override ItemType GetItemType()
+    { return ItemType.Body; }
 }

@@ -15,25 +15,31 @@ public enum TileType
     Item,
     None = 0
 }
+
 [System.Serializable]
 public class ShoppingItem
 {
     [SerializeField]
     private List<Item> m_item = new List<Item>();
+
     public List<Item> Items
     {
         get { return m_item; }
         set { m_item = value; }
     }
+
     [SerializeField]
     private string m_name;
+
     public string ShopName
     {
         get { return m_name; }
         set { m_name = value; }
     }
+
     [SerializeField]
     private string m_description;
+
     public string Description
     {
         get { return m_description; }
@@ -46,10 +52,13 @@ public class TileMapData : ScriptableObject
 {
     [SerializeField]
     private int width;
+
     [SerializeField]
     private int height;
+
     [SerializeField]
     private SerializedDictionary<Vector2Int, TileType> tiles = new SerializedDictionary<Vector2Int, TileType>();
+
     [SerializeField]
     private Vector2Int? startedTile = null;
 
@@ -64,6 +73,7 @@ public class TileMapData : ScriptableObject
         get => width;
         set => width = value;
     }
+
     public int Height
     {
         get => height;
@@ -114,7 +124,7 @@ public class TileMapData : ScriptableObject
     {
         RemoveWarpTile(position, tileType);
         DeleteStart(position, tileType);
-        RemoveWarpTile(position, tileType);
+        RemoveShopTile(position, tileType);
         if (tileType == TileType.None || tileType == TileType.Wall)
         {
             tiles.Remove(position);
@@ -139,7 +149,6 @@ public class TileMapData : ScriptableObject
         {
             StartedTile = null;
         }
-
     }
 
     public void RemoveShopTile(Vector2Int position, TileType tileType)
@@ -148,7 +157,6 @@ public class TileMapData : ScriptableObject
         {
             warpTile.Remove(position);
         }
-
     }
 
     public void SetWarp(Vector2Int position, TileType tileType)
@@ -163,6 +171,16 @@ public class TileMapData : ScriptableObject
         shopTile.TryAdd(position, new());
         Debug.Log(position.ToString());
         SetTile(position, tileType);
+    }
+
+
+
+    public void Reload()
+    {
+        startedTile = null;
+        shopTile.Clear();
+        warpTile.Clear();
+
     }
 
 }

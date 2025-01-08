@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
@@ -68,6 +69,15 @@ public class GridManager : MonoBehaviour
     {
         get => m_corner;
         set => m_corner = value;
+    }
+
+    [SerializeField]
+    private GameObject m_textObject; // corner
+
+    public GameObject TextObject
+    {
+        get => m_textObject;
+        set => m_textObject = value;
     }
 
     private readonly Vector2Int[] m_orientations = new[]
@@ -185,19 +195,21 @@ public class GridManager : MonoBehaviour
             ConnectAdjacentGrids(obj, Vector2Int.down);
 
             var point = obj.GridPoint;
-            var tileData = m_mazeTableObject.Tiles[point];
-
-            switch (tileData)
+            if (m_mazeTableObject.Tiles.ContainsKey(point))
             {
-                case TileType.Start:
-                    FirstGrid = obj;
-                    break;
+                var tileData = m_mazeTableObject.Tiles[point];
 
+                switch (tileData)
+                {
+                    case TileType.Start:
+                        FirstGrid = obj;
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
+
             }
-
         }
     }
 
@@ -249,7 +261,7 @@ public class GridManager : MonoBehaviour
             if (spawn != null) DestroyImmediate(spawn);
         }
         m_spawnObjects.Clear();
-
+        var tiles = m_mazeTableObject.Tiles;
         foreach (GridObject obj in m_grids)
         {
             Transform trans = obj.transform;
@@ -257,10 +269,14 @@ public class GridManager : MonoBehaviour
             floorInstance.transform.localPosition = Vector3.zero;
             floorInstance.transform.localScale *= m_baseScale;
             m_spawnObjects.Add(floorInstance);
-
-            Distraction distraction = DistractionArea(obj.GridPoint);
+            Vector2Int point = obj.GridPoint;
+            Distraction distraction = DistractionArea(point);
             SpawnWall(distraction.Wall, m_spawnObjects, Vector3.zero, trans);
             SpawnCorner(distraction.Corner, m_spawnObjects, Vector3.zero, trans);
+            if (!tiles.ContainsKey(point)) continue;
+            if (tiles[point] == TileType.Wall || tiles[point] == TileType.None || tiles[point] == TileType.Area) continue;
+            SpawnText(tiles[point], m_spawnObjects, Vector3.up * 0.5f, trans);
+
         }
     }
 
@@ -330,12 +346,24 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private GameObject SpawnObject(GameObject prefab, Vector3 position, Transform parent, List<GameObject> gameObjects)
+    private void SpawnText(TileType type, List<GameObject> gameObjects, Vector3 position, Transform parent)
+    {
+        var spawn = SpawnObject(m_textObject, position, parent, gameObjects, false);
+        if (spawn.TryGetComponent<TMP_Text>(out TMP_Text text))
+        {
+            text.text = type.ToString();
+        }
+    }
+
+
+    private GameObject SpawnObject(GameObject prefab, Vector3 position, Transform parent, List<GameObject> gameObjects, bool isScaled = true)
     {
         GameObject instance = Instantiate(prefab, parent);
         instance.transform.localPosition = position;
-        instance.transform.localScale *= m_baseScale;
+        instance.transform.localScale = isScaled ? instance.transform.localScale * m_baseScale : instance.transform.localScale;
         gameObjects.Add(instance);
         return instance;
     }
+
+
 }

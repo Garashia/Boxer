@@ -12,15 +12,12 @@ public struct TextParameter
 public class MessageMicroCommand :
     MicroCommander<TextParameter, CommandList>
 {
-
-
     public class MessageCommand : Command
     {
         /*
          * 共通で使いたい関数をここに宣言
          */
     }
-
 }
 
 // 以下、CommandListを継承したコマンドクラスを追加

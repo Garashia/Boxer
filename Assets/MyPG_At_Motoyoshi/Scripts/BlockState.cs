@@ -4,8 +4,10 @@ public class BlockState : StateMachineBehaviour
 {
     [SerializeField]
     private string m_booleanName;
+
     [SerializeField]
     private float m_limitTime = 0.5f;
+
     private float m_timer;
 
     private void Awake()
@@ -14,14 +16,14 @@ public class BlockState : StateMachineBehaviour
     }
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         m_timer = 0.0f;
         animator.SetBool(m_booleanName, true);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         m_timer += Time.deltaTime;
         if (m_timer >= m_limitTime)
@@ -31,7 +33,7 @@ public class BlockState : StateMachineBehaviour
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.SetBool(m_booleanName, false);
     }

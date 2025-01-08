@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class GetInputSystem : MonoBehaviour
 {
-    static private GameInputs m_gameInputs = null;
-    static private GameInputs Inputs
+    private static GameInputs m_gameInputs = null;
+
+    private static GameInputs Inputs
     {
         get
         {
@@ -19,15 +20,18 @@ public class GetInputSystem : MonoBehaviour
             m_gameInputs = value;
         }
     }
-    static public GameInputs.UIActions UIAction
+
+    public static GameInputs.UIActions UIAction
     {
         get { return Inputs.UI; }
     }
-    static public GameInputs.PlayerActions PlayerAction
+
+    public static GameInputs.PlayerActions PlayerAction
     {
         get { return Inputs.Player; }
     }
-    static public GameInputs.MapActions MapAction
+
+    public static GameInputs.MapActions MapAction
     {
         get { return Inputs.Map; }
     }

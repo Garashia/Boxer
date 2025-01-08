@@ -7,6 +7,7 @@ public class BattleManager : MonoBehaviour
 {
     [SerializeField]
     private PlayerController m_playerController = null;
+
     public PlayerController SceneInPlayerController
     {
         set { m_playerController = value; }
@@ -15,6 +16,7 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField]
     private EnemyController m_enemyController = null;
+
     public EnemyController EnemyController
     {
         set { m_enemyController = value; }
@@ -42,7 +44,7 @@ public class BattleManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         EnemyObserver.SetBattleManager(this);
         PlayerObserver.SetBattleManager(this);
@@ -50,7 +52,7 @@ public class BattleManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (m_player)
         {
@@ -83,7 +85,6 @@ public class BattleManager : MonoBehaviour
                 m_playerController.Hit(m_enemyAttackDamage);
                 m_enemyBlock = 0;
             }
-
         }
 
         // Debug.Log(((int)(uint)m_playerMove).ToBinaryString());
@@ -96,7 +97,6 @@ public class BattleManager : MonoBehaviour
     {
         m_enemy = true;
     }
-
 
     public void OnStateExitEnemy(string dateName)
     {
@@ -116,7 +116,6 @@ public class BattleManager : MonoBehaviour
         state = m_playerState;
         m_player = true;
     }
-
 
     public void OnStateExitPlayer(PlayerState dateName)
     {
@@ -172,7 +171,6 @@ public class BattleManager : MonoBehaviour
         else if ((m_playerMove & PlayerState.LBRP) == PlayerState.LBRP
     && (m_enemyAttack & (uint)ID.LBlockRPunch) == (uint)ID.LBlockRPunch)
             return true;
-
 
         return false;
     }

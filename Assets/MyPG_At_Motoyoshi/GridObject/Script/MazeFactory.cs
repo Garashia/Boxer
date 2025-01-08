@@ -5,6 +5,7 @@ public class MazeFactory
 {
     // 2ŸŒ³”z—ñ‚Ì–À˜Hî•ñ
     private int[,] Maze;
+
     private int Width { get; set; }
     private int Height { get; set; }
 
@@ -72,7 +73,6 @@ public class MazeFactory
                 {
                     Maze[x, y] = Wall;
                 }
-
             }
         }
         return Maze;
@@ -110,14 +110,17 @@ public class MazeFactory
                     SetPath(x, --y);
                     SetPath(x, --y);
                     break;
+
                 case Direction.Right:
                     SetPath(++x, y);
                     SetPath(++x, y);
                     break;
+
                 case Direction.Down:
                     SetPath(x, ++y);
                     SetPath(x, ++y);
                     break;
+
                 case Direction.Left:
                     SetPath(--x, y);
                     SetPath(--x, y);
@@ -175,8 +178,9 @@ public class MazeFactory
     }
 
     // ’Ê˜HE•Çî•ñ
-    const int Path = 0;
-    const int Wall = 1;
+    private const int Path = 0;
+
+    private const int Wall = 1;
 
     // ƒZƒ‹î•ñ
     private class Cell
@@ -194,4 +198,3 @@ public class MazeFactory
         Left = 3
     }
 }
-

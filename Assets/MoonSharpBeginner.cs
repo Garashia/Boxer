@@ -3,15 +3,14 @@ using UnityEngine;
 
 public class MoonSharpBeginner : MonoBehaviour
 {
-
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         double result = MoonSharpFactorial();
         Debug.Log("Lua execution result: " + result);
     }
 
-    double MoonSharpFactorial()
+    private double MoonSharpFactorial()
     {
         string script = @"
 		-- defines a factorial function

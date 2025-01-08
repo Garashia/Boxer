@@ -5,6 +5,7 @@ public class GridObject : MonoBehaviour
     public class AdjacentGrid
     {
         private GridObject m_front = null;
+
         public GridObject Front
         {
             get { return m_front; }
@@ -12,6 +13,7 @@ public class GridObject : MonoBehaviour
         }
 
         private GridObject m_back = null;
+
         public GridObject Back
         {
             get { return m_back; }
@@ -19,6 +21,7 @@ public class GridObject : MonoBehaviour
         }
 
         private GridObject m_right = null;
+
         public GridObject Right
         {
             get { return m_right; }
@@ -26,6 +29,7 @@ public class GridObject : MonoBehaviour
         }
 
         private GridObject m_left = null;
+
         public GridObject Left
         {
             get { return m_left; }
@@ -33,7 +37,7 @@ public class GridObject : MonoBehaviour
         }
     }
 
-    struct Vector3_Structure
+    private struct Vector3_Structure
     {
         public Vector3 from;
         public Vector3 to;
@@ -55,12 +59,14 @@ public class GridObject : MonoBehaviour
     }
 
     private AdjacentGrid adjacentGrid = new AdjacentGrid();
+
     public AdjacentGrid A_Grid
     {
         get { return adjacentGrid; }
     }
 
     private bool m_opened = false;
+
     public bool Open
     {
         get { return m_opened; }
@@ -69,6 +75,7 @@ public class GridObject : MonoBehaviour
 
     [SerializeField, HideInInspector]
     private Vector2Int m_gridPoint;
+
     public Vector2Int GridPoint
     {
         set { m_gridPoint = value; }
@@ -76,6 +83,7 @@ public class GridObject : MonoBehaviour
     }
 
     private bool m_gridDataRender;
+
     public bool GridRender
     {
         set { m_gridDataRender = value; }
@@ -84,16 +92,19 @@ public class GridObject : MonoBehaviour
 
     [SerializeField, HideInInspector]
     private GridManager m_gridManager;
+
     public GridManager GetGridManager
     {
         get { return m_gridManager; }
     }
+
     public GridManager SetGridManager
     {
         set { m_gridManager = value; }
     }
 
     private int m_id = 0;
+
     public int Id
     {
         get { return m_id; }
@@ -101,10 +112,10 @@ public class GridObject : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-
     }
+
     private void OnDrawGizmos()
     {
         Vector3 vector3 = transform.position;
@@ -126,10 +137,10 @@ public class GridObject : MonoBehaviour
         Gizmos.color = new Color(1.0f, 0.0f, 0.0f);
         Gizmos.DrawRay(transform.position, Normal);
     }
-    // Update is called once per frame
-    void Update()
-    {
 
+    // Update is called once per frame
+    private void Update()
+    {
     }
 
     public void GridDown()
@@ -143,7 +154,7 @@ public class GridObject : MonoBehaviour
         }
     }
 
-    Vector3_Structure GetVector3_Structure(Vector3 from, Vector3 to)
+    private Vector3_Structure GetVector3_Structure(Vector3 from, Vector3 to)
     {
         Quaternion quat = transform.rotation;
         Vector3 vector = transform.localScale;
@@ -174,5 +185,4 @@ public class GridObject : MonoBehaviour
 
         return vector3_Structure;
     }
-
 }

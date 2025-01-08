@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+
 [DefaultExecutionOrder(5)]
 public class MapMoving : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class MapMoving : MonoBehaviour
     private Fade m_fade;
 
     private bool m_isMove = false;
+
     public bool IsMove
     {
         get { return m_isMove; }
@@ -82,8 +84,6 @@ public class MapMoving : MonoBehaviour
         GetInputSystem.MapAction.Front.performed += Front;
         GetInputSystem.MapAction.RightRotation.performed += RightRotation;
         GetInputSystem.MapAction.LeftRotation.performed += LeftRotation;
-
-
     }
 
     // Update is called once per frame

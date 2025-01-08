@@ -70,6 +70,7 @@ public class TileMapDataEditor : Editor
         {
             TileMapEditor editor = (TileMapEditor)EditorWindow.GetWindow(typeof(TileMapEditor));
             editor.titleContent = new GUIContent("Tile Map Editor");
+
             editor.Focus();
             editor.LoadTileMapData(obj);
         }

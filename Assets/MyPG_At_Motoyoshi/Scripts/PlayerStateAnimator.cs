@@ -10,22 +10,29 @@ public class PlayerStateAnimator : StateMachineBehaviour
 
         RightB = (1 << 2),
         LeftB = (1 << 3),
+
         [InspectorName("")]
         B = LeftB | RightB,
+
         [InspectorName("")]
         RBRP = (1 << 4),
+
         [InspectorName("")]
         LBRP = (1 << 5),
+
         [InspectorName("")]
         RBLP = (1 << 6),
+
         [InspectorName("")]
         LBLP = (1 << 7),
+
         [InspectorName("")]
         P = RightP | LeftP | RBRP | LBRP | RBLP | LBLP,
     }
 
     [SerializeField]
     private PlayerState m_name;
+
     public PlayerState Name
     {
         get { return m_name; }
@@ -34,11 +41,13 @@ public class PlayerStateAnimator : StateMachineBehaviour
 
     [SerializeField]
     private float m_first, m_end;
+
     public float First
     {
         set { m_first = value; }
         get { return m_first; }
     }
+
     public float End
     {
         set { m_end = value; }
@@ -46,14 +55,13 @@ public class PlayerStateAnimator : StateMachineBehaviour
     }
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerObserver.OnStateEnter(m_name);
     }
 
-
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         float timer = stateInfo.length * stateInfo.normalizedTime;
         if (timer > m_first && timer < m_end)
@@ -61,7 +69,7 @@ public class PlayerStateAnimator : StateMachineBehaviour
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlayerObserver.OnStateExit(m_name);
     }
