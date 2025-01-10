@@ -46,6 +46,7 @@ public class ItemListController
         m_ItemList.onSelectionChange += OnArmsSelected;
 
         m_SelectItemButton.clicked += TaskOnClick;
+
     }
 
 
@@ -146,7 +147,6 @@ public class ItemListController
         Debug.Log(m_select_item?.name);
 
         m_ItemDescriptionsLabel.text = m_select_item?.description;
-
 
         // 選択ボタンを有効にする
         m_SelectItemButton.SetEnabled(true);
