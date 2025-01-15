@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using StairsMap = SerializedDictionary<UnityEngine.Vector2Int,
+    TileMapData>;
 public enum TileType
 {
     Wall = 0, // NoneÇ‚WallÇÕé´èëÇ…ìoò^ÇµÇ»Ç¢
@@ -8,7 +9,7 @@ public enum TileType
     Shop,
     Start,
     Goal,
-    Move,
+    Stairs,
     Warp,
     Boss,
     Chara,
@@ -68,6 +69,10 @@ public class TileMapData : ScriptableObject
     [SerializeField]
     private SerializedDictionary<Vector2Int, ShoppingItem> shopTile = new SerializedDictionary<Vector2Int, ShoppingItem>();
 
+    [SerializeField]
+    private StairsMap stairsTile = new();
+
+
     public int Width
     {
         get => width;
@@ -104,6 +109,13 @@ public class TileMapData : ScriptableObject
         set => shopTile = value;
     }
 
+    public StairsMap StairsTiles
+    {
+        get => stairsTile;
+        set => stairsTile = value;
+
+    }
+
     public void Initialize(int width, int height)
     {
         this.width = width;
@@ -125,6 +137,7 @@ public class TileMapData : ScriptableObject
         RemoveWarpTile(position, tileType);
         DeleteStart(position, tileType);
         RemoveShopTile(position, tileType);
+        RemoveStairsTile(position, tileType);
         if (tileType == TileType.None || tileType == TileType.Wall)
         {
             tiles.Remove(position);
@@ -142,6 +155,15 @@ public class TileMapData : ScriptableObject
             shopTile.Remove(position);
         }
     }
+
+    private void RemoveStairsTile(Vector2Int position, TileType tileType)
+    {
+        if (tileType != TileType.Stairs && StairsTiles.ContainsKey(position))
+        {
+            StairsTiles.Remove(position);
+        }
+    }
+
 
     private void DeleteStart(Vector2Int position, TileType tileType)
     {
@@ -172,6 +194,14 @@ public class TileMapData : ScriptableObject
         Debug.Log(position.ToString());
         SetTile(position, tileType);
     }
+
+    public void SetStairs(Vector2Int position, TileType tileType)
+    {
+        stairsTile.TryAdd(position, new());
+        Debug.Log(position.ToString());
+        SetTile(position, tileType);
+    }
+
 
 
 

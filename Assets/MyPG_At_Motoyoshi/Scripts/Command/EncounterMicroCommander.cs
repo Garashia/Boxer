@@ -1,27 +1,28 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CommandList = EncounterMicroCommander.EncounterCommand;
 
-public struct EncounterParameter
-{
-    public GameObject m_gameObject;
-    public Text encounterText;
 
-    // 新規に宣言した変数は、コンストラクタ内で初期化すること。
-    public EncounterParameter
-    (
-        GameObject gameObject = null
-        , Text text = null
-    )
-    {
-        m_gameObject = gameObject;
-        encounterText = text;
-    }
-}
+//     public GameObject m_gameObject;
+//     public Text encounterText;
+
+//public struct EncounterParameter
+//{
+
+//    // 新規に宣言した変数は、コンストラクタ内で初期化すること。
+//    public EncounterParameter
+//    (
+//        GameObject gameObject = null
+//        , Text text = null
+//    )
+//    {
+//        m_gameObject = gameObject;
+//        encounterText = text;
+//    }
+//}
 
 public class EncounterMicroCommander :
-    MicroCommander<EncounterParameter, CommandList>
+    MicroCommander
 {
     public class EncounterCommand : Command
     {
@@ -42,16 +43,22 @@ public class ShoppingCommand : CommandList
 {
     private bool _isShopping = false;
     private float m_timer = 0.0f;
+    private GameObject m_gameObject;
+    private Text m_encounterText;
 
+    public ShoppingCommand(Text encounterText)
+    {
+        m_encounterText = encounterText;
+    }
     public override void Execute()
     {
         m_timer += Time.deltaTime;
         string output = "ショッピング中";
         output += Dot(m_timer);
 
-        if (Parameter.encounterText != null)
+        if (m_encounterText != null)
         {
-            Parameter.encounterText.text = output;
+            m_encounterText.text = output;
         }
         Debug.Log(output);
         if (m_timer >= 5)
@@ -70,6 +77,12 @@ public class ItemCommand : CommandList
 {
     private bool _isItem = false;
     private float m_timer = 0.0f;
+    private Text m_encounterText;
+
+    public ItemCommand(Text encounterText)
+    {
+        m_encounterText = encounterText;
+    }
 
     public override void Execute()
     {
@@ -77,9 +90,9 @@ public class ItemCommand : CommandList
         string output = "アイテム取得中";
         output += Dot(m_timer);
 
-        if (Parameter.encounterText != null)
+        if (m_encounterText != null)
         {
-            Parameter.encounterText.text = output;
+            m_encounterText.text = output;
         }
 
         Debug.Log(output);
@@ -99,16 +112,20 @@ public class StrengthenCommand : CommandList
 {
     private bool _isStrengthen = false;
     private float m_timer = 0.0f;
-
+    private Text m_encounterText;
+    public StrengthenCommand(Text encounterText)
+    {
+        m_encounterText = encounterText;
+    }
     public override void Execute()
     {
         m_timer += Time.deltaTime;
         string output = "強化中";
         output += Dot(m_timer);
 
-        if (Parameter.encounterText != null)
+        if (m_encounterText != null)
         {
-            Parameter.encounterText.text = output;
+            m_encounterText.text = output;
         }
 
         Debug.Log(output);
@@ -128,16 +145,21 @@ public class MessengerCommand : CommandList
 {
     private bool _isMessenger = false;
     private float m_timer = 0.0f;
+    private Text m_encounterText;
 
+    public MessengerCommand(Text encounterText)
+    {
+        m_encounterText = encounterText;
+    }
     public override void Execute()
     {
         m_timer += Time.deltaTime;
         string output = "会話中";
         output += Dot(m_timer);
 
-        if (Parameter.encounterText != null)
+        if (m_encounterText != null)
         {
-            Parameter.encounterText.text = output;
+            m_encounterText.text = output;
         }
 
         Debug.Log(output);
@@ -156,13 +178,19 @@ public class MessengerCommand : CommandList
 public class SpawnCommand : CommandList
 {
     private bool _isSpawn = false;
+    private Text m_encounterText;
+
+    public SpawnCommand(Text encounterText)
+    {
+        m_encounterText = encounterText;
+    }
 
     public override void Execute()
     {
-        if (Parameter.encounterText != null)
+        if (m_encounterText != null)
         {
             // Parameter.encounterText.enabled = true;
-            Parameter.encounterText.text = "";
+            m_encounterText.text = "";
         }
         _isSpawn = true;
     }
@@ -177,12 +205,19 @@ public class DeleteCommand : CommandList
 {
     private bool _isDelete = false;
 
+    private Text m_encounterText;
+
+    public DeleteCommand(Text encounterText)
+    {
+        m_encounterText = encounterText;
+    }
+
     public override void Execute()
     {
-        if (Parameter.encounterText != null)
+        if (m_encounterText != null)
         {
             // Parameter.encounterText.enabled = false;
-            Parameter.encounterText.text = "";
+            m_encounterText.text = "";
         }
         _isDelete = true;
     }
@@ -193,45 +228,39 @@ public class DeleteCommand : CommandList
     }
 }
 
-public static class EncounterCommandList
-{
-    public static List<CommandList> ShoppingCommandList()
-    {
-        return new List<CommandList>()
-        {
-            new SpawnCommand(),
-            new ShoppingCommand(),
-            new DeleteCommand(),
-        };
-    }
+//public static class EncounterCommandList
+//{
+//    public static List<CommandList> ShoppingCommandList()
+//    {
+//    }
 
-    public static List<CommandList> ItemCommandList()
-    {
-        return new List<CommandList>()
-        {
-            new SpawnCommand(),
-            new ItemCommand(),
-            new DeleteCommand()
-        };
-    }
+//    public static List<CommandList> ItemCommandList()
+//    {
+//        return new List<CommandList>()
+//        {
+//            new SpawnCommand(),
+//            new ItemCommand(),
+//            new DeleteCommand()
+//        };
+//    }
 
-    public static List<CommandList> StrengthenCommandList()
-    {
-        return new List<CommandList>()
-        {
-            new SpawnCommand(),
-            new StrengthenCommand(),
-            new DeleteCommand()
-        };
-    }
+//    public static List<CommandList> StrengthenCommandList()
+//    {
+//        return new List<CommandList>()
+//        {
+//            new SpawnCommand(),
+//            new StrengthenCommand(),
+//            new DeleteCommand()
+//        };
+//    }
 
-    public static List<CommandList> MessengerCommandList()
-    {
-        return new List<CommandList>()
-        {
-            new SpawnCommand(),
-            new MessengerCommand(),
-            new DeleteCommand(),
-        };
-    }
-}
+//    public static List<CommandList> MessengerCommandList()
+//    {
+//        return new List<CommandList>()
+//        {
+//            new SpawnCommand(),
+//            new MessengerCommand(),
+//            new DeleteCommand(),
+//        };
+//    }
+//}

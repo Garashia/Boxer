@@ -1,9 +1,13 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
+    [SerializeField, HideInInspector]
+    public bool isOpen { get; set; }
+
     [SerializeField]
     private Vector3 m_gridScale; // gridScale
 
@@ -146,11 +150,21 @@ public class GridManager : MonoBehaviour
 
     private const float m_baseScale = 2.25f; // by
     private readonly float m_wallHeight = 0.275f * m_baseScale; // high
-    private readonly float m_wallOffset = 0.39f * m_baseScale; // wallInvert
-    private readonly float m_cornerOffset = 0.375f * m_baseScale; // cornerInvert
+    private readonly float m_wallOffset = 0.44f * m_baseScale; // wallInvert
+    private readonly float m_cornerOffset = 0.44f * m_baseScale; // cornerInvert
+    //private readonly float m_cornerOffset = 0.425f * m_baseScale; // cornerInvert
 
     [SerializeField, HideInInspector]
     private List<GameObject> m_spawnObjects; // spawnObjects
+
+    [SerializeField]
+    private Text m_textGUI;
+    public Text TextGUI
+    {
+        get { return m_textGUI; }
+        set { m_textGUI = value; }
+    }
+
 
     public bool IsAdjacent(int x, int y, Vector2Int direction)
     {
@@ -204,7 +218,19 @@ public class GridManager : MonoBehaviour
                     case TileType.Start:
                         FirstGrid = obj;
                         break;
+                    case TileType.Shop:
+                        obj.EncounterCommands = () =>
+                        {
+                            return new List<EncounterMicroCommander.EncounterCommand>()
+                            {
+                                new SpawnCommand(encounterText:TextGUI),
+                                new ShoppingCommand(encounterText:TextGUI),
+                                new DeleteCommand(encounterText:TextGUI)
+                            };
 
+                        };
+                        // obj.EncounterStates = new EncounterParameter(text: TextGUI);
+                        break;
                     default:
                         break;
                 }

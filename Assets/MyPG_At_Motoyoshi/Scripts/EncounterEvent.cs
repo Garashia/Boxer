@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-using CommandList = EncounterMicroCommander.EncounterCommand;
 
 public class EncounterEvent : MonoBehaviour
 {
@@ -40,51 +37,51 @@ public class EncounterEvent : MonoBehaviour
         }
     }
 
-    public void ShoppingEncounter()
-    {
-        m_playerInput.IsMove = true;
-        List<CommandList> commands = EncounterCommandList.ShoppingCommandList();
-        EncounterParameter parameter = new EncounterParameter(text: m_text);
-        SetCommand(commands, parameter);
-    }
+    //public void ShoppingEncounter()
+    //{
+    //    m_playerInput.IsMove = true;
+    //    List<CommandList> commands = EncounterCommandList.ShoppingCommandList();
+    //    EncounterParameter parameter = new EncounterParameter(text: m_text);
+    //    SetCommand(commands, parameter);
+    //}
 
-    public void ItemEncounter()
-    {
-        m_playerInput.IsMove = true;
-        List<CommandList> commands = EncounterCommandList.ItemCommandList();
-        EncounterParameter parameter = new EncounterParameter(text: m_text);
-        SetCommand(commands, parameter);
-    }
+    //public void ItemEncounter()
+    //{
+    //    m_playerInput.IsMove = true;
+    //    List<CommandList> commands = EncounterCommandList.ItemCommandList();
+    //    EncounterParameter parameter = new EncounterParameter(text: m_text);
+    //    SetCommand(commands, parameter);
+    //}
 
-    public void StrengthenEncounter()
-    {
-        m_playerInput.IsMove = true;
-        List<CommandList> commands = EncounterCommandList.StrengthenCommandList();
-        EncounterParameter parameter = new EncounterParameter(text: m_text);
-        SetCommand(commands, parameter);
-    }
+    //public void StrengthenEncounter()
+    //{
+    //    m_playerInput.IsMove = true;
+    //    List<CommandList> commands = EncounterCommandList.StrengthenCommandList();
+    //    EncounterParameter parameter = new EncounterParameter(text: m_text);
+    //    SetCommand(commands, parameter);
+    //}
 
-    public void MessengerEncounter()
-    {
-        m_playerInput.IsMove = true;
-        List<CommandList> commands = EncounterCommandList.MessengerCommandList();
-        EncounterParameter parameter = new EncounterParameter(text: m_text);
-        SetCommand(commands, parameter);
-    }
+    //public void MessengerEncounter()
+    //{
+    //    m_playerInput.IsMove = true;
+    //    List<CommandList> commands = EncounterCommandList.MessengerCommandList();
+    //    EncounterParameter parameter = new EncounterParameter(text: m_text);
+    //    SetCommand(commands, parameter);
+    //}
 
-    private void SetCommand
-    (
-        List<CommandList> commands,
-        EncounterParameter parameter
-    )
-    {
-        EncounterMicroCommander microCommander = new EncounterMicroCommander();
-        foreach (CommandList command in commands)
-        {
-            microCommander.AddCommand(command, parameter);
-        }
-        m_encounterMicroCommander = microCommander;
-    }
+    //private void SetCommand
+    //(
+    //    List<CommandList> commands,
+    //    EncounterParameter parameter
+    //)
+    //{
+    //    EncounterMicroCommander microCommander = new EncounterMicroCommander();
+    //    foreach (CommandList command in commands)
+    //    {
+    //        microCommander.AddCommand(command, parameter);
+    //    }
+    //    m_encounterMicroCommander = microCommander;
+    //}
 
     // public void
 }

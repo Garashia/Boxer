@@ -1,4 +1,4 @@
-public interface ICommand<T>
+public interface ICommand
 {
     // Às‚·‚é
     abstract public void Execute();

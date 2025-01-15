@@ -208,3 +208,4 @@ MonoBehaviour:
     start: 0.75
     end: 0.9
     math: 13
+  m_runtimeAnimatorController: {fileID: 9100000, guid: 69de81462b07e644f861585973ce060e, type: 2}

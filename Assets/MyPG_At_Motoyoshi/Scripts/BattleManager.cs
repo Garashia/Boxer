@@ -66,13 +66,6 @@ public class BattleManager : MonoBehaviour
         }
         if (m_enemy)
         {
-            //if ((m_playerMove & PlayerState.B) == PlayerState.None)
-            //{
-            //    m_playerController.Hit(m_enemyAttackDamage);
-            //    m_enemy = false;
-            //    m_enemyBlock = 0;
-            //}
-            //else
             if ((m_enemyBlock & (uint)BlockID.LeftBlock) == (uint)BlockID.LeftBlock
                 && !((m_playerMove & PlayerState.LeftB) == PlayerState.LeftB))
             {
@@ -86,8 +79,6 @@ public class BattleManager : MonoBehaviour
                 m_enemyBlock = 0;
             }
         }
-
-        // Debug.Log(((int)(uint)m_playerMove).ToBinaryString());
         m_playerMove = PlayerState.None;
 
         m_enemyAttackDamage = 0.0f;

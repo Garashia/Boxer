@@ -1,27 +1,18 @@
-public class Commander<T>
+public class Commander
 {
-    private ICommand<T> m_command = null;
-    private T m_parameter;
+    private ICommand m_command = null;
 
     // コマンドを取得する
-    public ICommand<T> GetCommand()
+    public ICommand GetCommand()
     {
         return m_command;
     }
 
     // コマンドを設定する
-    public void SetCommand(ICommand<T> command)
+    public void SetCommand(ICommand command)
     {
         m_command = command;
     }
-
-    // パラメータを取得する
-    public T GetParameter()
-    { return m_parameter; }
-
-    // パラメータを設定する
-    public void SetParameter(T parameter)
-    { m_parameter = parameter; }
 
     // 実行中か確認
     public virtual bool Execute()

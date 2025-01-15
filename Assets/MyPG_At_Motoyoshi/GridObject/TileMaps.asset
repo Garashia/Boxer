@@ -192,3 +192,5 @@ MonoBehaviour:
       Value: 0
   shopTile:
     m_list: []
+  stairsTile:
+    m_list: []

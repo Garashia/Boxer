@@ -1390,3 +1390,5 @@ MonoBehaviour:
     m_list: []
   shopTile:
     m_list: []
+  stairsTile:
+    m_list: []
