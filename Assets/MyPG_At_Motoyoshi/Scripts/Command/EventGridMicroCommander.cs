@@ -5,7 +5,7 @@ public struct EventParameter
 }
 
 public class EventGridMicroCommander :
-    MicroCommander<EventParameter, CommandList>
+    MicroCommander
 {
     public class EventGridCommand : Command
     { }

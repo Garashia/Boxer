@@ -89,13 +89,13 @@ public class GridObject : MonoBehaviour
         set { eventStates = value; }
     }
 
-    [SerializeField, HideInInspector]
-    private EncounterParameter encounterParameter;
-    public EncounterParameter EncounterStates
-    {
-        get { return encounterParameter; }
-        set { encounterParameter = value; }
-    }
+    //[SerializeField, HideInInspector]
+    //private EncounterParameter encounterParameter;
+    //public EncounterParameter EncounterStates
+    //{
+    //    get { return encounterParameter; }
+    //    set { encounterParameter = value; }
+    //}
 
     private AdjacentGrid adjacentGrid = new AdjacentGrid();
 
@@ -184,7 +184,7 @@ public class GridObject : MonoBehaviour
         encounter.Clear();
         foreach (var command in commands)
         {
-            encounter.AddCommand(command, encounterParameter);
+            encounter.AddCommand(command);
         }
         return encounter;
     }
@@ -197,7 +197,7 @@ public class GridObject : MonoBehaviour
         encounter.Clear();
         foreach (var command in commands)
         {
-            encounter.AddCommand(command, encounterParameter);
+            encounter.AddCommand(command);
         }
         encounterMicroCommander = encounter;
         return true;
@@ -211,7 +211,7 @@ public class GridObject : MonoBehaviour
         eventGrid.Clear();
         foreach (var command in commands)
         {
-            eventGrid.AddCommand(command, eventStates);
+            eventGrid.AddCommand(command);
         }
         return eventGrid;
     }

@@ -219,8 +219,17 @@ public class GridManager : MonoBehaviour
                         FirstGrid = obj;
                         break;
                     case TileType.Shop:
-                        obj.EncounterCommands = EncounterCommandList.ShoppingCommandList;
-                        obj.EncounterStates = new EncounterParameter(text: TextGUI);
+                        obj.EncounterCommands = () =>
+                        {
+                            return new List<EncounterMicroCommander.EncounterCommand>()
+                            {
+                                new SpawnCommand(encounterText:TextGUI),
+                                new ShoppingCommand(encounterText:TextGUI),
+                                new DeleteCommand(encounterText:TextGUI)
+                            };
+
+                        };
+                        // obj.EncounterStates = new EncounterParameter(text: TextGUI);
                         break;
                     default:
                         break;

@@ -1,18 +1,9 @@
 using System.Collections.Generic;
 
-public class MicroCommander<T, Com> : Commander<T>
-    where Com : MicroCommander<T, Com>.Command
+public class MicroCommander : Commander
 {
-    public class Command : ICommand<T>
+    public class Command : ICommand
     {
-        // パラメーター変数
-        private T m_parameter;
-
-        public T Parameter
-        {
-            get { return m_parameter; }
-            set { m_parameter = value; }
-        }
 
         public virtual void Execute()
         { }
@@ -21,15 +12,14 @@ public class MicroCommander<T, Com> : Commander<T>
         { return true; }
     };
 
-    private Queue<Com> m_microCommand = new Queue<Com>();
+    private Queue<Command> m_microCommand = new Queue<Command>();
 
     // マクロコマンド数を取得する
     private int GetMacroCommandNumber()
     { return m_microCommand.Count; }
 
-    public void AddCommand(Com command, T parameter)
+    public void AddCommand(Command command)
     {
-        command.Parameter = (parameter);
         m_microCommand.Enqueue(command);
     }
 
