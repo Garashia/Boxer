@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEditor;      //!< デプロイ時にEditorスクリプトが入るとエラーになるので UNITY_EDITOR で括ってね！
 using UnityEditor.Animations;
-
-// using UnityEditor.Animations;
 using UnityEditorInternal;
 using UnityEngine;
 using static EnemyParameter;

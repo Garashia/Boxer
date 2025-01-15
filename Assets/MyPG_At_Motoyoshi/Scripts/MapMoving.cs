@@ -15,6 +15,7 @@ public class MapMoving : MonoBehaviour
     private float m_higher;
 
     private EncounterMicroCommander m_commander = null;
+    private EventGridMicroCommander m_eventCommander = null;
 
     private int m_index = 0;
 
@@ -70,13 +71,15 @@ public class MapMoving : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        var startUp = StartupInitializer.StartUp;
         // m_commander = new EncounterMicroCommander();
         m_encounterCount = m_OnEncounter.Count;
         m_isMove = false;
         m_index = 0;
         Vector3 vector3 = Vector3.zero;
-        Grid = (GridSave.GridID > 0) ? m_gridManager.Grids[GridSave.GridID] : Grid;
-        m_index = (GridSave.GridIndex > 0) ? GridSave.GridIndex : m_index;
+        Grid = (startUp.GridID > 0) ? m_gridManager.Grids[startUp.GridID] : Grid;
+        m_index = (startUp.GridIndex > 0) ? startUp.GridIndex : m_index;
+        startUp.InitIndex = Grid.Id;
         vector3.y = CAMERA_ANGLE[m_index];
         transform.rotation = Grid.Rotation * Quaternion.AngleAxis
         (vector3.y, Vector3.up);
@@ -95,9 +98,17 @@ public class MapMoving : MonoBehaviour
         if (Grid == null)
             return;
         bool? isCommander = m_commander?.Execute();
+
         if (isCommander != null && isCommander != m_isMove)
         {
             m_isMove = (bool)isCommander;
+        }
+        if (isCommander == null || isCommander == false)
+        {
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                m_eventCommander = Grid.OnEvent();
+            }
         }
     }
 
@@ -162,12 +173,12 @@ public class MapMoving : MonoBehaviour
             m_OnEncounter[m_random.Next(m_encounterCount)].Invoke();
     }
 
-    public void OnEncount()
+    public void OnEncounter()
     {
         //return;
         m_isMove = true;
-        GridSave.GridID = Grid.Id;
-        GridSave.GridIndex = m_index;
+        StartupInitializer.StartUp.GridID = Grid.Id;
+        StartupInitializer.StartUp.GridIndex = m_index;
         m_fade.FadeIn(1.0f, () =>
         {
             SceneManager.LoadSceneAsync("Player");

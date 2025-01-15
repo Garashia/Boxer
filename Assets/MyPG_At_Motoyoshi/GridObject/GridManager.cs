@@ -1,9 +1,13 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
+    [SerializeField, HideInInspector]
+    public bool isOpen { get; set; }
+
     [SerializeField]
     private Vector3 m_gridScale; // gridScale
 
@@ -153,6 +157,15 @@ public class GridManager : MonoBehaviour
     [SerializeField, HideInInspector]
     private List<GameObject> m_spawnObjects; // spawnObjects
 
+    [SerializeField]
+    private Text m_textGUI;
+    public Text TextGUI
+    {
+        get { return m_textGUI; }
+        set { m_textGUI = value; }
+    }
+
+
     public bool IsAdjacent(int x, int y, Vector2Int direction)
     {
         return IsAdjacent(new Vector2Int(x, y), direction);
@@ -205,7 +218,10 @@ public class GridManager : MonoBehaviour
                     case TileType.Start:
                         FirstGrid = obj;
                         break;
-
+                    case TileType.Shop:
+                        obj.EncounterCommands = EncounterCommandList.ShoppingCommandList;
+                        obj.EncounterStates = new EncounterParameter(text: TextGUI);
+                        break;
                     default:
                         break;
                 }

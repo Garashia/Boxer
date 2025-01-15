@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.UI;
 
 [CustomEditor(typeof(GridManager))]
 public class GridManagerEditor : Editor
@@ -102,8 +103,9 @@ public class GridManagerEditor : Editor
         {
             GridDestroy(obj.Grids);
         }
-
-        gridList.DoLayoutList();
+        obj.isOpen = EditorGUILayout.Foldout(obj.isOpen, "GridList");
+        if (obj.isOpen)
+            gridList.DoLayoutList();
 
         if (GUILayout.Button("Create Grid"))
         {
@@ -127,6 +129,8 @@ public class GridManagerEditor : Editor
                 obj.PushObjectSpawn();
             }
         }
+
+        obj.TextGUI = (Text)EditorGUILayout.ObjectField("TextGUI", obj.TextGUI, typeof(Text), true);
 
         EditorUtility.SetDirty(obj);
         serializedObject.ApplyModifiedProperties();
