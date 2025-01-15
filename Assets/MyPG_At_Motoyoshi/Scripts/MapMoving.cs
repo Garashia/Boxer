@@ -169,7 +169,7 @@ public class MapMoving : MonoBehaviour
             m_commander = encounter;
         }
 
-        if (m_random.Probability(0.8f))
+        if (m_random.Probability(0.01f))
             m_OnEncounter[m_random.Next(m_encounterCount)].Invoke();
     }
 
