@@ -58,6 +58,7 @@ public class HoldingItemList
     private void None()
     {
         List<HoldingItem> values = new List<HoldingItem>(HavingItems.Values);
+
     }
 
     /// <summary>

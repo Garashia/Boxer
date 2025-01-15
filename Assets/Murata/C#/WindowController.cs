@@ -23,6 +23,39 @@ public class WindowController : MonoBehaviour
                                     command_menu_button, command_item_button, command_map_button,
                                         arms_head_button, arms_arm_button, arms_body_button, arms_leg_button, arms_accessory_button;
 
+    //  移動関係のボタン
+    UnityEngine.UIElements.Button move_up_button, move_down_button, move_right_button, move_left_button,
+                                    move_return_button, spin_right_button, spin_left_button;
+    public System.Action DownButtonClicked
+    {
+        set { move_down_button.clicked += value; }
+    }
+    public System.Action UpButtonClicked
+    {
+        set { move_up_button.clicked += value; }
+    }
+    public System.Action RightButtonClicked
+    {
+        set { move_right_button.clicked += value; }
+    }
+    public System.Action LeftButtonClicked
+    {
+        set { move_left_button.clicked += value; }
+    }
+    public System.Action ReturnButtonClicked
+    {
+        set { move_return_button.clicked += value; }
+    }
+    public System.Action SpinRightButtonClicked
+    {
+        set { spin_right_button.clicked += value; }
+    }
+    public System.Action SpinLeftButtonClicked
+    {
+        set { spin_left_button.clicked += value; }
+    }
+
+
     //  UIの表示状態
     UI_State ui_state;
     //  メニューUIの表示状態,過去の状態
@@ -115,6 +148,24 @@ public class WindowController : MonoBehaviour
         arms_accessory_button = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Accessory");
 
 
+        //  移動関係のボタン
+        //  前移動ボタン
+        move_up_button = command_uIDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Move_UP");
+        //  後ろ移動ボタン
+        move_down_button = command_uIDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Move_Down");
+        //  右移動ボタン
+        move_right_button = command_uIDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Move_Right");
+        //  左移動ボタン
+        move_left_button = command_uIDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Move_Left");
+        //  反転ボタン
+        move_return_button = command_uIDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Move_Return");
+        //  右回転ボタン
+        spin_right_button = command_uIDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Spin_Right");
+        //  左回転ボタン
+        spin_left_button = command_uIDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Spin_Left");
+
+
+
         //origin_item_texture = item_use_image.texture;
         //Texture2D item_use_texture = new Texture2D((int)item_use_image.rect.width, (int)item_use_image.rect.height);
 
@@ -143,8 +194,6 @@ public class WindowController : MonoBehaviour
 
         //arms_set_texture.Apply();
 
-
-
         //  アイテム使用ボタン
         item_use_button = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("SelectItemButton");
 
@@ -165,6 +214,18 @@ public class WindowController : MonoBehaviour
         {
             menu_state = past_menu_state;
             ui_state = UI_State.MENU;
+        };
+
+        //  メニュー:アイテムを押すと消費アイテム画面を展開する
+        command_item_button.clicked += () =>
+        {
+            menu_state = past_menu_state;
+            ui_state = UI_State.MENU;
+
+            menu_state = Menu_State.ITEM;
+            //  リストに消費アイテムのみを表示
+            SingleTonList.SingletonList.ViewItemType = IsThisItem.ItemType.Consumables;
+
         };
 
         //  メニュー:装備ボタンを押すとメニュー:装備画面を開く
@@ -220,8 +281,6 @@ public class WindowController : MonoBehaviour
         {
             menu_state = Menu_State.SYSTEM;
         };
-
-
 
 
 
