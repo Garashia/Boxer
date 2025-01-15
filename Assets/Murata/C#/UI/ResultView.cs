@@ -32,7 +32,7 @@ public class ResultView : MonoBehaviour
 
         m_dropListController.InitializeItemList(uiDocument.rootVisualElement, m_ListEntryTemplate);
 
-        //  リザルト画面の各種ラベルに戦闘結果(戦闘時間、獲得G,経験値)を入れる
+        //  リザルト画面の各種ラベルに戦闘結果(戦闘時間、獲得G,経験値)を入れる 
         m_dropListController.SetResultLabel(m_clearTime, m_money, m_exp);
 
         m_dropListController.SetDropItem(m_dropItem);

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 296499699603334250}
   - component: {fileID: 7908870499343840855}
-  - component: {fileID: 537755842421704}
   m_Layer: 0
   m_Name: Result_UI
   m_TagString: Untagged
@@ -49,22 +48,3 @@ MonoBehaviour:
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: d7dd45a4f6f7b0644a4ab37756694f10, type: 3}
   m_SortingOrder: 0
---- !u!114 &537755842421704
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 590100184605261760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3f40c53087c8574d89730f782fe6a5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ListEntryTemplate: {fileID: 9197481963319205126, guid: ea3e4c5c674e97f4eb1036d787070bf7, type: 3}
-  m_dropItem:
-  - {fileID: 11400000, guid: c775a7ca6a07c764ea88ed2f46001f20, type: 2}
-  - {fileID: 11400000, guid: a47d713f46be6f74e9b79d68d03fb080, type: 2}
-  m_clearTime: 30
-  m_money: 10
-  m_exp: 4

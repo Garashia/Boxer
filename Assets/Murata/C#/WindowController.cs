@@ -42,6 +42,18 @@ public class WindowController : MonoBehaviour
     {
         set { move_left_button.clicked += value; }
     }
+    public System.Action ReturnButtonClicked
+    {
+        set { move_return_button.clicked += value; }
+    }
+    public System.Action SpinRightButtonClicked
+    {
+        set { spin_right_button.clicked += value; }
+    }
+    public System.Action SpinLeftButtonClicked
+    {
+        set { spin_left_button.clicked += value; }
+    }
 
 
     //  UIの表示状態
@@ -269,44 +281,6 @@ public class WindowController : MonoBehaviour
         {
             menu_state = Menu_State.SYSTEM;
         };
-
-
-        //  移動:前移動ボタンを押すと前進する
-        move_up_button.clicked += () =>
-        {
-            
-        };
-        //  移動:後ろ移動ボタンを押すと後退する
-        move_down_button.clicked += () =>
-        {
-
-        };
-        //  移動:右移動ボタンを押すと右に移動する
-        move_right_button.clicked += () =>
-        {
-
-        };
-        //  移動:左移動ボタンを押すと左に移動する
-        move_left_button.clicked += () =>
-        {
-
-        };
-        //  移動:反転ボタンを押すと反対を向く
-        move_return_button.clicked += () =>
-        {
-
-        };
-        //  移動:右回転ボタンを押すと右に90度回転する
-        spin_right_button.clicked += () =>
-        {
-
-        };
-        //  移動:左回転ボタンを押すと左に90度回転する
-        spin_left_button.clicked += () =>
-        {
-
-        };
-
 
 
 
