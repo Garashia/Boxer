@@ -1,167 +1,30 @@
 using UnityEngine;
 using UnityEngine.UI;
-using CommandList = EncounterMicroCommander.EncounterCommand;
+using CommandList = MicroCommander.Command;
 
-
-//     public GameObject m_gameObject;
-//     public Text encounterText;
-
-//public struct EncounterParameter
-//{
-
-//    // 新規に宣言した変数は、コンストラクタ内で初期化すること。
-//    public EncounterParameter
-//    (
-//        GameObject gameObject = null
-//        , Text text = null
-//    )
-//    {
-//        m_gameObject = gameObject;
-//        encounterText = text;
-//    }
-//}
-
-public class EncounterMicroCommander :
-    MicroCommander
-{
-    public class EncounterCommand : Command
-    {
-        public string Dot(float timer)
-        {
-            int point = (int)(timer) % 3;
-            if (point == 0)
-                return ".";
-            else if (point == 1)
-                return "..";
-            else
-                return "...";
-        }
-    }
-}
-
-public class ShoppingCommand : CommandList
-{
-    private bool _isShopping = false;
-    private float m_timer = 0.0f;
-    private GameObject m_gameObject;
-    private Text m_encounterText;
-
-    public ShoppingCommand(Text encounterText)
-    {
-        m_encounterText = encounterText;
-    }
-    public override void Execute()
-    {
-        m_timer += Time.deltaTime;
-        string output = "ショッピング中";
-        output += Dot(m_timer);
-
-        if (m_encounterText != null)
-        {
-            m_encounterText.text = output;
-        }
-        Debug.Log(output);
-        if (m_timer >= 5)
-        {
-            _isShopping = true;
-        }
-    }
-
-    public override bool IsCompleted()
-    {
-        return _isShopping;
-    }
-}
-
-public class ItemCommand : CommandList
-{
-    private bool _isItem = false;
-    private float m_timer = 0.0f;
-    private Text m_encounterText;
-
-    public ItemCommand(Text encounterText)
-    {
-        m_encounterText = encounterText;
-    }
-
-    public override void Execute()
-    {
-        m_timer += Time.deltaTime;
-        string output = "アイテム取得中";
-        output += Dot(m_timer);
-
-        if (m_encounterText != null)
-        {
-            m_encounterText.text = output;
-        }
-
-        Debug.Log(output);
-        if (m_timer >= 5)
-        {
-            _isItem = true;
-        }
-    }
-
-    public override bool IsCompleted()
-    {
-        return _isItem;
-    }
-}
-
-public class StrengthenCommand : CommandList
-{
-    private bool _isStrengthen = false;
-    private float m_timer = 0.0f;
-    private Text m_encounterText;
-    public StrengthenCommand(Text encounterText)
-    {
-        m_encounterText = encounterText;
-    }
-    public override void Execute()
-    {
-        m_timer += Time.deltaTime;
-        string output = "強化中";
-        output += Dot(m_timer);
-
-        if (m_encounterText != null)
-        {
-            m_encounterText.text = output;
-        }
-
-        Debug.Log(output);
-        if (m_timer >= 5)
-        {
-            _isStrengthen = true;
-        }
-    }
-
-    public override bool IsCompleted()
-    {
-        return _isStrengthen;
-    }
-}
 
 public class MessengerCommand : CommandList
 {
     private bool _isMessenger = false;
     private float m_timer = 0.0f;
     private Text m_encounterText;
+    private string m_message;
 
-    public MessengerCommand(Text encounterText)
+    public MessengerCommand(string message, Text encounterText)
     {
+        m_message = message;
         m_encounterText = encounterText;
     }
     public override void Execute()
     {
         m_timer += Time.deltaTime;
-        string output = "会話中";
-        output += Dot(m_timer);
+        string output = m_message;
+        output += CommonFunction.Dot(m_timer);
 
         if (m_encounterText != null)
         {
             m_encounterText.text = output;
         }
-
         Debug.Log(output);
         if (m_timer >= 5)
         {
@@ -175,30 +38,27 @@ public class MessengerCommand : CommandList
     }
 }
 
-public class SpawnCommand : CommandList
+public class EnableCommand : CommandList
 {
-    private bool _isSpawn = false;
-    private Text m_encounterText;
-
-    public SpawnCommand(Text encounterText)
+    private GameObject enabledObject;
+    private bool _isEnabled;
+    private bool m_enabled;
+    public EnableCommand(GameObject enabledObject, bool isEnabled)
     {
-        m_encounterText = encounterText;
+        this.enabledObject = enabledObject;
+        _isEnabled = isEnabled;
     }
 
     public override void Execute()
     {
-        if (m_encounterText != null)
-        {
-            // Parameter.encounterText.enabled = true;
-            m_encounterText.text = "";
-        }
-        _isSpawn = true;
+        enabledObject.SetActive(_isEnabled);
+        m_enabled = true;
     }
-
     public override bool IsCompleted()
     {
-        return _isSpawn;
+        return m_enabled;
     }
+
 }
 
 public class DeleteCommand : CommandList
@@ -228,40 +88,3 @@ public class DeleteCommand : CommandList
     }
 }
 
-//public static class EncounterCommandList
-//{
-//    public static List<CommandList> ShoppingCommandList()
-//    {
-//    }
-
-//    public static List<CommandList> ItemCommandList()
-//    {
-//        return new List<CommandList>()
-//        {
-//            new SpawnCommand(),
-//            new ItemCommand(),
-//            new DeleteCommand()
-//        };
-//    }
-
-//    public static List<CommandList> StrengthenCommandList()
-//    {
-//        return new List<CommandList>()
-//        {
-//            new SpawnCommand(),
-//            new StrengthenCommand(),
-//            new DeleteCommand()
-//        };
-//    }
-
-//    public static List<CommandList> MessengerCommandList()
-//    {
-//        return new List<CommandList>()
-//        {
-//            new SpawnCommand(),
-//            new MessengerCommand(),
-//            new DeleteCommand(),
-//        };
-
-//    }
-//}

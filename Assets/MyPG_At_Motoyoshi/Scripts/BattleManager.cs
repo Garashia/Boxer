@@ -51,6 +51,11 @@ public class BattleManager : MonoBehaviour
         m_enemyAttackDamage = 0.0f;
     }
 
+    public void EnemyDown()
+    {
+
+    }
+
     // Update is called once per frame
     private void Update()
     {
@@ -59,7 +64,7 @@ public class BattleManager : MonoBehaviour
             if ((m_playerMove & PlayerState.P) != PlayerState.None)
                 if (!m_enemy || Check())
                 {
-                    m_enemyController.Hit(m_playerController.Power);
+                    m_enemyController.Hit(m_playerController.Power, this);
                     m_playerMove = PlayerState.None;
                     m_player = false;
                 }

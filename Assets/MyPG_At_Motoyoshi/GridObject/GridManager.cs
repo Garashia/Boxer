@@ -26,6 +26,8 @@ public class GridManager : MonoBehaviour
         set => m_grids = value;
     }
 
+    private Dictionary<Vector2Int, GridObject> m_gridObjects;
+
     [SerializeField, HideInInspector]
     private GridObject m_firstGrid = null; // firstGrid
 
@@ -199,6 +201,15 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
+        CreateMap();
+
+
+
+
+    }
+
+    private void CreateMap()
+    {
         for (int i = 0; i < m_grids.Count; i++)
         {
             GridObject obj = m_grids[i];
@@ -207,8 +218,9 @@ public class GridManager : MonoBehaviour
             ConnectAdjacentGrids(obj, Vector2Int.left);
             ConnectAdjacentGrids(obj, Vector2Int.up);
             ConnectAdjacentGrids(obj, Vector2Int.down);
-
             var point = obj.GridPoint;
+            m_gridObjects.Add(point, obj);
+
             if (m_mazeTableObject.Tiles.ContainsKey(point))
             {
                 var tileData = m_mazeTableObject.Tiles[point];
@@ -219,22 +231,20 @@ public class GridManager : MonoBehaviour
                         FirstGrid = obj;
                         break;
                     case TileType.Shop:
-                        obj.EncounterCommands = () =>
+                        obj.EventCommands = () =>
                         {
-                            return new List<EncounterMicroCommander.EncounterCommand>()
+                            return new List<MicroCommander.Command>()
                             {
-                                new SpawnCommand(encounterText:TextGUI),
-                                new ShoppingCommand(encounterText:TextGUI),
-                                new DeleteCommand(encounterText:TextGUI)
+                                new SpawnEventCommand(TextGUI),
+                                new ShoppingEventCommand(TextGUI),
+                                new DeleteEventCommand(TextGUI)
                             };
 
                         };
-                        // obj.EncounterStates = new EncounterParameter(text: TextGUI);
                         break;
                     default:
                         break;
                 }
-
             }
         }
     }

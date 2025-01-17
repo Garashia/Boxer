@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using EncounterMicroCommander = MicroCommander;
+using EventGridMicroCommander = MicroCommander;
 
 public class GridObject : MonoBehaviour
 {
@@ -58,7 +61,7 @@ public class GridObject : MonoBehaviour
     {
         get { return transform.position; }
     }
-    public delegate List<EncounterMicroCommander.EncounterCommand> GetEncounterCommands();
+    public delegate List<MicroCommander.Command> GetEncounterCommands();
 
     [SerializeField, HideInInspector]
     private GetEncounterCommands m_encounterCommands = null;
@@ -67,7 +70,7 @@ public class GridObject : MonoBehaviour
         get { return m_encounterCommands; }
         set { m_encounterCommands = value; }
     }
-    public delegate List<EventGridMicroCommander.EventGridCommand> GetEventCommands();
+    public delegate List<MicroCommander.Command> GetEventCommands();
     [SerializeField, HideInInspector]
     private GetEventCommands m_eventCommands = null;
     public GetEventCommands EventCommands
@@ -81,21 +84,6 @@ public class GridObject : MonoBehaviour
 
     private EventGridMicroCommander eventGrid = new();
 
-    [SerializeField, HideInInspector]
-    private EventParameter eventStates;
-    public EventParameter EvensStates
-    {
-        get { return eventStates; }
-        set { eventStates = value; }
-    }
-
-    //[SerializeField, HideInInspector]
-    //private EncounterParameter encounterParameter;
-    //public EncounterParameter EncounterStates
-    //{
-    //    get { return encounterParameter; }
-    //    set { encounterParameter = value; }
-    //}
 
     private AdjacentGrid adjacentGrid = new AdjacentGrid();
 
@@ -215,6 +203,17 @@ public class GridObject : MonoBehaviour
         }
         return eventGrid;
     }
+
+    public void PreUpdate(Action<bool> action = null)
+    {
+        action?.Invoke(m_eventCommands != null);
+    }
+
+    public void PostUpdate(Action action = null)
+    {
+        action?.Invoke();
+    }
+
 
     // Update is called once per frame
     private void Update()

@@ -72,7 +72,6 @@ public class EnemyController : MonoBehaviour
     // private List<string> m_triggerList = new List<string>();
     private void SetEnemyState(List<EnemyState> enemyStates)
     {
-
         m_enemyStateList = enemyStates;
         m_animator = gameObject.GetComponent<Animator>();
 
@@ -82,9 +81,6 @@ public class EnemyController : MonoBehaviour
         }
         m_animator.runtimeAnimatorController = m_enemyParameter.EnemyAnimationController;
         m_animator.avatar = m_enemyParameter.EnemyAvatar;
-        // state.motion = m_enemyParameter.EnemyIdleMotion;
-
-
     }
     // Start is called before the first frame update
     private void Start()
@@ -129,7 +125,7 @@ public class EnemyController : MonoBehaviour
         return Params[Random.Range(0, Params.Count)];
     }
 
-    public void Hit(float power)
+    public void Hit(float power, BattleManager battleManager)
     {
         m_animator.SetTriggerOneFrame(this, "Hit");
         m_hp--;
@@ -141,7 +137,7 @@ public class EnemyController : MonoBehaviour
                 child.mass = 50000;
                 child.AddForce(Vector3.forward * (20.0f), ForceMode.VelocityChange);
             }
-
+            battleManager.EnemyDown();
             m_animator.enabled = false;
             fade.FadeIn(1.0f, () =>
             {
