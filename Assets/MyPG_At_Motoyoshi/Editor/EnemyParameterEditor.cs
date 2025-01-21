@@ -15,7 +15,7 @@ public class EnemyParameterEditor : Editor
 {
     private EnemyParameter obj;
     private ReorderableList _reorderableList;
-
+    private ReorderableList _itemList;
 
     private void OnEnable()
     {
@@ -172,7 +172,7 @@ public class EnemyParameterEditor : Editor
 
         }
         // 描画
-        _reorderableList.DoLayoutList();
+        _reorderableList?.DoLayoutList();
 
         if (GUILayout.Button("Animation"))
             obj.EnemyAnimationController = GetAnimatorController();
@@ -181,7 +181,54 @@ public class EnemyParameterEditor : Editor
         EditorGUILayout.ObjectField
             (obj.EnemyAnimationController, typeof(RuntimeAnimatorController), true);
         EditorGUI.EndDisabledGroup();
+        EditorGUILayout.LabelField("取得できる金額の上下限");
+        EditorGUILayout.BeginHorizontal();
+        obj.MinMoney = EditorGUILayout.IntField("min:", obj.MinMoney);
+        obj.MaxMoney = EditorGUILayout.IntField("max:", obj.MaxMoney);
+        //float min = obj.MinMoney;
+        //float max = obj.MaxMoney;
+        //EditorGUILayout.MinMaxSlider(ref min, ref max, 0, 10000);
+        //obj.MinMoney = (int)min;
+        //obj.MaxMoney = (int)max;
+        EditorGUILayout.EndHorizontal();
+        var isThisItems = obj.ItemList;
+        if (_itemList == null)
+        {
+            _itemList = new ReorderableList(isThisItems, typeof(IsThisItem), true, true, true, true);
+            // 並び替え可能か
+            _itemList.draggable = true;
 
+            // タイトル描画時のコールバック
+            // 上書きしてEditorGUIを使えばタイトル部分を自由にレイアウトできる
+            _itemList.drawHeaderCallback = rect => EditorGUI.LabelField(rect, "取得できるアイテム一覧");
+
+            // 要素の描画時のコールバック
+            // 上書きしてEditorGUIを使えば自由にレイアウトできる
+            _itemList.drawElementCallback += DrawElement;
+
+            void DrawElement(Rect rect, int index, bool isActive, bool isFocused)
+            {
+                var height = EditorGUIUtility.singleLineHeight + 5;
+                rect.height = EditorGUIUtility.singleLineHeight;
+                rect.y += 5;
+                rect.x += 10;
+                var item = isThisItems[index];
+                item = EditorGUI.ObjectField(rect, $"アイテム{index}", item, typeof(IsThisItem), true) as IsThisItem;
+                isThisItems[index] = item;
+                rect.y += 5;
+
+            }
+
+            // +ボタンが押された時のコールバック
+            _itemList.onAddCallback += Add;
+            void Add(ReorderableList list)
+            {
+                Debug.Log("+ clicked.");
+                isThisItems.Add(null);//現在の要素の個数を文字列で追加する
+            }
+
+        }
+        _itemList?.DoLayoutList();
         // Dirtyフラグを立てる
         EditorUtility.SetDirty(obj);
         serializedObject.ApplyModifiedProperties();

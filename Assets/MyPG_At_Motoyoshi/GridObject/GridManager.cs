@@ -26,7 +26,7 @@ public class GridManager : MonoBehaviour
         set => m_grids = value;
     }
 
-    private Dictionary<Vector2Int, GridObject> m_gridObjects;
+    private Dictionary<Vector2Int, GridObject> m_gridObjects = new Dictionary<Vector2Int, GridObject>();
 
     [SerializeField, HideInInspector]
     private GridObject m_firstGrid = null; // firstGrid
@@ -167,6 +167,14 @@ public class GridManager : MonoBehaviour
         set { m_textGUI = value; }
     }
 
+    [SerializeField]
+    private GameObject m_activeObject;
+    public GameObject ActiveObject
+    {
+        get { return m_activeObject; }
+        set { m_activeObject = value; }
+    }
+
 
     public bool IsAdjacent(int x, int y, Vector2Int direction)
     {
@@ -235,9 +243,12 @@ public class GridManager : MonoBehaviour
                         {
                             return new List<MicroCommander.Command>()
                             {
+                                new EnableCommand(m_activeObject, false),
                                 new SpawnEventCommand(TextGUI),
                                 new ShoppingEventCommand(TextGUI),
-                                new DeleteEventCommand(TextGUI)
+                                new DeleteEventCommand(TextGUI),
+                                new EnableCommand(m_activeObject, true),
+
                             };
 
                         };

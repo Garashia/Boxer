@@ -18720,7 +18720,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1278097994}
         m_TargetAssemblyTypeName: MapMoving, Assembly-CSharp
-        m_MethodName: OnEncount
+        m_MethodName: OnEncounter
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -29693,6 +29693,10 @@ PrefabInstance:
       propertyPath: m_gridScale.z
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 673352262238328221, guid: f95e5627646e8d84bb71247bb59afb2f, type: 3}
+      propertyPath: m_activeObject
+      value: 
+      objectReference: {fileID: 314248240}
     - target: {fileID: 673352262238328221, guid: f95e5627646e8d84bb71247bb59afb2f, type: 3}
       propertyPath: m_mazeTableObject
       value: 

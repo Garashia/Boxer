@@ -131,6 +131,7 @@ public class GridManagerEditor : Editor
         }
 
         obj.TextGUI = (Text)EditorGUILayout.ObjectField("TextGUI", obj.TextGUI, typeof(Text), true);
+        obj.ActiveObject = (GameObject)EditorGUILayout.ObjectField("Active", obj.ActiveObject, typeof(GameObject), true);
 
         EditorUtility.SetDirty(obj);
         serializedObject.ApplyModifiedProperties();
