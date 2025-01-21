@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using CommandList = MicroCommander.Command;
 
@@ -88,3 +89,35 @@ public class DeleteCommand : CommandList
     }
 }
 
+public class SceneChangeCommand : CommandList
+{
+    private string _sceneName;
+    private Fade m_fade;
+    private bool m_isChanged;
+    public SceneChangeCommand(string sceneName, Fade fade)
+    {
+        _sceneName = sceneName;
+        m_fade = fade;
+        m_isChanged = false;
+    }
+
+    public override void Initialize()
+    {
+        m_fade.FadeIn(1.0f, () =>
+        {
+            SceneManager.LoadScene(_sceneName);
+            m_isChanged = true;
+        });
+    }
+
+    public override void Execute()
+    {
+    }
+
+    public override bool IsCompleted()
+    {
+        return m_isChanged;
+    }
+
+
+}

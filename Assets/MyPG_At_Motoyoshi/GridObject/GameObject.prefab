@@ -54,3 +54,4 @@ MonoBehaviour:
   m_textObject: {fileID: 0}
   m_spawnObjects: []
   m_textGUI: {fileID: 0}
+  m_activeObject: {fileID: 0}

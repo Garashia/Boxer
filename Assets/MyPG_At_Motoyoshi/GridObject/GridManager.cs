@@ -26,7 +26,7 @@ public class GridManager : MonoBehaviour
         set => m_grids = value;
     }
 
-    private Dictionary<Vector2Int, GridObject> m_gridObjects = new Dictionary<Vector2Int, GridObject>();
+    // private Dictionary<Vector2Int, GridObject> m_gridObjects = new Dictionary<Vector2Int, GridObject>();
 
     [SerializeField, HideInInspector]
     private GridObject m_firstGrid = null; // firstGrid
@@ -209,83 +209,83 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        CreateMap();
+        //CreateMap();
 
 
 
 
     }
 
-    private void CreateMap()
-    {
-        for (int i = 0; i < m_grids.Count; i++)
-        {
-            GridObject obj = m_grids[i];
-            obj.Id = i;
-            ConnectAdjacentGrids(obj, Vector2Int.right);
-            ConnectAdjacentGrids(obj, Vector2Int.left);
-            ConnectAdjacentGrids(obj, Vector2Int.up);
-            ConnectAdjacentGrids(obj, Vector2Int.down);
-            var point = obj.GridPoint;
-            m_gridObjects.Add(point, obj);
+    //private void CreateMap()
+    //{
+    //    for (int i = 0; i < m_grids.Count; i++)
+    //    {
+    //        GridObject obj = m_grids[i];
+    //        obj.Id = i;
+    //        ConnectAdjacentGrids(obj, Vector2Int.right);
+    //        ConnectAdjacentGrids(obj, Vector2Int.left);
+    //        ConnectAdjacentGrids(obj, Vector2Int.up);
+    //        ConnectAdjacentGrids(obj, Vector2Int.down);
+    //        var point = obj.GridPoint;
+    //        m_gridObjects.Add(point, obj);
 
-            if (m_mazeTableObject.Tiles.ContainsKey(point))
-            {
-                var tileData = m_mazeTableObject.Tiles[point];
+    //        if (m_mazeTableObject.Tiles.ContainsKey(point))
+    //        {
+    //            var tileData = m_mazeTableObject.Tiles[point];
 
-                switch (tileData)
-                {
-                    case TileType.Start:
-                        FirstGrid = obj;
-                        break;
-                    case TileType.Shop:
-                        obj.EventCommands = () =>
-                        {
-                            return new List<MicroCommander.Command>()
-                            {
-                                new EnableCommand(m_activeObject, false),
-                                new SpawnEventCommand(TextGUI),
-                                new ShoppingEventCommand(TextGUI),
-                                new DeleteEventCommand(TextGUI),
-                                new EnableCommand(m_activeObject, true),
+    //            switch (tileData)
+    //            {
+    //                case TileType.Start:
+    //                    FirstGrid = obj;
+    //                    break;
+    //                case TileType.Shop:
+    //                    obj.EventCommands = () =>
+    //                    {
+    //                        return new List<MicroCommander.Command>()
+    //                        {
+    //                            new EnableCommand(m_activeObject, false),
+    //                            new SpawnEventCommand(TextGUI),
+    //                            new ShoppingEventCommand(TextGUI),
+    //                            new DeleteEventCommand(TextGUI),
+    //                            new EnableCommand(m_activeObject, true),
 
-                            };
+    //                        };
 
-                        };
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-    }
+    //                    };
+    //                    break;
+    //                default:
+    //                    break;
+    //            }
+    //        }
+    //    }
+    //}
 
-    private void ConnectAdjacentGrids(GridObject grid, Vector2Int direction)
-    {
-        GridObject adjacentGrid = GetGridObject(grid.GridPoint, direction);
-        if (adjacentGrid == null) return;
+    //private void ConnectAdjacentGrids(GridObject grid, Vector2Int direction)
+    //{
+    //    GridObject adjacentGrid = GetGridObject(grid.GridPoint, direction);
+    //    if (adjacentGrid == null) return;
 
-        if (direction == Vector2Int.right)
-        {
-            grid.A_Grid.Right ??= adjacentGrid;
-            adjacentGrid.A_Grid.Left ??= grid;
-        }
-        else if (direction == Vector2Int.left)
-        {
-            grid.A_Grid.Left ??= adjacentGrid;
-            adjacentGrid.A_Grid.Right ??= grid;
-        }
-        else if (direction == Vector2Int.up)
-        {
-            grid.A_Grid.Front ??= adjacentGrid;
-            adjacentGrid.A_Grid.Back ??= grid;
-        }
-        else if (direction == Vector2Int.down)
-        {
-            grid.A_Grid.Back ??= adjacentGrid;
-            adjacentGrid.A_Grid.Front ??= grid;
-        }
-    }
+    //    if (direction == Vector2Int.right)
+    //    {
+    //        grid.A_Grid.Right ??= adjacentGrid;
+    //        adjacentGrid.A_Grid.Left ??= grid;
+    //    }
+    //    else if (direction == Vector2Int.left)
+    //    {
+    //        grid.A_Grid.Left ??= adjacentGrid;
+    //        adjacentGrid.A_Grid.Right ??= grid;
+    //    }
+    //    else if (direction == Vector2Int.up)
+    //    {
+    //        grid.A_Grid.Front ??= adjacentGrid;
+    //        adjacentGrid.A_Grid.Back ??= grid;
+    //    }
+    //    else if (direction == Vector2Int.down)
+    //    {
+    //        grid.A_Grid.Back ??= adjacentGrid;
+    //        adjacentGrid.A_Grid.Front ??= grid;
+    //    }
+    //}
 
     public void DestroyObject(GameObject obj)
     {

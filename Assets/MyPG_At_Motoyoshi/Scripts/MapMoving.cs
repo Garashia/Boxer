@@ -182,8 +182,8 @@ public class MapMoving : MonoBehaviour
         {
             m_commander = encounter;
         }
-
-        if (m_random.Probability(0.8f))
+        var com = m_commander?.Execute();
+        if (m_random.Probability(0.8f) && ((com != null) ? !(bool)com : true))
             m_OnEncounter[m_random.Next(m_encounterCount)].Invoke();
     }
 
