@@ -26,8 +26,18 @@ public class EventManager : MonoBehaviour
 
     [SerializeField]
     private Fade fade;
+
+    [SerializeField]
+    private ShoppingList m_shoppingGUI;
+
+    [SerializeField]
+    private Canvas m_canvas;
+
     private void CreateMap()
     {
+        var gridData = m_gridManager.MazeObject;
+        var itemList = gridData.ShoppingList;
+
         var grids = m_gridManager.Grids;
         int count = grids.Count;
         for (int i = 0; i < count; i++)
@@ -51,13 +61,16 @@ public class EventManager : MonoBehaviour
                         m_gridManager.FirstGrid = obj;
                         break;
                     case TileType.Shop:
+
+                        var list = itemList[point];
+
                         obj.EventCommands = () =>
                         {
                             return new List<MicroCommander.Command>()
                             {
                                 new EnableCommand(m_activeObject, false),
                                 new SpawnEventCommand(TextGUI),
-                                new ShoppingEventCommand(TextGUI),
+                                new ShoppingEventCommand(TextGUI, m_shoppingGUI, m_canvas),
                                 new DeleteEventCommand(TextGUI),
                                 new EnableCommand(m_activeObject, true),
 

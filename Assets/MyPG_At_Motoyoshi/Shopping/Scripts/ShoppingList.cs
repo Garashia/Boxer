@@ -1,3 +1,4 @@
+using Demo;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,19 @@ public class ShoppingList : MonoBehaviour
 
     [SerializeField]
     private Text m_shopName;
+    public Text ShopName
+    {
+        get => m_shopName;
+        set { m_shopName = value; }
+    }
 
+    [SerializeField]
+    private ItemDropList m_itemDropList;
+    public ItemDropList DropList
+    {
+        get => m_itemDropList;
+        set { m_itemDropList = value; }
+    }
 
     // Start is called before the first frame update
     void Start()

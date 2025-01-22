@@ -218,6 +218,12 @@ public class TileMapEditor : EditorWindow
                 rect.y += 5;
 
             };
+
+            reorderableList.onAddCallback += list =>
+            {
+                value.Items.Add(null);
+            };
+
             reorderableList.DoLayoutList();
             lists[key] = value;
             tileMapData.ShoppingList = lists;

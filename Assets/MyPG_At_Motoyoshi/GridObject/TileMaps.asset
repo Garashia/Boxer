@@ -194,8 +194,12 @@ MonoBehaviour:
     m_list:
     - Key: {x: 7, y: 14}
       Value:
-        m_item: []
-        m_name: 
+        m_item:
+        - {fileID: 11400000, guid: c47de849ca5b10e499b14b019be5475d, type: 2}
+        - {fileID: 0}
+        - {fileID: 0}
+        - {fileID: 0}
+        m_name: "\u5927\u585A\u5BB6\u5177"
         m_description: 
   stairsTile:
     m_list: []

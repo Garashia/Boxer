@@ -1,15 +1,17 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Demo
 {
     [RequireComponent(typeof(UnityEngine.UI.LoopScrollRect))]
     [DisallowMultipleComponent]
-    public class InitOnStart : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDataSource
+    public class ItemDropList : MonoBehaviour, LoopScrollPrefabSource, LoopScrollDataSource
     {
-        public GameObject item;
-        public int totalCount = -1;
+        [SerializeField]
+        private GameObject item;
+        [SerializeField]
+        private int totalCount = -1;
 
         // Implement your own Cache Pool here. The following is just for example.
         Stack<Transform> pool = new Stack<Transform>();
