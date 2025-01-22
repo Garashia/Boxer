@@ -21,9 +21,9 @@ public enum TileType
 public class ShoppingItem
 {
     [SerializeField]
-    private List<Item> m_item = new List<Item>();
+    private List<IsThisItem> m_item = new List<IsThisItem>();
 
-    public List<Item> Items
+    public List<IsThisItem> Items
     {
         get { return m_item; }
         set { m_item = value; }

@@ -213,11 +213,17 @@ public class TileMapEditor : EditorWindow
                 rect.y += 5;
                 rect.x += 10;
                 var item = value.Items[index];
-                item = EditorGUI.ObjectField(rect, "アイテム", item, typeof(Item), true) as Item;
+                item = EditorGUI.ObjectField(rect, "アイテム", item, typeof(IsThisItem), true) as IsThisItem;
                 value.Items[index] = item;
                 rect.y += 5;
 
             };
+
+            reorderableList.onAddCallback += list =>
+            {
+                value.Items.Add(null);
+            };
+
             reorderableList.DoLayoutList();
             lists[key] = value;
             tileMapData.ShoppingList = lists;

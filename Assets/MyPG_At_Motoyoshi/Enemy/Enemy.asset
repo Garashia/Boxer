@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c0b0b8e22c1f6d4e965d782105c8618, type: 3}
   m_Name: Enemy
   m_EditorClassIdentifier: 
-  m_MaxHP: 10
+  m_MaxHP: 1
   m_Power: 99
   m_Guard: 9
   m_enemyAvatar: {fileID: 9000000, guid: 50c8fe73844fb0a42bdb72b9873224e6, type: 3}
@@ -24,9 +24,9 @@ MonoBehaviour:
     enemyMotion: {fileID: 2061026298564689150, guid: 5931e593c5fda164c87ee5b52d4227b0, type: 2}
     transitionConditionList:
       m_HPConditions:
-        m_transitionHP: 77
+        m_transitionHP: 5
       m_transitionConditionsList: []
-      m_explanatoryIndex: 0
+      m_explanatoryIndex: 1
       m_explanatoryNoteList:
       - "\u30EA\u30B9\u30C8\u304B\u3089\u6761\u4EF6\u3092\u6307\u5B9A:"
       - "\u9077\u79FB\u6761\u4EF6\uFF1AHP"
@@ -209,3 +209,9 @@ MonoBehaviour:
     end: 0.9
     math: 13
   m_runtimeAnimatorController: {fileID: 9100000, guid: 69de81462b07e644f861585973ce060e, type: 2}
+  isThisItems:
+  - {fileID: 11400000, guid: f5c7b54fe3f1398489db62316b898f31, type: 2}
+  - {fileID: 11400000, guid: c47de849ca5b10e499b14b019be5475d, type: 2}
+  - {fileID: 11400000, guid: b65b960a0f77e6140ac87fedafaad332, type: 2}
+  m_minMoney: 0
+  m_maxMoney: 0

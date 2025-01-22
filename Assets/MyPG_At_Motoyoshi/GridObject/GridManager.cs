@@ -26,6 +26,8 @@ public class GridManager : MonoBehaviour
         set => m_grids = value;
     }
 
+    // private Dictionary<Vector2Int, GridObject> m_gridObjects = new Dictionary<Vector2Int, GridObject>();
+
     [SerializeField, HideInInspector]
     private GridObject m_firstGrid = null; // firstGrid
 
@@ -165,6 +167,14 @@ public class GridManager : MonoBehaviour
         set { m_textGUI = value; }
     }
 
+    [SerializeField]
+    private GameObject m_activeObject;
+    public GameObject ActiveObject
+    {
+        get { return m_activeObject; }
+        set { m_activeObject = value; }
+    }
+
 
     public bool IsAdjacent(int x, int y, Vector2Int direction)
     {
@@ -199,72 +209,83 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < m_grids.Count; i++)
-        {
-            GridObject obj = m_grids[i];
-            obj.Id = i;
-            ConnectAdjacentGrids(obj, Vector2Int.right);
-            ConnectAdjacentGrids(obj, Vector2Int.left);
-            ConnectAdjacentGrids(obj, Vector2Int.up);
-            ConnectAdjacentGrids(obj, Vector2Int.down);
+        //CreateMap();
 
-            var point = obj.GridPoint;
-            if (m_mazeTableObject.Tiles.ContainsKey(point))
-            {
-                var tileData = m_mazeTableObject.Tiles[point];
 
-                switch (tileData)
-                {
-                    case TileType.Start:
-                        FirstGrid = obj;
-                        break;
-                    case TileType.Shop:
-                        obj.EncounterCommands = () =>
-                        {
-                            return new List<EncounterMicroCommander.EncounterCommand>()
-                            {
-                                new SpawnCommand(encounterText:TextGUI),
-                                new ShoppingCommand(encounterText:TextGUI),
-                                new DeleteCommand(encounterText:TextGUI)
-                            };
 
-                        };
-                        // obj.EncounterStates = new EncounterParameter(text: TextGUI);
-                        break;
-                    default:
-                        break;
-                }
 
-            }
-        }
     }
 
-    private void ConnectAdjacentGrids(GridObject grid, Vector2Int direction)
-    {
-        GridObject adjacentGrid = GetGridObject(grid.GridPoint, direction);
-        if (adjacentGrid == null) return;
+    //private void CreateMap()
+    //{
+    //    for (int i = 0; i < m_grids.Count; i++)
+    //    {
+    //        GridObject obj = m_grids[i];
+    //        obj.Id = i;
+    //        ConnectAdjacentGrids(obj, Vector2Int.right);
+    //        ConnectAdjacentGrids(obj, Vector2Int.left);
+    //        ConnectAdjacentGrids(obj, Vector2Int.up);
+    //        ConnectAdjacentGrids(obj, Vector2Int.down);
+    //        var point = obj.GridPoint;
+    //        m_gridObjects.Add(point, obj);
 
-        if (direction == Vector2Int.right)
-        {
-            grid.A_Grid.Right ??= adjacentGrid;
-            adjacentGrid.A_Grid.Left ??= grid;
-        }
-        else if (direction == Vector2Int.left)
-        {
-            grid.A_Grid.Left ??= adjacentGrid;
-            adjacentGrid.A_Grid.Right ??= grid;
-        }
-        else if (direction == Vector2Int.up)
-        {
-            grid.A_Grid.Front ??= adjacentGrid;
-            adjacentGrid.A_Grid.Back ??= grid;
-        }
-        else if (direction == Vector2Int.down)
-        {
-            grid.A_Grid.Back ??= adjacentGrid;
-            adjacentGrid.A_Grid.Front ??= grid;
-        }
-    }
+    //        if (m_mazeTableObject.Tiles.ContainsKey(point))
+    //        {
+    //            var tileData = m_mazeTableObject.Tiles[point];
+
+    //            switch (tileData)
+    //            {
+    //                case TileType.Start:
+    //                    FirstGrid = obj;
+    //                    break;
+    //                case TileType.Shop:
+    //                    obj.EventCommands = () =>
+    //                    {
+    //                        return new List<MicroCommander.Command>()
+    //                        {
+    //                            new EnableCommand(m_activeObject, false),
+    //                            new SpawnEventCommand(TextGUI),
+    //                            new ShoppingEventCommand(TextGUI),
+    //                            new DeleteEventCommand(TextGUI),
+    //                            new EnableCommand(m_activeObject, true),
+
+    //                        };
+
+    //                    };
+    //                    break;
+    //                default:
+    //                    break;
+    //            }
+    //        }
+    //    }
+    //}
+
+    //private void ConnectAdjacentGrids(GridObject grid, Vector2Int direction)
+    //{
+    //    GridObject adjacentGrid = GetGridObject(grid.GridPoint, direction);
+    //    if (adjacentGrid == null) return;
+
+    //    if (direction == Vector2Int.right)
+    //    {
+    //        grid.A_Grid.Right ??= adjacentGrid;
+    //        adjacentGrid.A_Grid.Left ??= grid;
+    //    }
+    //    else if (direction == Vector2Int.left)
+    //    {
+    //        grid.A_Grid.Left ??= adjacentGrid;
+    //        adjacentGrid.A_Grid.Right ??= grid;
+    //    }
+    //    else if (direction == Vector2Int.up)
+    //    {
+    //        grid.A_Grid.Front ??= adjacentGrid;
+    //        adjacentGrid.A_Grid.Back ??= grid;
+    //    }
+    //    else if (direction == Vector2Int.down)
+    //    {
+    //        grid.A_Grid.Back ??= adjacentGrid;
+    //        adjacentGrid.A_Grid.Front ??= grid;
+    //    }
+    //}
 
     public void DestroyObject(GameObject obj)
     {

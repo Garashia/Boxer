@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MyPG_At_Motoyoshi/Scenes/Player.unity
     guid: 42ad4e70b7144f644882c614e07f6588
+  - enabled: 1
+    path: Assets/MyPG_At_Motoyoshi/Scenes/Result.unity
+    guid: e8a592b24e972604293b85b55917b282
   m_configObjects: {}

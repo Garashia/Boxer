@@ -272,6 +272,32 @@ public class EnemyParameter : ScriptableObject
         set { m_runtimeAnimatorController = value; }
         get { return m_runtimeAnimatorController; }
     }
+
+    [SerializeField, HideInInspector]
+    private List<IsThisItem> isThisItems = new List<IsThisItem>();
+
+    public List<IsThisItem> ItemList
+    {
+        get { return isThisItems; }
+        set { isThisItems = value; }
+    }
+
+    [SerializeField, HideInInspector]
+    private int m_minMoney, m_maxMoney;
+
+    public int MinMoney
+    {
+        get { return m_minMoney; }
+        set { m_minMoney = value; }
+    }
+
+    public int MaxMoney
+    {
+        get { return m_maxMoney; }
+        set { m_maxMoney = value; }
+    }
+
+
 }
 
 [System.Serializable]

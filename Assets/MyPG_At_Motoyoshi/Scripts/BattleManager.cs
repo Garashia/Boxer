@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using static EnemyParameter;
 using static PlayerStateAnimator;
@@ -31,6 +32,9 @@ public class BattleManager : MonoBehaviour
     private PlayerState m_playerState;
     private PlayerState m_playerMove;
 
+    private float m_playerCooldownTimer;
+    private float m_enemyCooldownTimer;
+
     public uint EnemyBlock
     {
         get { return m_enemyBlock; }
@@ -51,6 +55,30 @@ public class BattleManager : MonoBehaviour
         m_enemyAttackDamage = 0.0f;
     }
 
+    public void EnemyDown()
+    {
+        var parameter = m_enemyController.Parameter;
+        int money = Random.Range(parameter.MinMoney, parameter.MaxMoney);
+        int count = Random.Range(0, 10);
+        List<IsThisItem> areItem = parameter.ItemList;
+        int length = areItem.Count - 1;
+        List<IsThisItem> items = new List<IsThisItem>();
+        for (int i = 0; i < count; ++i)
+        {
+            var item = areItem[Random.Range(0, length)];
+            items.Add(item);
+            StartupInitializer.StartUp.ItemList.AddItem(item.Index, item);
+        }
+        StartupInitializer.StartUp.Parameter.Money += money;
+
+
+    }
+
+    public void PlayerDown()
+    {
+
+    }
+
     // Update is called once per frame
     private void Update()
     {
@@ -59,7 +87,7 @@ public class BattleManager : MonoBehaviour
             if ((m_playerMove & PlayerState.P) != PlayerState.None)
                 if (!m_enemy || Check())
                 {
-                    m_enemyController.Hit(m_playerController.Power);
+                    m_enemyController.Hit(m_playerController.Power, this);
                     m_playerMove = PlayerState.None;
                     m_player = false;
                 }

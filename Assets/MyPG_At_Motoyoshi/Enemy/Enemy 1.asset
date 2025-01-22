@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c0b0b8e22c1f6d4e965d782105c8618, type: 3}
+  m_Name: Enemy 1
+  m_EditorClassIdentifier: 
+  m_MaxHP: 0
+  m_Power: 0
+  m_Guard: 0
+  m_enemyAvatar: {fileID: 0}
+  m_enemyIdleMotion: {fileID: 0}
+  m_enemyHitMotion: {fileID: 0}
+  m_enemyDownMotion: {fileID: 0}
+  m_transitionConditionList: []
+  m_runtimeAnimatorController: {fileID: 0}
+  isThisItems: []
+  m_minMoney: 0
+  m_maxMoney: 0

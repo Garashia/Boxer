@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -14,8 +15,7 @@ public class MapMoving : MonoBehaviour
     [SerializeField]
     private float m_higher;
 
-    private EncounterMicroCommander m_commander = null;
-    private EventGridMicroCommander m_eventCommander = null;
+    private MicroCommander m_commander = null;
 
     private int m_index = 0;
 
@@ -36,6 +36,10 @@ public class MapMoving : MonoBehaviour
 
     [SerializeField]
     private Fade m_fade;
+
+    [SerializeField]
+    private TMP_Text m_text;
+
 
     private bool m_isMove = false;
 
@@ -72,7 +76,6 @@ public class MapMoving : MonoBehaviour
     private void Start()
     {
         var startUp = StartupInitializer.StartUp;
-        // m_commander = new EncounterMicroCommander();
         m_encounterCount = m_OnEncounter.Count;
         m_isMove = false;
         m_index = 0;
@@ -90,6 +93,9 @@ public class MapMoving : MonoBehaviour
         GetInputSystem.MapAction.Front.performed += Front;
         GetInputSystem.MapAction.RightRotation.performed += RightRotation;
         GetInputSystem.MapAction.LeftRotation.performed += LeftRotation;
+        m_text.text = "Check:" + Const.C_CLICKED;
+        m_text.enabled = false;
+
     }
 
     // Update is called once per frame
@@ -107,9 +113,10 @@ public class MapMoving : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.C))
             {
-                m_eventCommander = Grid.OnEvent();
+                m_commander = Grid.OnEvent();
             }
         }
+
     }
 
     public void RightRotation(InputAction.CallbackContext context)
@@ -157,19 +164,26 @@ public class MapMoving : MonoBehaviour
             obj = Grid.A_Grid.Left;
         }
         if (obj == null) return;
-
+        Grid.PostUpdate(() =>
+        {
+            m_text.enabled = false;
+        });
         Grid = obj;
+        Grid.PreUpdate((bool flag) =>
+        {
+            m_text.enabled = flag;
+        });
         transform.position = Grid.transform.position + Grid.Rotation * (Vector3.up * m_higher);
         vector3.y = CAMERA_ANGLE[m_index];
         transform.rotation = Grid.Rotation * Quaternion.AngleAxis
         (vector3.y, Vector3.up);
 
-        if (Grid.OnEncounter(out EncounterMicroCommander encounter))
+        if (Grid.OnEncounter(out MicroCommander encounter))
         {
             m_commander = encounter;
         }
-
-        if (m_random.Probability(0.01f))
+        var com = m_commander?.Execute();
+        if (m_random.Probability(0.8f) && ((com != null) ? !(bool)com : true))
             m_OnEncounter[m_random.Next(m_encounterCount)].Invoke();
     }
 

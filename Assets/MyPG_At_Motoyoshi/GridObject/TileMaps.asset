@@ -109,7 +109,7 @@ MonoBehaviour:
     - Key: {x: 1, y: 8}
       Value: 1
     - Key: {x: 7, y: 14}
-      Value: 1
+      Value: 2
     - Key: {x: 13, y: 8}
       Value: 1
     - Key: {x: 1, y: 9}
@@ -191,6 +191,15 @@ MonoBehaviour:
     - Key: {x: 14, y: 3}
       Value: 0
   shopTile:
-    m_list: []
+    m_list:
+    - Key: {x: 7, y: 14}
+      Value:
+        m_item:
+        - {fileID: 11400000, guid: c47de849ca5b10e499b14b019be5475d, type: 2}
+        - {fileID: 0}
+        - {fileID: 0}
+        - {fileID: 0}
+        m_name: "\u5927\u585A\u5BB6\u5177"
+        m_description: 
   stairsTile:
     m_list: []

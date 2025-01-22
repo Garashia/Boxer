@@ -10,6 +10,9 @@ public class MicroCommander : Commander
 
         public virtual bool IsCompleted()
         { return true; }
+
+        public virtual void Initialize() { }
+
     };
 
     private Queue<Command> m_microCommand = new Queue<Command>();
@@ -28,7 +31,9 @@ public class MicroCommander : Commander
         int index = GetMacroCommandNumber();
         if (GetCommand() == null && index != 0)
         {
-            SetCommand(m_microCommand.Dequeue());
+            var command = m_microCommand.Dequeue();
+            SetCommand(command);
+            command.Initialize();
         }
         return base.Execute();
     }
