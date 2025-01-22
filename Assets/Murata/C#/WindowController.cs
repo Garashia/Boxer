@@ -1,10 +1,7 @@
-using UnityEngine.UIElements;
 using UnityEngine;
-using Unity.VisualScripting;
-using System.CodeDom.Compiler;
-using UnityEditor.U2D;
-using System.IO;
-using UnityEditor;
+using UnityEngine.UIElements;
+// using UnityEditor.U2D;
+// using UnityEditor;
 
 public class WindowController : MonoBehaviour
 {
@@ -15,7 +12,7 @@ public class WindowController : MonoBehaviour
     //Texture2D origin_item_texture, origin_arms_texture;
 
 
-    private UIDocument menu_uiDocument,command_uIDocument;
+    private UIDocument menu_uiDocument, command_uIDocument;
 
     UnityEngine.UIElements.VisualElement menu_ui_base, command_ui_base, holding_item_list, arms_UIs, item_UIs, system_ui_base;
 
@@ -124,7 +121,7 @@ public class WindowController : MonoBehaviour
         //  マップボタン
         command_map_button = command_uIDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Map");
 
-        
+
         //  所持アイテムのリスト
         holding_item_list = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.VisualElement>("HoldingItem_UIs");
         //  装備画面のUI群
