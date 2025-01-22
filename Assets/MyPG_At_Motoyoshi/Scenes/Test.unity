@@ -10023,6 +10023,8 @@ MonoBehaviour:
   m_textGUI: {fileID: 1455213014}
   m_activeObject: {fileID: 314248240}
   fade: {fileID: 1510445417}
+  m_shoppingGUI: {fileID: 6377505944766509923, guid: 333b4df82dc3104418603dba41384617, type: 3}
+  m_canvas: {fileID: 1869483856}
 --- !u!4 &723821707
 Transform:
   m_ObjectHideFlags: 0

@@ -301,6 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_shopName: {fileID: 6377505946710510044}
+  m_itemDropList: {fileID: 5955489022172894067}
 --- !u!1 &6377505945892650720
 GameObject:
   m_ObjectHideFlags: 0
