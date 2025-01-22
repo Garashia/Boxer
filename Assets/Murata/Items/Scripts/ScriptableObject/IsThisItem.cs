@@ -15,13 +15,13 @@ public abstract class IsThisItem : ScriptableObject
         None
     }
 
-    [SerializeField, Header("Šî–{î•ñ")]
+    [SerializeField, Header("ï¿½ï¿½{ï¿½ï¿½ï¿½")]
     private string m_itemName;
 
-    [SerializeField, Tooltip("”ƒ’l‰¿Ši")]
+    [SerializeField, Tooltip("ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½i")]
     private int m_buyPrice;
 
-    [SerializeField, Tooltip("”„’l‰¿Ši")]
+    [SerializeField, Tooltip("ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½i")]
     private int m_sellPrice;
 
     [SerializeField, TextArea]
