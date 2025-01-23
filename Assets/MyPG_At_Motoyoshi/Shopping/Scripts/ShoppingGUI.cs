@@ -11,13 +11,20 @@ public class ShoppingGUI : MonoBehaviour
     private Text m_prime;
     [SerializeField]
     private Button m_isBuy;
+
+
+
     // Start is called before the first frame update
 
-    public void ScrollCellIndex(int idx)
+    public void ScrollCellIndex(IsThisItem idx)
     {
         if (m_name != null)
         {
-            m_name.text = $"itemID : {idx}";
+            m_name.text = idx.ItemName;
+        }
+        if (m_prime != null)
+        {
+            m_prime.text = $"${idx.BuyPrice}";
         }
     }
 

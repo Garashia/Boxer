@@ -10,8 +10,9 @@ namespace Demo
     {
         [SerializeField]
         private GameObject item;
-        [SerializeField]
-        private int totalCount = -1;
+        // [SerializeField]
+        private List<IsThisItem> m_item = new List<IsThisItem>();
+        public List<IsThisItem> Items { get { return m_item; } set { m_item = value; } }
 
         // Implement your own Cache Pool here. The following is just for example.
         Stack<Transform> pool = new Stack<Transform>();
@@ -37,15 +38,17 @@ namespace Demo
 
         public void ProvideData(Transform transform, int idx)
         {
-            transform.SendMessage("ScrollCellIndex", idx);
+            transform.SendMessage("ScrollCellIndex", m_item[idx]);
         }
+
 
         void Start()
         {
+            Debug.Log(m_item.Count);
             var ls = GetComponent<LoopScrollRect>();
             ls.prefabSource = this;
             ls.dataSource = this;
-            ls.totalCount = totalCount;
+            ls.totalCount = m_item.Count;
             ls.RefillCells();
         }
     }

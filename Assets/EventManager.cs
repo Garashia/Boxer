@@ -70,7 +70,7 @@ public class EventManager : MonoBehaviour
                             {
                                 new EnableCommand(m_activeObject, false),
                                 new SpawnEventCommand(TextGUI),
-                                new ShoppingEventCommand(TextGUI, m_shoppingGUI, m_canvas),
+                                new ShoppingEventCommand(TextGUI, m_shoppingGUI, m_canvas, list),
                                 new DeleteEventCommand(TextGUI),
                                 new EnableCommand(m_activeObject, true),
 

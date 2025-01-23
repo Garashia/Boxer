@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: -0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &5955489022062335340
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce71017a2903f7c4c9a699e438d0b897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalCount: 0
+  totalCount: 4
   reverseDirection: 0
   m_Content: {fileID: 5955489022062335351}
   m_Horizontal: 0
@@ -193,7 +193,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 5507159409213517905, guid: 21120e51436ac47449980efc20c95112, type: 3}
-  totalCount: 50000
 --- !u!1 &6377505944766509950
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,4 +455,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Shop Title
+  m_Text: "\u5927\u585A\u5BB6\u5177"

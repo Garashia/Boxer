@@ -44,37 +44,27 @@ public class ShoppingEventCommand : CommandList
     private GameObject m_shoppingObject;
     private Text m_encounterText;
     private Transform m_canvasParent;
+    private ShoppingItem m_shoppingItems = null;
 
-    public ShoppingEventCommand(Text encounterText, ShoppingList shoppingGUI, Canvas canvas)
+    public ShoppingEventCommand(Text encounterText, ShoppingList shoppingGUI, Canvas canvas, ShoppingItem shoppingItems)
     {
         m_encounterText = encounterText;
         m_shoppingGUI = shoppingGUI;
         m_canvasParent = canvas.transform;
-
+        m_shoppingItems = shoppingItems;
     }
 
     public override void Initialize()
     {
         base.Initialize();
         m_shoppingObject = GameObject.Instantiate(m_shoppingGUI.gameObject, m_canvasParent);
-
+        m_shoppingGUI = m_shoppingObject.GetComponent<ShoppingList>();
+        m_shoppingGUI.ShopName.text = m_shoppingItems.ShopName;
+        m_shoppingGUI.DropList.Items = m_shoppingItems.Items;
 
     }
     public override void Execute()
     {
-        //m_timer += Time.deltaTime;
-        //string output = "ショッピング中";
-        //output += CommonFunction.Dot(m_timer);
-
-        //if (m_encounterText != null)
-        //{
-        //    m_encounterText.text = output;
-        //}
-        //Debug.Log(output);
-        //if (m_timer >= 5)
-        //{
-        //    _isShopping = true;
-        //}
     }
 
     public override bool IsCompleted()
