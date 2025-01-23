@@ -103,6 +103,11 @@ public class MapMoving : MonoBehaviour
     {
         if (Grid == null)
             return;
+        Grid.PreUpdate((bool flag) =>
+        {
+            m_text.enabled = flag;
+        });
+
         bool? isCommander = m_commander?.Execute();
 
         if (isCommander != null && isCommander != m_isMove)
@@ -169,10 +174,6 @@ public class MapMoving : MonoBehaviour
             m_text.enabled = false;
         });
         Grid = obj;
-        Grid.PreUpdate((bool flag) =>
-        {
-            m_text.enabled = flag;
-        });
         transform.position = Grid.transform.position + Grid.Rotation * (Vector3.up * m_higher);
         vector3.y = CAMERA_ANGLE[m_index];
         transform.rotation = Grid.Rotation * Quaternion.AngleAxis

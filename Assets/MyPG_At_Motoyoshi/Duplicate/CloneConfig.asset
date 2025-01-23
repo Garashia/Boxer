@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b8e7d9ba7acc549ac3324882037d55, type: 3}
   m_Name: CloneConfig
   m_EditorClassIdentifier: 
-  targetObject: {fileID: 0}
+  targetObject: {fileID: 1947796978222413552, guid: 30a7a3053ff687e42a79229819be4dca, type: 3}
   cloneCount: 100
   isParent: 1
   positionOffset:

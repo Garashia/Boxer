@@ -81,7 +81,8 @@ public class EventManager : MonoBehaviour
                     case TileType.Goal:
                         obj.EncounterCommands = () =>
                         {
-                            return new List<MicroCommander.Command>()
+                            return new
+                            List<MicroCommander.Command>()
                             {
                                 new SceneChangeCommand("Result", fade),
                             };
