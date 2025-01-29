@@ -46,5 +46,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu_UI: {fileID: 5927557276164788298, guid: 12c8cfad5781d4f439aff3a5a7c135ec, type: 3}
   command_UI: {fileID: 8018971776927924417, guid: 31165c736baf7a944a67c570631d00e6, type: 3}
-  item_use_image: {fileID: 2800000, guid: e77b2271c5990af4f8b4145b813bd786, type: 3}
-  arms_set_image: {fileID: 2800000, guid: 64a924a68fab4224483d44829c933e99, type: 3}
+  textAsset:
+    path: Assets/Murata/C#/InitManager/Init/config.ini
+    textString: '[Graphics]
+
+      Brightness=50
+
+      Sight=50
+
+      FullScreen=true
+
+      [Audio]
+
+      MasterVolume=93
+
+      MusicVolume=50
+
+      EffectVolume=50
+
+      [Controls]
+
+      MoveFromt=W
+
+      SpinRight=E
+
+      SpinLeft=Q
+
+'
