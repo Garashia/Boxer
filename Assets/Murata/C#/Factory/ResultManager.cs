@@ -43,7 +43,6 @@ public class ResultManager : MonoBehaviour
 
         //  とりあえず表示の為に呼んである(アイテムは空)
         ResultSetter(60, 30, 4, m_dropItem);
-
     }
 
     public void ResultSetter(int clearTime, int money, int exp, List<IsThisItem> dropItems)
@@ -52,6 +51,11 @@ public class ResultManager : MonoBehaviour
         m_dropListController.SetResultLabel(clearTime, money, exp);
 
         m_dropListController.SetDropItem(dropItems);
+    }
+
+    public void ViewResult()
+    {
+        obj.SetActive(true);
     }
 
 }
