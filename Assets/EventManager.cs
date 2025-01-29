@@ -33,6 +33,8 @@ public class EventManager : MonoBehaviour
     [SerializeField]
     private Canvas m_canvas;
 
+    //[SerializeField]
+    //private GameObject windowObject;
     private void CreateMap()
     {
         var gridData = m_gridManager.MazeObject;
@@ -70,7 +72,7 @@ public class EventManager : MonoBehaviour
                             {
                                 new EnableCommand(m_activeObject, false),
                                 new SpawnEventCommand(TextGUI),
-                                new ShoppingEventCommand(TextGUI, m_shoppingGUI, m_canvas),
+                                new ShoppingEventCommand(TextGUI, m_shoppingGUI, m_canvas, list),
                                 new DeleteEventCommand(TextGUI),
                                 new EnableCommand(m_activeObject, true),
 
@@ -81,7 +83,8 @@ public class EventManager : MonoBehaviour
                     case TileType.Goal:
                         obj.EncounterCommands = () =>
                         {
-                            return new List<MicroCommander.Command>()
+                            return new
+                            List<MicroCommander.Command>()
                             {
                                 new SceneChangeCommand("Result", fade),
                             };

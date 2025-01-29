@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e099c6f0be9dcf545a8e37f5a286c72f, type: 3}
   m_Name: NewConsumable 4
   m_EditorClassIdentifier: 
-  m_itemName: "\u30ED\u30D0\u51B7\u9EB5"
-  m_buyPrice: 920
+  m_itemName: "\u30DA\u30EB\u30B7\u30E3\u7D68\u6BEF"
+  m_buyPrice: 9200000
   m_sellPrice: 200
   m_description: 
   m_effect:
