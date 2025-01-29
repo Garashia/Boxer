@@ -21,7 +21,7 @@ public class GameUIFactory : ScriptableObject
     public GameObject CreateResultUI(int clearTime = 0,  Vector3 pos = new(), Transform parent = null)
     {
         GameObject obj = Instantiate(result_UI, pos, Quaternion.identity, parent);
-        //obj.SetActive(false);
+        obj.SetActive(false);
         return obj;
     }
 
