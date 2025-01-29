@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 // using UnityEditor.U2D;
 // using UnityEditor;
@@ -7,9 +9,7 @@ public class WindowController : MonoBehaviour
 {
     [SerializeField] GameObject menu_UI;
     [SerializeField] GameObject command_UI;
-    //[SerializeField] Sprite item_use_image, arms_set_image;
-
-    //Texture2D origin_item_texture, origin_arms_texture;
+    [SerializeField] IniTextAsset textAsset;
 
 
     private UIDocument menu_uiDocument, command_uIDocument;
@@ -18,11 +18,21 @@ public class WindowController : MonoBehaviour
 
     UnityEngine.UIElements.Button menu_arms_button, menu_item_button, menu_state_button, menu_system_button, item_use_button,
                                     command_menu_button, command_item_button, command_map_button,
-                                        arms_head_button, arms_arm_button, arms_body_button, arms_leg_button, arms_accessory_button;
-
+                                        arms_head_button, arms_arm_button, arms_body_button, arms_leg_button, arms_accessory_button,
+                                            system_reset_button, system_reflect_button;
     //  移動関係のボタン
     UnityEngine.UIElements.Button move_up_button, move_down_button, move_right_button, move_left_button,
                                     move_return_button, spin_right_button, spin_left_button;
+
+    // スライダー
+    UnityEngine.UIElements.SliderInt main_volume_slider, bgm_volume_slider, se_volume_slider,
+                                       light_display_slider, sight_display_slider;
+
+    //  割合標示ラベル
+    UnityEngine.UIElements.Label main_volume_label, bgm_volume_label, se_volume_label,
+                                    light_display_label, sight_display_label;
+
+
     public System.Action DownButtonClicked
     {
         set { move_down_button.clicked += value; }
@@ -145,6 +155,36 @@ public class WindowController : MonoBehaviour
         arms_accessory_button = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Accessory");
 
 
+        //  システム設定のスライダー
+        //  メイン音量スライダー
+        main_volume_slider = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.SliderInt>("VolumeSlider1");
+        //  BGM音量スライダー
+        bgm_volume_slider = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.SliderInt>("VolumeSlider2");
+        //  SE音量スライダー
+        se_volume_slider = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.SliderInt>("VolumeSlider3");
+
+        //  明るさスライダー
+        light_display_slider = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.SliderInt>("DisplaySlider1");
+        //  視野スライダー
+        sight_display_slider = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.SliderInt>("DisplaySlider2");
+
+
+        //  システム設定割合ラベル
+        //  メイン音量ラベル
+        main_volume_label = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.Label>("MVPoint");
+        //  BGM音量ラベル
+        bgm_volume_label = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.Label>("BVPoint");
+        //  SE音量ラベル
+        se_volume_label = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.Label>("SVPoint");
+        //  明るさラベル
+        light_display_label = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.Label>("LDPoint");
+        //  視野ラベル
+        sight_display_label = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.Label>("SDPoint");
+        //  システムリセットボタン
+        system_reset_button = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("System_Reset");
+        //  システム反映ボタン
+        system_reflect_button = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("System_Reflect");
+
         //  移動関係のボタン
         //  前移動ボタン
         move_up_button = command_uIDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Move_UP");
@@ -162,6 +202,7 @@ public class WindowController : MonoBehaviour
         spin_left_button = command_uIDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Spin_Left");
 
 
+        
 
         //origin_item_texture = item_use_image.texture;
         //Texture2D item_use_texture = new Texture2D((int)item_use_image.rect.width, (int)item_use_image.rect.height);
@@ -194,6 +235,10 @@ public class WindowController : MonoBehaviour
         //  アイテム使用ボタン
         item_use_button = menu_uiDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("SelectItemButton");
 
+        //  コンフィグファイルをロードする
+        ConfigLoad();
+        //  設定画面のスタート処理
+        SliderStart();
     }
 
     private void Update()
@@ -279,6 +324,23 @@ public class WindowController : MonoBehaviour
             menu_state = Menu_State.SYSTEM;
         };
 
+        //  反映ボタンを入力したら反映する
+        system_reflect_button.clicked += () =>
+        {
+            ConfigSave();
+        };
+
+        //  設定初期化ボタン
+        system_reset_button.clicked += () =>
+        {
+            int def = 50;
+
+            main_volume_slider.value = def;
+            bgm_volume_slider.value = def;
+            se_volume_slider.value = def;
+            light_display_slider.value = def;
+            sight_display_slider.value = def;
+        };
 
 
         //  menu_stateの状態ごとに表示されるUIを変える
@@ -314,6 +376,9 @@ public class WindowController : MonoBehaviour
                 arms_UIs.visible = false;
                 item_UIs.visible = false;
                 system_ui_base.visible = true;
+
+                SettingUpdate();
+
                 break;
 
         }
@@ -341,7 +406,61 @@ public class WindowController : MonoBehaviour
                 break;
         }
 
+        Debug.Log(textAsset.GetValue("Audio", "MasterVolume"));
     }
 
+    void SliderStart()
+    {
+        //  設定スライダーに設定ファイル(.ini)の情報にあるそれぞれの数値を反映する
+        main_volume_slider.value = int.Parse(textAsset.GetValue("Audio", "MasterVolume"));
+        bgm_volume_slider.value = int.Parse(textAsset.GetValue("Audio", "MusicVolume"));
+        se_volume_slider.value = int.Parse(textAsset.GetValue("Audio", "EffectVolume"));
+        light_display_slider.value = int.Parse(textAsset.GetValue("Graphics", "Brightness"));
+        sight_display_slider.value = int.Parse(textAsset.GetValue("Graphics", "Sight"));
 
+        //  スライダーの数値を設定に反映する(まだ保存はされない)
+        textAsset.SetValue("Audio", "MasterVolume", main_volume_slider.value.ToString());
+        textAsset.SetValue("Audio", "MusicVolume", bgm_volume_slider.value.ToString());
+        textAsset.SetValue("Audio", "EffectVolume", se_volume_slider.value.ToString());
+        textAsset.SetValue("Graphics", "Brightness", light_display_slider.value.ToString());
+        textAsset.SetValue("Graphics", "Sight", sight_display_slider.value.ToString());
+
+        //  ラベルに現在の数値を反映する
+        main_volume_label.text = textAsset.GetValue("Audio", "MasterVolume");
+        bgm_volume_label.text = textAsset.GetValue("Audio", "MusicVolume");
+        se_volume_label.text = textAsset.GetValue("Audio", "EffectVolume");
+        light_display_label.text = textAsset.GetValue("Graphics", "Brightness");
+        sight_display_label.text = textAsset.GetValue("Graphics", "Sight");
+
+    }
+
+    void SettingUpdate()
+    {
+        //  スライダーの数値を設定に反映する(まだ保存はされない)
+        textAsset.SetValue("Audio", "MasterVolume", main_volume_slider.value.ToString());
+        textAsset.SetValue("Audio", "MusicVolume", bgm_volume_slider.value.ToString());
+        textAsset.SetValue("Audio", "EffectVolume", se_volume_slider.value.ToString());
+        textAsset.SetValue("Graphics", "Brightness", light_display_slider.value.ToString());
+        textAsset.SetValue("Graphics", "Sight", sight_display_slider.value.ToString());
+
+        //  ラベルに現在の数値を反映する
+        main_volume_label.text = textAsset.GetValue("Audio", "MasterVolume");
+        bgm_volume_label.text = textAsset.GetValue("Audio", "MusicVolume");
+        se_volume_label.text = textAsset.GetValue("Audio", "EffectVolume");
+        light_display_label.text = textAsset.GetValue("Graphics", "Brightness");
+        sight_display_label.text = textAsset.GetValue("Graphics", "Sight");
+
+    }
+
+    //  コンフィグのロードを行う
+    void ConfigLoad()
+    {
+        textAsset.Load();
+    }
+
+    //  コンフィグの保存を行う
+    void ConfigSave()
+    {
+        textAsset.Save();
+    }
 }
