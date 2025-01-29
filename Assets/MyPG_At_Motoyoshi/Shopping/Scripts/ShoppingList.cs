@@ -28,10 +28,35 @@ public class ShoppingList : MonoBehaviour
         set { m_itemDropList = value; }
     }
 
+    [SerializeField]
+    private Button m_endButton;
+
+    private bool m_isEnd;
+    public bool EndButton
+    {
+        get { return m_isEnd; }
+        set { m_isEnd = value; }
+    }
+
+    [SerializeField]
+    private OptionsWindow m_optionsWindow;
+    public OptionsWindow OptionsWind
+    {
+        get
+        { return m_optionsWindow; }
+        set
+        { m_optionsWindow = value; }
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
-
+        m_isEnd = false;
+        m_endButton.onClick.AddListener(() =>
+        {
+            m_isEnd = true;
+        });
     }
 
     // Update is called once per frame

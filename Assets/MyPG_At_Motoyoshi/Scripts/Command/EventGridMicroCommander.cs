@@ -61,10 +61,15 @@ public class ShoppingEventCommand : CommandList
         m_shoppingGUI = m_shoppingObject.GetComponent<ShoppingList>();
         m_shoppingGUI.ShopName.text = m_shoppingItems.ShopName;
         m_shoppingGUI.DropList.Items = m_shoppingItems.Items;
-
+        m_shoppingGUI.DropList.OptionsWind = m_shoppingGUI.OptionsWind;
     }
     public override void Execute()
     {
+        _isShopping = m_shoppingGUI.EndButton;
+        if (_isShopping)
+        {
+            GameObject.Destroy(m_shoppingObject);
+        }
     }
 
     public override bool IsCompleted()

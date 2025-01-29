@@ -16,6 +16,16 @@ namespace Demo
 
         // Implement your own Cache Pool here. The following is just for example.
         Stack<Transform> pool = new Stack<Transform>();
+
+        private List<ShoppingGUI> m_guiList = new List<ShoppingGUI>();
+        private OptionsWindow m_optionsWindow;
+        public OptionsWindow OptionsWind
+        {
+            get
+            { return m_optionsWindow; }
+            set
+            { m_optionsWindow = value; }
+        }
         public GameObject GetObject(int index)
         {
             if (pool.Count == 0)
@@ -31,6 +41,7 @@ namespace Demo
         {
             // Use `DestroyImmediate` here if you don't need Pool
             trans.SendMessage("ScrollCellReturn", SendMessageOptions.DontRequireReceiver);
+
             trans.gameObject.SetActive(false);
             trans.SetParent(transform, false);
             pool.Push(trans);
@@ -39,8 +50,17 @@ namespace Demo
         public void ProvideData(Transform transform, int idx)
         {
             transform.SendMessage("ScrollCellIndex", m_item[idx]);
+            transform.SendMessage("SetItemDropList", this);
         }
 
+        public void SpawnItemBuyGUI(ShoppingGUI shoppingGUI)
+        {
+
+            // foreach (var item in pool)
+            foreach (var gui in m_guiList)
+                gui.SetInteractable(false);
+
+        }
 
         void Start()
         {
@@ -51,5 +71,18 @@ namespace Demo
             ls.totalCount = m_item.Count;
             ls.RefillCells();
         }
+
+        public void AddGUI(ShoppingGUI shoppingGUI)
+        {
+            if (m_guiList.Find(n => ReferenceEquals(n, shoppingGUI)) == null)
+                m_guiList.Add(shoppingGUI);
+        }
+
+        public void DeleteGUI(ShoppingGUI shoppingGUI)
+        {
+            if (m_guiList.Find(n => ReferenceEquals(n, shoppingGUI)) != null)
+                m_guiList.Remove(shoppingGUI);
+        }
+
     }
 }

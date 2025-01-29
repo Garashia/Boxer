@@ -33,6 +33,8 @@ public class EventManager : MonoBehaviour
     [SerializeField]
     private Canvas m_canvas;
 
+    //[SerializeField]
+    //private GameObject windowObject;
     private void CreateMap()
     {
         var gridData = m_gridManager.MazeObject;

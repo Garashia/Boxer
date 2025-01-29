@@ -98,6 +98,14 @@ public class MapMoving : MonoBehaviour
 
     }
 
+    private void OnDestroy()
+    {
+        GetInputSystem.MapAction.Front.performed -= Front;
+        GetInputSystem.MapAction.RightRotation.performed -= RightRotation;
+        GetInputSystem.MapAction.LeftRotation.performed -= LeftRotation;
+
+    }
+
     // Update is called once per frame
     private void Update()
     {
