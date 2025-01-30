@@ -297,6 +297,14 @@ public class EnemyParameter : ScriptableObject
         set { m_maxMoney = value; }
     }
 
+    [SerializeField, HideInInspector]
+    private int m_exp;
+
+    public int EXP
+    {
+        get { return m_exp; }
+        set { m_exp = value; }
+    }
 
 }
 

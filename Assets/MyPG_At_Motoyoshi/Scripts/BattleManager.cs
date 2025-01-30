@@ -1,5 +1,8 @@
+// using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static EnemyParameter;
 using static PlayerStateAnimator;
 
@@ -24,6 +27,19 @@ public class BattleManager : MonoBehaviour
         get { return m_enemyController; }
     }
 
+    [SerializeField]
+    GameUIFactory factory;
+
+    [SerializeField]
+    //  ドロップアイテムとして表示するUI
+    private VisualTreeAsset m_ListEntryTemplate;
+    private DropListController m_dropListController = null;
+
+    //  呼び出すUIオブジェクト
+    private GameObject Spawner;
+
+    private MicroCommander m_MicroCommander = new();
+
     private bool m_player = false;
     private bool m_enemy = false;
     private uint m_enemyBlock;
@@ -34,7 +50,14 @@ public class BattleManager : MonoBehaviour
 
     private float m_playerCooldownTimer;
     private float m_enemyCooldownTimer;
-
+    [SerializeField]
+    private Fade fade;
+    public Fade SceneFade
+    {
+        set => fade = value;
+        get { return fade; }
+    }
+    public float m_firstTime = 0.0f;
     public uint EnemyBlock
     {
         get { return m_enemyBlock; }
@@ -46,13 +69,27 @@ public class BattleManager : MonoBehaviour
     {
         get { return m_enemyAttack; }
     }
-
+    private VisualElement m_VisualElement;
     // Start is called before the first frame update
     private void Start()
     {
         EnemyObserver.SetBattleManager(this);
         PlayerObserver.SetBattleManager(this);
         m_enemyAttackDamage = 0.0f;
+
+        Spawner = factory.CreateResultUI(parent: transform, clearTime: 0);
+        Spawner.SetActive(true);
+        // UXML は、すでに UIDocument component コンポーネントによってインスタンス化済み
+        var uiDocument = Spawner.GetComponent<UIDocument>();
+
+        // ドロップリストコントローラーを初期化
+        m_dropListController = new DropListController();
+        m_dropListController.InitializeItemList(uiDocument.rootVisualElement, m_ListEntryTemplate);
+        m_VisualElement = uiDocument.rootVisualElement;
+
+
+        // Spawner.SetActive(false);
+        m_firstTime = Time.time;
     }
 
     public void EnemyDown()
@@ -71,6 +108,61 @@ public class BattleManager : MonoBehaviour
         }
         StartupInitializer.StartUp.Parameter.Money += money;
 
+        (Label timeUI, Label exp, Label money, ListView view) dropper = (m_dropListController.ButtleTimeLabel, m_dropListController.GotExpLabel
+            , m_dropListController.GotMoneyLabel, m_dropListController.ItemView);
+
+        (int min, int max) m_gotMoney = (m_enemyController.Parameter.MinMoney, m_enemyController.Parameter.MaxMoney);
+        int getMoney = Random.Range(m_gotMoney.min, m_gotMoney.max);
+        var itemList = m_enemyController.Parameter.ItemList;
+        List<IsThisItem> dropList = new List<IsThisItem>(Enumerable.Range(0, Random.Range(1, 33))
+            .Select(_ => itemList[Random.Range(0, itemList.Count)])
+            );
+        m_dropListController.DropItem = dropList;
+        foreach (IsThisItem item in dropList)
+        {
+            Debug.Log(item.ItemName);
+        }
+
+        int exp = m_enemyController.Parameter.EXP;
+        List<MicroCommander.Command> commands = new List<MicroCommander.Command>()
+        {
+            new EnableCommand(Spawner, true),
+
+            new TextDecisionCommand(m_dropListController.ButtleTimeLabel, "", ""),
+            new TextDecisionCommand(dropper.exp, "", ""),
+            new TextDecisionCommand(dropper.money, "", ""),
+            new UIElementsEnabledCommand(m_VisualElement, true),
+            new UIElementsEnabledCommand(dropper.timeUI, true),
+            new UIElementsEnabledCommand(dropper.exp, true),
+            new UIElementsEnabledCommand(dropper.money, true),
+            new UIElementsEnabledCommand(dropper.view, true),
+
+            new TextDecisionCommand(dropper.timeUI, "", DropListController.BUTTLE_TIME_LABEL_FIRST),
+            new RegularShuffleCommand(dropper.timeUI, 4, @"(\d{2})(\d{2})", "戦闘時間 : $1.$2", "0123456789", 1),
+            new TextDecisionCommand(dropper.timeUI, System.TimeSpan.FromSeconds(Time.time - m_firstTime).ToString(@"mm\.ss"), DropListController.BUTTLE_TIME_LABEL_FIRST),
+
+            new TextDecisionCommand(dropper.money, "", DropListController.BUTTLE_TIME_LABEL_FIRST),
+            new TextShuffleCommand(dropper.money, getMoney.ToString().Length,DropListController.GOT_MONEY_LABEL_FIRST, "0123456789", 1),
+            new TextDecisionCommand(dropper.money, getMoney.ToString(), DropListController.GOT_MONEY_LABEL_FIRST),
+
+            new TextDecisionCommand(dropper.exp, "", DropListController.GOT_EXP_LABEL_FIRST),
+            new TextShuffleCommand(dropper.exp, exp.ToString().Length,DropListController.GOT_EXP_LABEL_FIRST, "0123456789", 1),
+            new TextDecisionCommand(dropper.exp, exp.ToString(), DropListController.GOT_EXP_LABEL_FIRST),
+
+            new ListAnimationCommand<IsThisItem>(dropList, dropper.view, 3.0f),
+
+            new SceneChangeCommand("Test", fade),
+        };
+
+        foreach (MicroCommander.Command command in commands)
+        {
+            m_MicroCommander.AddCommand(command);
+        }
+
+        //fade.FadeIn(1.0f, () =>
+        //{
+        //    SceneManager.LoadSceneAsync("Test");
+        //});
 
     }
 
@@ -82,6 +174,7 @@ public class BattleManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        m_MicroCommander?.Execute();
         if (m_player)
         {
             if ((m_playerMove & PlayerState.P) != PlayerState.None)

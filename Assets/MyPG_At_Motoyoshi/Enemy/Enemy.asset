@@ -213,5 +213,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f5c7b54fe3f1398489db62316b898f31, type: 2}
   - {fileID: 11400000, guid: c47de849ca5b10e499b14b019be5475d, type: 2}
   - {fileID: 11400000, guid: b65b960a0f77e6140ac87fedafaad332, type: 2}
-  m_minMoney: 0
-  m_maxMoney: 0
+  m_minMoney: 500
+  m_maxMoney: 680
+  m_exp: 0

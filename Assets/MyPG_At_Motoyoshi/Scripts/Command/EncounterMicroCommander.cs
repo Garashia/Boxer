@@ -94,16 +94,18 @@ public class SceneChangeCommand : CommandList
     private string _sceneName;
     private Fade m_fade;
     private bool m_isChanged;
-    public SceneChangeCommand(string sceneName, Fade fade)
+    private float m_time;
+    public SceneChangeCommand(string sceneName, Fade fade, float time = 1.0f)
     {
         _sceneName = sceneName;
         m_fade = fade;
         m_isChanged = false;
+        m_time = time;
     }
 
     public override void Initialize()
     {
-        m_fade.FadeIn(1.0f, () =>
+        m_fade.FadeIn(m_time, () =>
         {
             SceneManager.LoadScene(_sceneName);
             m_isChanged = true;

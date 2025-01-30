@@ -185,12 +185,15 @@ public class EnemyParameterEditor : Editor
         EditorGUILayout.BeginHorizontal();
         obj.MinMoney = EditorGUILayout.IntField("min:", obj.MinMoney);
         obj.MaxMoney = EditorGUILayout.IntField("max:", obj.MaxMoney);
+
         //float min = obj.MinMoney;
         //float max = obj.MaxMoney;
         //EditorGUILayout.MinMaxSlider(ref min, ref max, 0, 10000);
         //obj.MinMoney = (int)min;
         //obj.MaxMoney = (int)max;
         EditorGUILayout.EndHorizontal();
+        obj.EXP = EditorGUILayout.IntField("åoå±íl:", obj.EXP);
+
         var isThisItems = obj.ItemList;
         if (_itemList == null)
         {

@@ -2434,7 +2434,6 @@ MonoBehaviour:
   m_enemyList: {fileID: 11400000, guid: 457a306d639040048bd826493d27b664, type: 2}
   m_parent: {fileID: 668109815}
   m_battleManager: {fileID: 1153641679}
-  m_fade: {fileID: 2092500022}
 --- !u!1 &183936705
 GameObject:
   m_ObjectHideFlags: 0
@@ -18515,6 +18514,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_playerController: {fileID: 792619704}
   m_enemyController: {fileID: 0}
+  factory: {fileID: 11400000, guid: be688f76a99bb704d9e2e8540bfc068a, type: 2}
+  m_ListEntryTemplate: {fileID: 9197481963319205126, guid: d7dd45a4f6f7b0644a4ab37756694f10, type: 3}
+  fade: {fileID: 2092500022}
 --- !u!4 &1153641680
 Transform:
   m_ObjectHideFlags: 0
