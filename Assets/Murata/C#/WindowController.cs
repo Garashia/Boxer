@@ -406,7 +406,6 @@ public class WindowController : MonoBehaviour
                 break;
         }
 
-        Debug.Log(textAsset.GetValue("Audio", "MasterVolume"));
     }
 
     void SliderStart()

@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Base" style="background-color: rgb(15, 33, 115); -unity-background-image-tint-color: rgb(255, 255, 255); width: 217px; opacity: 1;">
+        <ui:VisualElement name="result_back" style="position: absolute; height: 695px; width: 900px; background-image: url(&quot;project://database/Assets/20%20Logos%20PSD/Background/Background.png?fileID=21300000&amp;guid=3b26ead8969ab354ab909f303ac398aa&amp;type=3#Background&quot;); top: -6px; left: -5px;">
+            <ui:Label tabindex="-1" text="GameClear" parse-escape-sequences="true" display-tooltip-when-elided="false" picking-mode="Ignore" name="Result_Title" style="color: rgb(255, 255, 255); height: 54px; font-size: 50px; position: absolute; width: 204px; top: 46px; left: 336px; -unity-text-align: middle-center; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Thank you for Playing!" parse-escape-sequences="true" display-tooltip-when-elided="false" picking-mode="Ignore" name="Comment" style="color: rgb(255, 255, 255); height: 54px; font-size: 50px; position: absolute; width: 204px; top: 154px; left: 328px; -unity-text-align: middle-center; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Clear Time :" parse-escape-sequences="true" display-tooltip-when-elided="false" picking-mode="Ignore" name="ClearTIme" enable-rich-text="false" style="color: rgb(255, 255, 255); height: 54px; font-size: 45px; position: absolute; width: 204px; top: 317px; left: 193px; -unity-text-align: middle-center; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Clear Rank :" parse-escape-sequences="true" display-tooltip-when-elided="false" picking-mode="Ignore" name="ClearRank" enable-rich-text="false" style="color: rgb(255, 255, 255); height: 54px; font-size: 45px; position: absolute; width: 204px; top: 479px; left: 190px; -unity-text-align: middle-center; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
