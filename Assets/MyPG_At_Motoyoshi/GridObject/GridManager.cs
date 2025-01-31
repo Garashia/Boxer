@@ -94,29 +94,55 @@ public class GridManager : MonoBehaviour
         new Vector2Int(-1, 0)
     };
 
+    //private Vector2Int[,] m_cornerOrientations = new Vector2Int[4, 3]
+    //{
+    //    {
+    //        new Vector2Int(0, 1),
+    //        new Vector2Int(1, 1),
+    //        new Vector2Int(1, 0)
+    //    },
+    //    {
+    //        new Vector2Int(0, 1),
+    //        new Vector2Int(-1, 1),
+    //        new Vector2Int(-1, 0)
+    //    },
+    //    {
+    //        new Vector2Int(0, -1),
+    //        new Vector2Int(1, -1),
+    //        new Vector2Int(1, 0)
+    //    },
+    //    {
+    //        new Vector2Int(0, -1),
+    //        new Vector2Int(-1, -1),
+    //        new Vector2Int(-1, 0)
+    //    }
+    //};
+
     private Vector2Int[,] m_cornerOrientations = new Vector2Int[4, 3]
-    {
+{
         {
             new Vector2Int(0, 1),
+            new Vector2Int(1, 0),
             new Vector2Int(1, 1),
-            new Vector2Int(1, 0)
         },
         {
             new Vector2Int(0, 1),
+                        new Vector2Int(-1, 0),
             new Vector2Int(-1, 1),
-            new Vector2Int(-1, 0)
         },
         {
             new Vector2Int(0, -1),
+                        new Vector2Int(1, 0)
+,
             new Vector2Int(1, -1),
-            new Vector2Int(1, 0)
         },
         {
-            new Vector2Int(0, -1),
+            new Vector2Int(0, -1),            new Vector2Int(-1, 0)
+,
             new Vector2Int(-1, -1),
-            new Vector2Int(-1, 0)
         }
-    };
+};
+
 
     private static readonly uint Corner_Up_Right = (1 << 0);
     private static readonly uint Corner_Up_Left = (1 << 1);

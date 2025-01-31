@@ -24,3 +24,4 @@ MonoBehaviour:
   isThisItems: []
   m_minMoney: 0
   m_maxMoney: 0
+  m_exp: 0

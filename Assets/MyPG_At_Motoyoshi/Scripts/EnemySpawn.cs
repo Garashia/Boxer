@@ -10,9 +10,6 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField]
     private BattleManager m_battleManager;
 
-    [SerializeField]
-    private Fade m_fade;
-
     private void Awake()
     {
         if (m_parent != null && m_enemyList != null)
@@ -24,10 +21,6 @@ public class EnemySpawn : MonoBehaviour
             if (enemy.TryGetComponent<EnemyController>(out EnemyController component) && m_battleManager != null)
             {
                 m_battleManager.EnemyController = component;
-                if (m_fade != null)
-                {
-                    component.SceneFade = m_fade;
-                }
             }
         }
     }

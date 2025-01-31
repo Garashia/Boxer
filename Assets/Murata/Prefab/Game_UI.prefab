@@ -50,19 +50,19 @@ MonoBehaviour:
     path: Assets/Murata/C#/InitManager/Init/config.ini
     textString: '[Graphics]
 
-      Brightness=50
+      Brightness=34
 
-      Sight=50
+      Sight=76
 
       FullScreen=true
 
       [Audio]
 
-      MasterVolume=93
+      MasterVolume=88
 
-      MusicVolume=50
+      MusicVolume=34
 
-      EffectVolume=50
+      EffectVolume=60
 
       [Controls]
 

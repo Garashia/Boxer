@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using static EnemyParameter;
 
 public static class AnimatorExtension
@@ -60,13 +59,6 @@ public class EnemyController : MonoBehaviour
     }
 
     private List<EnemyState> m_enemyStateList;
-    [SerializeField]
-    private Fade fade;
-    public Fade SceneFade
-    {
-        set => fade = value;
-        get { return fade; }
-    }
 
 
     // private List<string> m_triggerList = new List<string>();
@@ -139,10 +131,7 @@ public class EnemyController : MonoBehaviour
             }
             battleManager.EnemyDown();
             m_animator.enabled = false;
-            fade.FadeIn(1.0f, () =>
-            {
-                SceneManager.LoadSceneAsync("Test");
-            });
+
         }
 
     }

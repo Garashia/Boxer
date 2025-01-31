@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -31,7 +30,7 @@ public class ResultManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        obj = factory.CreateResultUI( parent:transform, clearTime: 0);
+        obj = factory.CreateResultUI(parent: transform, clearTime: 0);
 
         // UXML は、すでに UIDocument component コンポーネントによってインスタンス化済み
         var uiDocument = obj.GetComponent<UIDocument>();
@@ -47,7 +46,7 @@ public class ResultManager : MonoBehaviour
 
     public void ResultSetter(int clearTime, int money, int exp, List<IsThisItem> dropItems)
     {
-        //  リザルト画面の各種ラベルに戦闘結果(戦闘時間、獲得G,経験値)を入れる 
+        //  リザルト画面の各種ラベルに戦闘結果(戦闘時間、獲得G,経験値)を入れる
         m_dropListController.SetResultLabel(clearTime, money, exp);
 
         m_dropListController.SetDropItem(dropItems);
