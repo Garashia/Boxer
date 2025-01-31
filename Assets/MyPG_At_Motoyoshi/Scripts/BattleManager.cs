@@ -50,6 +50,12 @@ public class BattleManager : MonoBehaviour
 
     private float m_playerCooldownTimer;
     private float m_enemyCooldownTimer;
+
+    private const float m_maxInvincibleTime = 0.5f;
+
+    private bool m_isInvinciblePlayer;
+    private bool m_isInvincibleEnemy;
+
     [SerializeField]
     private Fade fade;
     public Fade SceneFade
@@ -213,6 +219,7 @@ public class BattleManager : MonoBehaviour
     public void OnStateExitEnemy(string dateName)
     {
         m_enemy = false;
+        m_enemyBlock = 0;
     }
 
     public void OnStateEnterPlayer(PlayerState stateName)

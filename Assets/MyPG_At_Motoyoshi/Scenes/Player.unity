@@ -18515,8 +18515,9 @@ MonoBehaviour:
   m_playerController: {fileID: 792619704}
   m_enemyController: {fileID: 0}
   factory: {fileID: 11400000, guid: be688f76a99bb704d9e2e8540bfc068a, type: 2}
-  m_ListEntryTemplate: {fileID: 9197481963319205126, guid: d7dd45a4f6f7b0644a4ab37756694f10, type: 3}
+  m_ListEntryTemplate: {fileID: 9197481963319205126, guid: ea3e4c5c674e97f4eb1036d787070bf7, type: 3}
   fade: {fileID: 2092500022}
+  m_firstTime: 0
 --- !u!4 &1153641680
 Transform:
   m_ObjectHideFlags: 0
