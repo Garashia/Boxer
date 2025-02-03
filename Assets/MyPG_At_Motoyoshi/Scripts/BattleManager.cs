@@ -93,6 +93,10 @@ public class BattleManager : MonoBehaviour
         m_dropListController.InitializeItemList(uiDocument.rootVisualElement, m_ListEntryTemplate);
         m_VisualElement = uiDocument.rootVisualElement;
 
+        m_isInvinciblePlayer = false;
+        m_isInvincibleEnemy = false;
+        m_playerCooldownTimer = 0.0f;
+        m_enemyCooldownTimer = 0.0f;
 
         // Spawner.SetActive(false);
         m_firstTime = Time.time;
@@ -164,12 +168,6 @@ public class BattleManager : MonoBehaviour
         {
             m_MicroCommander.AddCommand(command);
         }
-
-        //fade.FadeIn(1.0f, () =>
-        //{
-        //    SceneManager.LoadSceneAsync("Test");
-        //});
-
     }
 
     public void PlayerDown()
@@ -181,34 +179,64 @@ public class BattleManager : MonoBehaviour
     private void Update()
     {
         m_MicroCommander?.Execute();
-        if (m_player)
+
+        if (m_isInvinciblePlayer)
+        {
+            PlayerInvincible();
+        }
+        if (m_isInvincibleEnemy)
+        {
+            EnemyInvincible();
+        }
+        if (m_player && m_isInvincibleEnemy == false)
         {
             if ((m_playerMove & PlayerState.P) != PlayerState.None)
-                if (!m_enemy || Check())
+                if (Check())
                 {
                     m_enemyController.Hit(m_playerController.Power, this);
-                    m_playerMove = PlayerState.None;
-                    m_player = false;
+                    // m_playerMove = PlayerState.None;
+                    m_isInvincibleEnemy = true;
                 }
         }
-        if (m_enemy)
+        if (m_enemy && m_isInvinciblePlayer == false)
         {
             if ((m_enemyBlock & (uint)BlockID.LeftBlock) == (uint)BlockID.LeftBlock
                 && !((m_playerMove & PlayerState.LeftB) == PlayerState.LeftB))
             {
                 m_playerController.Hit(m_enemyAttackDamage);
-                m_enemyBlock = 0;
+                m_isInvinciblePlayer = true;
             }
             else if ((m_enemyBlock & (uint)BlockID.RightBlock) == (uint)BlockID.RightBlock
                 && !((m_playerMove & PlayerState.RightB) == PlayerState.RightB))
             {
                 m_playerController.Hit(m_enemyAttackDamage);
-                m_enemyBlock = 0;
+                m_isInvinciblePlayer = true;
             }
         }
         m_playerMove = PlayerState.None;
 
         m_enemyAttackDamage = 0.0f;
+    }
+
+    private void PlayerInvincible()
+    {
+        m_playerCooldownTimer += Time.deltaTime;
+        if (m_playerCooldownTimer > m_maxInvincibleTime)
+        {
+            m_playerCooldownTimer = 0.0f;
+            m_isInvinciblePlayer = false;
+        }
+    }
+
+    private void EnemyInvincible()
+    {
+        m_enemyCooldownTimer += Time.deltaTime;
+        if (m_enemyCooldownTimer > m_maxInvincibleTime)
+        {
+            m_enemyCooldownTimer = 0.0f;
+            m_isInvincibleEnemy = false;
+        }
+
     }
 
     public void OnStateEnterEnemy(string stateName)
