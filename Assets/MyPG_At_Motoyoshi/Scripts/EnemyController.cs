@@ -36,6 +36,7 @@ public static class AnimatorExtension
     }
 }
 
+[DefaultExecutionOrder(-99)]
 
 public class EnemyController : MonoBehaviour
 {
@@ -121,6 +122,7 @@ public class EnemyController : MonoBehaviour
     {
         m_animator.SetTriggerOneFrame(this, "Hit");
         m_hp--;
+        Debug.Log(m_hp);
         if (m_hp <= 0 && m_animator.enabled)
         {
             foreach (Rigidbody child in this.GetComponentsInChildren<Rigidbody>())
