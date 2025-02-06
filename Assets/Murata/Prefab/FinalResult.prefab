@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2541784801372973221
+--- !u!1 &8859899459544927945
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3266533700354778231}
-  - component: {fileID: 7671847831688215199}
-  m_Layer: 0
-  m_Name: Game_UI
+  - component: {fileID: 5381888804077179036}
+  - component: {fileID: 899546966110109171}
+  m_Layer: 5
+  m_Name: FinalResult
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3266533700354778231
+--- !u!4 &5381888804077179036
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2541784801372973221}
+  m_GameObject: {fileID: 8859899459544927945}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -32,44 +32,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7671847831688215199
+--- !u!114 &899546966110109171
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2541784801372973221}
+  m_GameObject: {fileID: 8859899459544927945}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb0011b7923acab45ba870835dbfd3f5, type: 3}
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu_UI: {fileID: 5927557276164788298, guid: 12c8cfad5781d4f439aff3a5a7c135ec, type: 3}
-  command_UI: {fileID: 8018971776927924417, guid: 31165c736baf7a944a67c570631d00e6, type: 3}
-  textAsset:
-    path: Assets/Murata/C#/InitManager/Init/config.ini
-    textString: '[Graphics]
-
-      Brightness=55
-
-      Sight=46
-
-      FullScreen=true
-
-      [Audio]
-
-      MasterVolume=76
-
-      MusicVolume=59
-
-      EffectVolume=71
-
-      [Controls]
-
-      MoveFromt=W
-
-      SpinRight=E
-
-      SpinLeft=Q
-
-'
+  m_PanelSettings: {fileID: 11400000, guid: cd8f84ff2c6082f41a7cfdd998b855c2, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: dae4b877458ba2947a0ddc2814bbf9c6, type: 3}
+  m_SortingOrder: 0
