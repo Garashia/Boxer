@@ -14,20 +14,20 @@ public class ItemManager : MonoBehaviour
     }
 
     [SerializeField]
-    private 
+    private
     // Start is called before the first frame update
     void Start()
     {
         m_holdingItemList = new HoldingItemList();
         Registration();
         m_tableList?.RegisterIndex();
-        SingleTonList.SingletonList.HoldingItemDatas = m_holdingItemList;
+        StartupInitializer.StartUp.ItemList = m_holdingItemList;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             var item = Items[5];
             m_holdingItemList.AddItem(item.Index, item, 3);

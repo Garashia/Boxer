@@ -86,7 +86,7 @@ public class EventManager : MonoBehaviour
                             return new
                             List<MicroCommander.Command>()
                             {
-                                new SceneChangeCommand("Result", fade),
+                                new SceneChangeCommand("MurataResult", fade),
                             };
                         };
 
