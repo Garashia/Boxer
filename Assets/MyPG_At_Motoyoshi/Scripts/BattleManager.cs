@@ -196,6 +196,7 @@ public class BattleManager : MonoBehaviour
                     m_enemyController.Hit(m_playerController.Power, this);
                     // m_playerMove = PlayerState.None;
                     m_isInvincibleEnemy = true;
+                    m_player = false;
                 }
         }
         if (m_enemy && m_isInvinciblePlayer == false)
@@ -205,12 +206,14 @@ public class BattleManager : MonoBehaviour
             {
                 m_playerController.Hit(m_enemyAttackDamage);
                 m_isInvinciblePlayer = true;
+                m_enemy = false;
             }
             else if ((m_enemyBlock & (uint)BlockID.RightBlock) == (uint)BlockID.RightBlock
                 && !((m_playerMove & PlayerState.RightB) == PlayerState.RightB))
             {
                 m_playerController.Hit(m_enemyAttackDamage);
                 m_isInvinciblePlayer = true;
+                m_enemy = false;
             }
         }
         m_playerMove = PlayerState.None;
