@@ -1,9 +1,9 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class HoldingItemList
-
 {
-    public struct HoldingItem
+    public class HoldingItem
     {
         // 所有してるアイテムの種類
         private IsThisItem havingItem;
@@ -75,11 +75,11 @@ public class HoldingItemList
             var hold = m_holdingItems[index];
             hold.Count += count;
             m_holdingItems[index] = hold;
+            Debug.Log(hold.Count);
             return;
         }
         // 登録されてない場合は追加
         m_holdingItems.Add(index, new(item, count));
-
     }
 
     /// <summary>

@@ -54,8 +54,24 @@ public class ItemListController
         //Output this to console when Button1 or Button3 is clicked
         //Debug.Log("You have clicked the button!");
         var dic = StartupInitializer.StartUp.ItemList;
+        //if (SingleTonList.SingletonList.ViewItemType == IsThisItem.ItemType.Consumables)
         //  選択されたアイテムを使用する
+        if (m_select_item == null) return;
         dic.Use((int)m_select_item?.index, () => true);
+        //else
+        //{
+        //    if (m_select_item == null) return;
+        //    switch (SingleTonList.SingletonList.ViewItemType)
+        //    {
+        //        case IsThisItem.ItemType.Arms:
+        //            StartupInitializer.StartUp.Parameter.Arms = (EquipmentArms)m_select_item;
+
+
+        //        case IsThisItem.ItemType.Consumables:
+        //        default:
+        //            break;
+        //    }
+        //}
         // SingleTonList.SingletonList.HoldingItemDatas = dic;
 
         m_AllItems = dic.GetList();
@@ -71,7 +87,7 @@ public class ItemListController
         if (dic == null) return;
         m_AllItems = dic.GetList(SingleTonList.SingletonList.ViewItemType);
         m_ItemList.itemsSource = m_AllItems;
-
+        // Debug.Log("m_AllItems:" + m_AllItems.Count.ToString());
     }
 
     void EnumerateAllItem()
@@ -143,7 +159,6 @@ public class ItemListController
 
         //  キャラクターの詳細を入力
         m_ItemNameLabel.text = m_select_item?.name;
-        Debug.Log(m_select_item?.name);
 
         m_ItemDescriptionsLabel.text = m_select_item?.description;
 

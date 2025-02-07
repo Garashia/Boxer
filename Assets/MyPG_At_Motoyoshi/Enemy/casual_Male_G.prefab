@@ -179,7 +179,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemyParameter: {fileID: 11400000, guid: 4c811e8a188768246817acefd0e21f41, type: 2}
-  fade: {fileID: 0}
 --- !u!95 &7559691572294379897
 Animator:
   serializedVersion: 5

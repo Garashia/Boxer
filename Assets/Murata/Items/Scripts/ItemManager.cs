@@ -13,15 +13,13 @@ public class ItemManager : MonoBehaviour
         get { return m_tableList.Items; }
     }
 
-    [SerializeField]
-    private
     // Start is called before the first frame update
     void Start()
     {
-        m_holdingItemList = new HoldingItemList();
-        Registration();
+        //m_holdingItemList = new HoldingItemList();
+        //Registration();
         m_tableList?.RegisterIndex();
-        StartupInitializer.StartUp.ItemList = m_holdingItemList;
+        //StartupInitializer.StartUp.ItemList = m_holdingItemList;
     }
 
     // Update is called once per frame
@@ -39,7 +37,7 @@ public class ItemManager : MonoBehaviour
         int count = Items.Count;
         for (int i = 0; i < count; ++i)
         {
-            m_holdingItemList.AddItem(i, Items[i], 3);
+            StartupInitializer.StartUp.ItemList.AddItem(i, Items[i], 3);
         }
     }
 

@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
         parameter.HP -= (int)damage;
         if (parameter.HP <= 0)
         {
-
+            StartupInitializer.Reset();
             Debug.Log("GameOver");
             SceneManager.LoadScene("Test");
         }

@@ -26,6 +26,9 @@ namespace Demo
             set
             { m_optionsWindow = value; }
         }
+
+
+
         public GameObject GetObject(int index)
         {
             if (pool.Count == 0)
@@ -60,11 +63,39 @@ namespace Demo
             foreach (var gui in m_guiList)
                 gui.SetInteractable(false);
 
+            var obj = Instantiate(m_optionsWindow.gameObject, transform);
+            var y = obj.GetComponent<OptionsWindow>();
+
+            if ((StartupInitializer.StartUp.Parameter.Money - shoppingGUI.Item.BuyPrice)
+                < 0)
+            {
+                y.YesButton.interactable = false;
+            }
+
+            y.YesButton.onClick.AddListener(() =>
+            {
+                StartupInitializer.StartUp.Parameter.Money -= shoppingGUI.Item.BuyPrice;
+                StartupInitializer.StartUp.ItemList.AddItem(shoppingGUI.Item.Index, shoppingGUI.Item);
+                Destroy(obj);
+                foreach (var gui in m_guiList)
+                    gui.SetInteractable(true);
+
+            });
+
+            y.NoButton.onClick.AddListener(() =>
+            {
+                Destroy(obj);
+                foreach (var gui in m_guiList)
+                    gui.SetInteractable(true);
+
+            });
+
+
         }
 
         void Start()
         {
-            Debug.Log(m_item.Count);
+            // Debug.Log(m_item.Count);
             var ls = GetComponent<LoopScrollRect>();
             ls.prefabSource = this;
             ls.dataSource = this;
