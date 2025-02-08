@@ -21,7 +21,7 @@ public class StartupInitializer
         get { return m_playerParameter; }
         set { m_playerParameter = value; }
     }
-    private HoldingItemList m_list;
+    private HoldingItemList m_list = new();
     public HoldingItemList ItemList
     {
         get { return m_list; }
@@ -67,10 +67,82 @@ public class StartupInitializer
 
     public static void Reset()
     {
+        ItemNotifier.Reset();
         startupInitializer = new StartupInitializer();
         startupInitializer.m_playerParameter = new PlayerParameter();
         startupInitializer.m_playerParameter.OnGame();
         startupInitializer.m_list = new HoldingItemList();
+
+        ItemNotifier.HeadAction += StartupInitializer.StartUp.SetHead;
+        ItemNotifier.ArmsAction += StartupInitializer.StartUp.SetArms;
+        ItemNotifier.BodyAction += StartupInitializer.StartUp.SetBody;
+        ItemNotifier.FootAction += StartupInitializer.StartUp.SetFoot;
+        ItemNotifier.AccessoriesAction += StartupInitializer.StartUp.SetAccessories;
+    }
+
+    public void SetAccessories(EquipmentAccessories item)
+    {
+        var accessories = m_playerParameter.Accessories;
+        if (accessories != null)
+        {
+            ItemList.AddItem(
+                accessories.Index,
+                accessories);
+            Debug.Log("ëùÇ¶ÇΩ-");
+        }
+        m_playerParameter.Accessories = item;
+
+    }
+
+    public void SetFoot(EquipmentFoot item)
+    {
+        var foot = m_playerParameter.Foot;
+        Debug.Log(foot != null);
+        if (foot != null)
+        {
+            ItemList.AddItem(
+                foot.Index,
+                foot);
+            Debug.Log("ëùÇ¶ÇΩ-");
+        }
+        m_playerParameter.Foot = item;
+    }
+    public void SetBody(EquipmentBody item)
+    {
+        var body = m_playerParameter.Body;
+        if (body != null)
+        {
+            ItemList.AddItem(
+                body.Index,
+                body);
+            Debug.Log("ëùÇ¶ÇΩ-");
+        }
+        m_playerParameter.Body = item;
+    }
+    public void SetArms(EquipmentArms item)
+    {
+        var arms = m_playerParameter.Arms;
+        if (arms != null)
+        {
+            ItemList.AddItem(
+                arms.Index,
+                arms);
+            Debug.Log("ëùÇ¶ÇΩ-");
+        }
+        m_playerParameter.Arms = item;
+    }
+    public void SetHead(EquipmentHead item)
+    {
+        var head = m_playerParameter.Head;
+        if (head != null)
+        {
+            ItemList.AddItem(
+                head.Index,
+                head);
+            Debug.Log("ëùÇ¶ÇΩ-");
+        }
+        m_playerParameter.Head = item;
+
     }
 
 

@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c0b0b8e22c1f6d4e965d782105c8618, type: 3}
+  m_Name: Mage
+  m_EditorClassIdentifier: 
+  m_MaxHP: 1
+  m_Power: 0
+  m_Guard: 0
+  m_enemyAvatar: {fileID: 0}
+  m_enemyIdleMotion: {fileID: -3100369314251171874, guid: 8328646964030534bad7db07b2ae978b, type: 3}
+  m_enemyHitMotion: {fileID: 2825485217256495706, guid: 8328646964030534bad7db07b2ae978b, type: 3}
+  m_enemyDownMotion: {fileID: 0}
+  m_transitionConditionList:
+  - stateName: Chop
+    enemyMotion: {fileID: 3963595363326709879, guid: 8328646964030534bad7db07b2ae978b, type: 3}
+    transitionConditionList:
+      m_HPConditions:
+        m_transitionHP: 0
+      m_transitionConditionsList: []
+      m_explanatoryIndex: 0
+      m_explanatoryNoteList:
+      - "\u30EA\u30B9\u30C8\u304B\u3089\u6761\u4EF6\u3092\u6307\u5B9A:"
+      - "\u9077\u79FB\u6761\u4EF6\uFF1AHP"
+    isFold: 1
+    selectPunch: -1
+    hitTerms_1:
+      isActive: 0
+      battleID: 0
+      start: 0
+      end: 9
+    hitTerms_2:
+      isActive: 0
+      battleID: 0
+      start: 0
+      end: 9
+    hitTerms_3:
+      isActive: 0
+      battleID: 0
+      start: 0
+      end: 9
+    hitTerms_4:
+      isActive: 0
+      battleID: 0
+      start: 0
+      end: 9
+    hitTerms_5:
+      isActive: 0
+      battleID: 0
+      start: 0
+      end: 9
+    hitTerms_6:
+      isActive: 0
+      battleID: 0
+      start: 0
+      end: 9
+    blockID: 3
+    damage: 0
+    start: 0.32
+    end: 0.34
+    math: 13
+  m_runtimeAnimatorController: {fileID: 9100000, guid: a1be0c64660556c468c19b028f59376b, type: 2}
+  isThisItems:
+  - {fileID: 11400000, guid: 5524ab8b35d615e44b7da49bf450c56d, type: 2}
+  m_minMoney: 10
+  m_maxMoney: 100
+  m_exp: 50

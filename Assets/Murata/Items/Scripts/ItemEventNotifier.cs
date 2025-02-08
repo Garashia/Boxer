@@ -55,17 +55,31 @@ public class Notifier<T>
 
 public static class ItemNotifier
 {
-    static private Notifier<EquipmentHead> m_equipHead = null;
-    static private Notifier<EquipmentArms> m_equipArms = null;
-    static private Notifier<EquipmentBody> m_equipBody = null;
-    static private Notifier<EquipmentFoot> m_equipFoot = null;
-    static private Notifier<EquipmentAccessories> m_equipAccessories = null;
-    static private Notifier<Consumables> m_usingConsumable = null;
-
+    static private Notifier<EquipmentHead> m_equipHead = new();
+    static private Notifier<EquipmentArms> m_equipArms = new();
+    static private Notifier<EquipmentBody> m_equipBody = new();
+    static private Notifier<EquipmentFoot> m_equipFoot = new();
+    static private Notifier<EquipmentAccessories> m_equipAccessories = new();
+    static private Notifier<Consumables> m_usingConsumable = new();
+    static public void Reset()
+    {
+        m_equipHead = new();
+        m_equipArms = new();
+        m_equipBody = new();
+        m_equipFoot = new();
+        m_equipAccessories = new();
+        m_usingConsumable = new();
+    }
     static public Notifier<EquipmentHead> HeadNotifier
     {
-        get { m_equipHead ??= new(); return m_equipHead; }
+        get { return m_equipHead; }
         set { m_equipHead = value; }
+    }
+
+    static public System.Action<EquipmentHead> HeadAction
+    {
+        set { m_equipHead.NotifierAction = value; }
+        get { return m_equipHead.NotifierAction; }
     }
 
     static public Notifier<EquipmentArms> ArmsNotifier
@@ -73,24 +87,60 @@ public static class ItemNotifier
         get { m_equipArms ??= new(); return m_equipArms; }
     }
 
+    static public System.Action<EquipmentArms> ArmsAction
+    {
+        set { m_equipArms.NotifierAction = value; }
+        get { return m_equipArms.NotifierAction; }
+    }
+
+
     static public Notifier<EquipmentBody> BodyNotifier
     {
-        get { m_equipBody ??= new(); return m_equipBody; }
+        set { m_equipBody = value; }
+        get { return m_equipBody; }
+    }
+
+    static public System.Action<EquipmentBody> BodyAction
+    {
+        set { m_equipBody.NotifierAction = value; }
+        get { return m_equipBody.NotifierAction; }
     }
 
     static public Notifier<EquipmentFoot> FootNotifier
     {
-        get { m_equipFoot ??= new(); return m_equipFoot; }
+        set { m_equipFoot = value; }
+        get { return m_equipFoot; }
+    }
+
+    static public System.Action<EquipmentFoot> FootAction
+    {
+        set { m_equipFoot.NotifierAction = value; }
+        get { return m_equipFoot.NotifierAction; }
     }
 
     static public Notifier<EquipmentAccessories> AccessoriesNotifier
     {
-        get { m_equipAccessories ??= new(); return m_equipAccessories; }
+        set { m_equipAccessories = value; }
+        get { return m_equipAccessories; }
+    }
+
+    static public System.Action<EquipmentAccessories> AccessoriesAction
+    {
+        set { m_equipAccessories.NotifierAction = value; }
+        get { return m_equipAccessories.NotifierAction; }
     }
 
     static public Notifier<Consumables> ConsumablesNotifier
     {
-        get { m_usingConsumable ??= new(); return m_usingConsumable; }
+        set { m_usingConsumable = value; }
+        get { return m_usingConsumable; }
     }
+
+    static public System.Action<Consumables> ConsumablesAction
+    {
+        set { m_usingConsumable.NotifierAction = value; }
+        get { return m_usingConsumable.NotifierAction; }
+    }
+
 }
 

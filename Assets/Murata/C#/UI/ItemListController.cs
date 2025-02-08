@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Minimam = System.Collections.Generic.List<(int index, string name, string description, int count)>;
@@ -54,9 +53,25 @@ public class ItemListController
     {
         //Output this to console when Button1 or Button3 is clicked
         //Debug.Log("You have clicked the button!");
-        var dic = SingleTonList.SingletonList.HoldingItemDatas;
+        var dic = StartupInitializer.StartUp.ItemList;
+        //if (SingleTonList.SingletonList.ViewItemType == IsThisItem.ItemType.Consumables)
         //  選択されたアイテムを使用する
+        if (m_select_item == null) return;
         dic.Use((int)m_select_item?.index, () => true);
+        //else
+        //{
+        //    if (m_select_item == null) return;
+        //    switch (SingleTonList.SingletonList.ViewItemType)
+        //    {
+        //        case IsThisItem.ItemType.Arms:
+        //            StartupInitializer.StartUp.Parameter.Arms = (EquipmentArms)m_select_item;
+
+
+        //        case IsThisItem.ItemType.Consumables:
+        //        default:
+        //            break;
+        //    }
+        //}
         // SingleTonList.SingletonList.HoldingItemDatas = dic;
 
         m_AllItems = dic.GetList();
@@ -68,11 +83,11 @@ public class ItemListController
 
     public void Update()
     {
-        var dic = SingleTonList.SingletonList.HoldingItemDatas;
+        var dic = StartupInitializer.StartUp.ItemList;
         if (dic == null) return;
         m_AllItems = dic.GetList(SingleTonList.SingletonList.ViewItemType);
         m_ItemList.itemsSource = m_AllItems;
-
+        // Debug.Log("m_AllItems:" + m_AllItems.Count.ToString());
     }
 
     void EnumerateAllItem()
@@ -81,7 +96,7 @@ public class ItemListController
         // m_AllArms.AddRange(Resources.LoadAll<ArmsData>("Arms"));
         // m_AllItems.AddRange(SingleTonList.SingletonList.ItemDatas);
         //Debug.Log("CCCCC");
-        var dic = SingleTonList.SingletonList.HoldingItemDatas;
+        var dic = StartupInitializer.StartUp.ItemList;
         m_AllItems = dic.GetList(SingleTonList.SingletonList.ViewItemType);
         Debug.Log("m_AllItems:" + m_AllItems.Count.ToString());
     }
@@ -124,7 +139,7 @@ public class ItemListController
     void OnArmsSelected(IEnumerable<object> selectedItems)
     {
 
-        m_select_item = m_ItemList.selectedItem as (int index, string name,  string description, int count)?;
+        m_select_item = m_ItemList.selectedItem as (int index, string name, string description, int count)?;
 
         // 非選択を処理 (Escape ですべて非選択にする)
         if (m_select_item == null)
@@ -144,7 +159,6 @@ public class ItemListController
 
         //  キャラクターの詳細を入力
         m_ItemNameLabel.text = m_select_item?.name;
-        Debug.Log(m_select_item?.name);
 
         m_ItemDescriptionsLabel.text = m_select_item?.description;
 

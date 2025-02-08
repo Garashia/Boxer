@@ -15,3 +15,5 @@ MonoBehaviour:
   enemyList:
   - enemyObject: {fileID: 758231224056099328, guid: fb1032f31b676d541a7cfa991c95a8e5, type: 3}
     enemyParameter: {fileID: 11400000, guid: 4c811e8a188768246817acefd0e21f41, type: 2}
+  - enemyObject: {fileID: 8366699545880536169, guid: a8e84734d12f4594e93cb4311a97f392, type: 3}
+    enemyParameter: {fileID: 11400000, guid: f2bbe1e8327264948b455c3753b84565, type: 2}

@@ -59,7 +59,7 @@ MonoBehaviour:
     - Key: {x: 0, y: 2}
       Value: 1
     - Key: {x: 14, y: 3}
-      Value: 6
+      Value: 1
     - Key: {x: 1, y: 2}
       Value: 1
     - Key: {x: 12, y: 4}
@@ -171,7 +171,7 @@ MonoBehaviour:
     - Key: {x: 1, y: 0}
       Value: 1
     - Key: {x: 0, y: 0}
-      Value: 6
+      Value: 1
     - Key: {x: 8, y: 12}
       Value: 1
     - Key: {x: 0, y: 8}
@@ -185,21 +185,14 @@ MonoBehaviour:
     - Key: {x: 2, y: 6}
       Value: 1
   warpTile:
-    m_list:
-    - Key: {x: 0, y: 0}
-      Value: 0
-    - Key: {x: 14, y: 3}
-      Value: 0
+    m_list: []
   shopTile:
     m_list:
     - Key: {x: 7, y: 14}
       Value:
         m_item:
-        - {fileID: 11400000, guid: 37d7e2800f1249d45a38b38c0e9460a2, type: 2}
-        - {fileID: 11400000, guid: f5a891098a3ab8b449e4e3e90a6dbdab, type: 2}
-        - {fileID: 11400000, guid: 4c6fef579bd949a4186b742a8c0777b6, type: 2}
-        - {fileID: 11400000, guid: 5524ab8b35d615e44b7da49bf450c56d, type: 2}
-        m_name: "\u5927\u585A\u5BB6\u5177"
+        - {fileID: 11400000, guid: f5c7b54fe3f1398489db62316b898f31, type: 2}
+        m_name: "\u6B66\u5668\u5C4B"
         m_description: 
   stairsTile:
     m_list: []

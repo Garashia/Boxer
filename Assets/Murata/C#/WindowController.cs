@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
 // using UnityEditor.U2D;
 // using UnityEditor;
@@ -202,7 +200,7 @@ public class WindowController : MonoBehaviour
         spin_left_button = command_uIDocument.rootVisualElement.Q<UnityEngine.UIElements.Button>("Spin_Left");
 
 
-        
+
 
         //origin_item_texture = item_use_image.texture;
         //Texture2D item_use_texture = new Texture2D((int)item_use_image.rect.width, (int)item_use_image.rect.height);

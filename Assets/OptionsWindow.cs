@@ -9,10 +9,15 @@ public class OptionsWindow : MonoBehaviour
     private Text m_descriptionWindow;
     [SerializeField]
     private Button m_yesButton;
+
+    public Button YesButton { get { return m_yesButton; } set { m_yesButton = value; } }
+
     [SerializeField]
     private Text m_yesText;
     [SerializeField]
     private Button m_noButton;
+
+    public Button NoButton { get { return m_noButton; } set { m_noButton = value; } }
     [SerializeField]
     private Text m_noText;
 

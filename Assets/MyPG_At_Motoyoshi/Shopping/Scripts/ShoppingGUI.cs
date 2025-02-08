@@ -13,11 +13,14 @@ public class ShoppingGUI : MonoBehaviour
     private Button m_isBuy;
 
     private Demo.ItemDropList m_itemDropList = null;
+    private IsThisItem isThis;
+    public IsThisItem Item { get { return isThis; } }
 
     // Start is called before the first frame update
 
     public void ScrollCellIndex(IsThisItem idx)
     {
+        isThis = idx;
         if (m_name != null)
         {
             m_name.text = idx.ItemName;
@@ -50,7 +53,7 @@ public class ShoppingGUI : MonoBehaviour
     public void SetInteractable(bool flag)
     {
         m_isBuy.interactable = flag;
-        Debug.Log("Amen");
+        // Debug.Log("Amen");
     }
 
     // Update is called once per frame
